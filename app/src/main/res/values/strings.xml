@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">WorkTime</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+
+    <string name="lista_de_actividades">Lista de Actividades</string>
+    <string name="separador">/</string>
+    <string name="enterprise">Empresa</string>
+    <string name="horas_tareadas">Horas Tareadas</string>
+    <string name="trabajadores">Trabajadores</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cultivo">Cultivo</string>
+    <string name="fundo">Fundo</string>
+    <string name="tareo_activity_name">Detalle de Actividad</string>
+    <string name="lista_de_trabajadores_activos">Lista de Trabajadores Activos</string>
+    <string name="sin_trabajadores_activos">Sin Trabajadores Activos</string>
+    <string name="sin_trabajadores_inactivos">Sin Trabajadores Inactivos</string>
+    <string name="sin_editar">Sin Editar</string>
+    <string name="lista_de_trabajadores_inactivos">Lista de Trabajadores Inactivos</string>
+    <string name="productividad">Productividad</string>
+    <string name="no_se_agreg_productividad">No se Agregó Productividad</string>
+    <string name="select_tareo_activity_name">Seleccione Actividad</string>
+    <string name="centro_de_coste">Centro de Coste</string>
+    <string name="title_activity_tabbet">TabbetActivity</string>
+    <string name="tab_text_1">Agregar</string>
+    <string name="tab_text_2">Lista</string>
+</resources>
