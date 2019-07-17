@@ -8,7 +8,8 @@
 
     <dimen name="tViewTittle">20dp</dimen>
     <dimen name="tViewPtimsryText">18dp</dimen>
-    <dimen name="tViewSecondaryyText">16dp</dimen>
+    <dimen name="tViewSecondaryText">16dp</dimen>
+    <dimen name="tViewTertearyText">14dp</dimen>
     <dimen name="margin_starndar">8dp</dimen>
     <dimen name="margin_min">4dp</dimen>
     <dimen name="space_floating_button">70dp</dimen>

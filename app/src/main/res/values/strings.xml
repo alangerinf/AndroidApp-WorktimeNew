@@ -37,4 +37,9 @@
     <string name="title_activity_tabbet">TabbetActivity</string>
     <string name="tab_text_1">Agregar</string>
     <string name="tab_text_2">Lista</string>
+    <string name="ingrese_dni">Ingrese DNI</string>
+    <string name="hora">Hora</string>
+    <string name="lista_de_cambios">Lista de Cambios</string>
+    <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
+    <string name="lista_de_personal">Lista de Personal</string>
 </resources>

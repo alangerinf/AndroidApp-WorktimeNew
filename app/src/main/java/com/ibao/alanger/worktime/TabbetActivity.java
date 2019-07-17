@@ -1,8 +1,14 @@
 package com.ibao.alanger.worktime;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -12,20 +18,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TabHost;
-import android.widget.TextView;
 
+import com.ibao.alanger.worktime.ui.main.AddPersonalFragment;
+import com.ibao.alanger.worktime.ui.main.ListPersonalAddedFragment;
 import com.ibao.alanger.worktime.ui.main.SectionsPagerAdapter;
 
-public class TabbetActivity extends AppCompatActivity {
+public class TabbetActivity extends AppCompatActivity
+        implements
+            AddPersonalFragment.OnFragmentInteractionListener,
+        ListPersonalAddedFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,28 @@ public class TabbetActivity extends AppCompatActivity {
             }
         });
         */
+
     }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            if ( v instanceof EditText) {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    assert imm != null;
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent( event );
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -62,4 +84,8 @@ public class TabbetActivity extends AppCompatActivity {
 
 
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }
