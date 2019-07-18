@@ -14,12 +14,10 @@
     android:layout_margin="@dimen/margin_starndar"
     android:layout_gravity="center"
     android:layout_height="wrap_content">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints">
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -34,26 +32,21 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:layout_marginBottom="@dimen/margin_starndar"
             tools:ignore="MissingConstraints">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/space_floating_button"
                 android:orientation="horizontal">
-
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic__time_black_24dp" />
-
                 <TextView
                     android:id="@+id/cmain_item_DNI"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="11/07/2019 12:00" />
-
-
             </LinearLayout>
 
             <LinearLayout
@@ -61,12 +54,10 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:orientation="horizontal">
-
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_assignment_black_24dp" />
-
                 <TextView
                     android:id="@+id/cmain_item_costCenter"
                     style="@style/tView_secondaryText"
@@ -81,12 +72,10 @@
                 android:layout_marginEnd="@dimen/space_floating_button"
                 android:orientation="horizontal"
                 tools:ignore="UseCompoundDrawables">
-
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_insert_chart_black_24dp" />
-
                 <TextView
                     android:id="@+id/cmain_item_dateTime"
                     style="@style/tView_secondaryText"
@@ -94,8 +83,6 @@
                     android:layout_height="wrap_content"
                     android:text="35 Jabas" />
             </LinearLayout>
-
-
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,7 +95,7 @@
         android:layout_margin="@dimen/margin_min"
         app:backgroundTint="@color/colorAccent"
         app:rippleColor="@color/colorPrimary"
-        app:srcCompat="@drawable/ic_more_vert_black_24dp"
+        app:srcCompat="@drawable/ic_edit_white_24dp"
         />
 
 </androidx.cardview.widget.CardView>
