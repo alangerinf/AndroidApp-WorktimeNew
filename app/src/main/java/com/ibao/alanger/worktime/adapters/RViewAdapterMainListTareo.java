@@ -37,6 +37,9 @@ public class RViewAdapterMainListTareo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+
+
+
     }
 
 
