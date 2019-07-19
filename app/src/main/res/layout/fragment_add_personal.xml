@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    tools:context=".ui.main.AddPersonalFragment">
+    tools:context=".views.transference.ui.main.AddPersonalFragment">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

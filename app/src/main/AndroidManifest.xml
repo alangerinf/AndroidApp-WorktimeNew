@@ -4,6 +4,7 @@
     package="com.ibao.alanger.worktime">
 
     <application
+        android:name=".app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,32 +12,48 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity
-            android:name=".TabbetActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme2.NoActionBar">
-        </activity>
-        <activity android:name=".CreateTareoActivity" />
-        <activity
-            android:name=".SelectTareoActivity"
-            android:label="@string/select_tareo_activity_name" />
-        <activity android:name=".ProductividadActivity" />
-        <activity android:name=".testActivity" />
-        <activity
-            android:name=".TareoActivity"
-            android:label="@string/tareo_activity_name"
-            android:parentActivityName=".MainActivity">
 
-        </activity>
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:name=".views.transference.TabbetActivity"
+            android:theme="@style/AppTheme2.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".views.CreateTareoActivity" />
+        <activity
+            android:name=".views.SelectTareoActivity"
+            android:label="@string/select_tareo_activity_name" />
+        <activity android:name=".views.ProductividadActivity" />
+        <activity android:name=".views.testActivity" />
+        <activity
+            android:name=".views.TareoActivity"
+            android:label="@string/tareo_activity_name"
+            android:parentActivityName=".views.MainActivity">
+
+        </activity>
+        <activity
+            android:name=".views.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+
+        </activity>
+
+
+        <activity
+            android:name=".views.ActivityPreloader"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Fullscreen">
+
+        </activity>
+
+        <activity
+            android:name=".login.view.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Fullscreen" />
+
     </application>
 
 </manifest>

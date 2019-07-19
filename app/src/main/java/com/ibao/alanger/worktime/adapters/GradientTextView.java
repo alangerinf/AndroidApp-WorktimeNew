@@ -5,11 +5,11 @@ import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 
+
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 
 import com.ibao.alanger.worktime.R;
-
 
 
 public class GradientTextView extends AppCompatTextView {
