@@ -3,18 +3,26 @@ package com.ibao.alanger.worktime.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.login.view.LoginActivity;
-import com.ibao.alanger.worktime.models.SharedPreferencesManager;
+import com.ibao.alanger.worktime.database.SharedPreferencesManager;
 import com.ibao.alanger.worktime.models.User;
+
+import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA;
 
 
 public class ActivityPreloader extends Activity {
@@ -31,6 +39,23 @@ public class ActivityPreloader extends Activity {
         setContentView(R.layout.activity_preloader);
         declare();
         startAnimations();
+
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = c.getReadableDatabase();
+
+        try{
+
+            Cursor cursor = db.rawQuery(
+                    "SELECT " +
+                            "*"+
+                            " FROM "+
+                            TAB_EMPRESA
+                    ,null);
+
+        }catch (Exception e){
+            Toast.makeText(ctx,e.toString(),Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void declare() {

@@ -1,9 +1,11 @@
-package com.ibao.alanger.worktime.models;
+package com.ibao.alanger.worktime.database;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.ibao.alanger.worktime.models.User;
 
 import java.util.Map;
 

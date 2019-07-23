@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ibao.alanger.worktime">
 
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
     <application
         android:name=".app.AppController"
         android:allowBackup="true"
@@ -11,16 +15,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".views.transference.TabbetActivity"
             android:theme="@style/AppTheme2.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".views.CreateTareoActivity" />
         <activity
@@ -46,7 +47,10 @@
             android:name=".views.ActivityPreloader"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Fullscreen">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

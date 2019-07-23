@@ -1,16 +1,18 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class CentroCoste {
+public class CentroCosteVO {
 
     private int id;
     private String cod;
+    private String name;
     private String desc;
     private int idEmpresa;
 
 
-    public CentroCoste(){
+    public CentroCosteVO(){
         this.id=0;
         this.cod="";
+        this.name="";
         this.desc="";
         this.idEmpresa =0;
     }
@@ -45,5 +47,13 @@ public class CentroCoste {
 
     public void setIdEmpresa(int idEmpresa) {
         this.idEmpresa = idEmpresa;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

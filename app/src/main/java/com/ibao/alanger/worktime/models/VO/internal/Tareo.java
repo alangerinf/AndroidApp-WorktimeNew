@@ -1,9 +1,9 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
 import com.ibao.alanger.worktime.models.VO.external.Actividad;
-import com.ibao.alanger.worktime.models.VO.external.CentroCoste;
+import com.ibao.alanger.worktime.models.VO.external.CentroCosteVO;
 import com.ibao.alanger.worktime.models.VO.external.Cultivo;
-import com.ibao.alanger.worktime.models.VO.external.Fundo;
+import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 import com.ibao.alanger.worktime.models.VO.external.Modulo;
 
 import java.util.ArrayList;
@@ -13,11 +13,11 @@ public class Tareo {
 
     private int id;
     private Actividad actividad;
-    private Fundo fundo;
+    private FundoVO fundo;
     private Cultivo cultivo;
     private String dateTimeStart;
     private String dateTimeEnd;
-    private CentroCoste centroCoste;
+    private CentroCosteVO centroCosteVO;
     private Modulo modulo;
     private int nHorasTareadas;
     private int nTrabajadores;
@@ -33,7 +33,7 @@ public class Tareo {
         this.cultivo = null;
         this.dateTimeStart ="";
         this.dateTimeEnd ="";
-        this.centroCoste=null;
+        this.centroCosteVO =null;
         this.modulo=null;
         this.nHorasTareadas=0;
         this.nTrabajadores=0;
@@ -58,11 +58,11 @@ public class Tareo {
         this.actividad = actividad;
     }
 
-    public Fundo getFundo() {
+    public FundoVO getFundo() {
         return fundo;
     }
 
-    public void setFundo(Fundo fundo) {
+    public void setFundo(FundoVO fundo) {
         this.fundo = fundo;
     }
 
@@ -90,12 +90,12 @@ public class Tareo {
         this.dateTimeEnd = dateTimeEnd;
     }
 
-    public CentroCoste getCentroCoste() {
-        return centroCoste;
+    public CentroCosteVO getCentroCosteVO() {
+        return centroCosteVO;
     }
 
-    public void setCentroCoste(CentroCoste centroCoste) {
-        this.centroCoste = centroCoste;
+    public void setCentroCosteVO(CentroCosteVO centroCosteVO) {
+        this.centroCosteVO = centroCosteVO;
     }
 
     public Modulo getModulo() {

@@ -1,24 +1,18 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class Trabajador {
+public class TrabajadorVO {
 
     private int id;
     private String cod;
     private String dni;
     private String name;
-    private String apPat;
-    private String apMat;
-    private String cargo;
     private int idEmpresa;
 
-    public Trabajador(){
+    public TrabajadorVO(){
         this.id=0;
         this.cod="";
         this.dni="";
         this.name="";
-        this.apPat="";
-        this.apMat="";
-        this.cargo="";
         this.idEmpresa=0;
     }
 
@@ -54,29 +48,6 @@ public class Trabajador {
         this.name = name;
     }
 
-    public String getApPat() {
-        return apPat;
-    }
-
-    public void setApPat(String apPat) {
-        this.apPat = apPat;
-    }
-
-    public String getApMat() {
-        return apMat;
-    }
-
-    public void setApMat(String apMat) {
-        this.apMat = apMat;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
 
     public int getIdEmpresa() {
         return idEmpresa;

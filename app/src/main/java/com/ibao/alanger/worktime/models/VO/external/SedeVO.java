@@ -1,11 +1,11 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class Fundo {
+public class SedeVO {
     private int id;
     private String name;
     private int idEmpresa;
 
-    public Fundo(){
+    public SedeVO(){
         this.id=0;
         this.name="";
         this.idEmpresa=0;

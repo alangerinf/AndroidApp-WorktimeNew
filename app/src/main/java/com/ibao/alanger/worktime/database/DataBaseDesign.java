@@ -1,17 +1,28 @@
-package com.ibao.alanger.worktime;
+package com.ibao.alanger.worktime.database;
 
 public class DataBaseDesign {
 
 
     /***NO QUITAR LOS ESPACIOS ENTRE LAS PALABRAS CLAVE PORQ SON NECESARIAS**/
 
+    //database name
+    public static final String DATABASE_NAME="dataWorktime";
+
     //PALABRAS CLAVE
-    private static final String TABLE_CREATE        = " CREATE TABLE ",
+    private static final String TABLE_CREATE        = " CREATE TABLE ",// IF NOT EXISTS
                                 AUTOINCREMET        = "  AUTOINCREMENT ",
                                 PK                  = " PRIMARY KEY ",
                                 N_NULL              = " NOT NULL ",
-                                DEF_DATE_NOW        = " DEFAULT  ",
-                                AND                 =" , ";
+                                DEF_DATE_NOW        = " DEFAULT (datetime('now','localtime')) ",
+                                AND                 = " , ";
+
+    public static final String  _SELECT     = " SELECT ",
+                                _AND        = " AND ",
+                                _FROM       = " FROM ",
+                                _WHERE      = " WHERE ",
+                                _ORDERBY    = " ORDER BY ",
+                                _STRASC     = " COLLATE UNICODE ASC ",
+                                _           = " , ";
 
     //TIPOS DE DATOS
     private static final String TYPE_INTEGER    = " INTEGER ",
@@ -26,7 +37,7 @@ public class DataBaseDesign {
 
     //TODO: TABLAS MAESTRAS
     //TABLE EMPRESA
-    public static final String  TAB_EMPRESA         = "Empresa",
+    public static final String  TAB_EMPRESA         = "EmpresaVO",
                                 TAB_EMPRESA_ID          = "id",
                                 TAB_EMPRESA_ID_TYPE     = TYPE_INTEGER,
                                 TAB_EMPRESA_NAME        = "name",
@@ -40,7 +51,7 @@ public class DataBaseDesign {
             ")";
 
     //TABLE FUNDO
-    public static final String  TAB_FUNDO               = "Fundo",
+    public static final String  TAB_FUNDO               = "FundoVO",
                                 TAB_FUNDO_ID                = "id",
                                 TAB_FUNDO_ID_TYPE           = TYPE_INTEGER,
                                 TAB_FUNDO_NAME              = "name",
@@ -75,30 +86,30 @@ public class DataBaseDesign {
                     TAB_SEDE_IDEMPRESA + TAB_SEDE_IDEMPRESA_TYPE + N_NULL+
                     ")";
 
-    //TABLE CENTRO DE COSTO
-    public static final String  TAB_CCOSTO              = "CentroCosto",
-                                TAB_CCOSTO_ID               = "id",
-                                TAB_CCOSTO_ID_TYPE          = TYPE_INTEGER,
-                                TAB_CCOSTO_COD              = "code",
-                                TAB_CCOSTO_COD_TYPE         = TYPE_VARCHAR,
-                                TAB_CCOSTO_NAME             = "name",
-                                TAB_CCOSTO_NAME_TYPE        = TYPE_VARCHAR,
-                                TAB_CCOSTO_DESC             = "descripcion",
-                                TAB_CCOSTO_DESC_TYPE        = TYPE_VARCHAR,
-                                TAB_CCOSTO_IDEMPRESA        = "idEmpresa",
-                                TAB_CCOSTO_IDEMPRESA_TYPE   = TYPE_INTEGER;
+    //TABLE CENTRO DE COSTE
+    public static final String TAB_CCOSTE = "CentroCoste",
+                                TAB_CCOSTE_ID               = "id",
+                                TAB_CCOSTE_ID_TYPE          = TYPE_INTEGER,
+                                TAB_CCOSTE_COD              = "code",
+                                TAB_CCOSTE_COD_TYPE         = TYPE_VARCHAR,
+                                TAB_CCOSTE_NAME             = "name",
+                                TAB_CCOSTE_NAME_TYPE        = TYPE_VARCHAR,
+                                TAB_CCOSTE_DESC             = "descripcion",
+                                TAB_CCOSTE_DESC_TYPE        = TYPE_VARCHAR,
+                                TAB_CCOSTE_IDEMPRESA        = "idEmpresa",
+                                TAB_CCOSTE_IDEMPRESA_TYPE   = TYPE_INTEGER;
 
-    public static final String CREATETABLE_CCOSTO =
-            TABLE_CREATE+TAB_CCOSTO+"("+
-                    TAB_CCOSTO_ID   + TAB_CCOSTO_ID_TYPE   + PK + N_NULL+
+    public static final String CREATETABLE_CCOSTE =
+            TABLE_CREATE+ TAB_CCOSTE +"("+
+                    TAB_CCOSTE_ID + TAB_CCOSTE_ID_TYPE + PK + N_NULL+
                     AND +
-                    TAB_CCOSTO_COD + TAB_CCOSTO_COD_TYPE + N_NULL+
+                    TAB_CCOSTE_COD + TAB_CCOSTE_COD_TYPE + N_NULL+
                     AND +
-                    TAB_CCOSTO_NAME + TAB_CCOSTO_NAME_TYPE + N_NULL+
+                    TAB_CCOSTE_NAME + TAB_CCOSTE_NAME_TYPE + N_NULL+
                     AND +
-                    TAB_CCOSTO_DESC + TAB_CCOSTO_DESC_TYPE + N_NULL+
+                    TAB_CCOSTE_DESC + TAB_CCOSTE_DESC_TYPE + N_NULL+
                     AND +
-                    TAB_CCOSTO_IDEMPRESA + TAB_CCOSTO_IDEMPRESA_TYPE + N_NULL+
+                    TAB_CCOSTE_IDEMPRESA + TAB_CCOSTE_IDEMPRESA_TYPE + N_NULL+
                     ")";
     
     //TABLE MODULO
@@ -120,13 +131,13 @@ public class DataBaseDesign {
                     AND +
                     TAB_MODULO_NAME + TAB_MODULO_NAME_TYPE + N_NULL+
                     AND +
-                    TAB_CCOSTO_DESC + TAB_CCOSTO_DESC_TYPE + N_NULL+
+                    TAB_CCOSTE_DESC + TAB_CCOSTE_DESC_TYPE + N_NULL+
                     AND +
                     TAB_MODULO_IDFUNDO + TAB_MODULO_IDFUNDO_TYPE+ N_NULL+
                     ")";
     
     //TABLE AGRUPACION_ACTIVIDAD
-    public static final String  TAB_AGRUPADORACT              = "Modulo",
+    public static final String  TAB_AGRUPADORACT              = "AgrupadorActividad",
                                 TAB_AGRUPADORACT_ID               = "id",
                                 TAB_AGRUPADORACT_ID_TYPE          = TYPE_INTEGER,
                                 TAB_AGRUPADORACT_COD              = "code",
@@ -195,7 +206,7 @@ public class DataBaseDesign {
                     TAB_FUND0CULTIVO_IDCULTIVO + TAB_FUND0CULTIVO_IDCULTIVO_TYPE+ N_NULL+
                     ")";
 
-    public static final String  TAB_TRABAJADOR              = "Trabajador",
+    public static final String  TAB_TRABAJADOR              = "TrabajadorVO",
                                 TAB_TRABAJADOR_ID               = "id",
                                 TAB_TRABAJADOR_ID_TYPE          = TYPE_INTEGER,
                                 TAB_TRABAJADOR_COD              = "cod",
@@ -220,7 +231,7 @@ public class DataBaseDesign {
                     TAB_TRABAJADOR_IDEMPRESA + TAB_TRABAJADOR_IDEMPRESA_TYPE+ N_NULL+
                     ")";
 
-    public static final String  TAB_ACTIVIDAD                   = "Trabajador",
+    public static final String  TAB_ACTIVIDAD                   = "Actividad",
                                 TAB_ACTIVIDAD_ID                    = "id",
                                 TAB_ACTIVIDAD_ID_TYPE               = TYPE_INTEGER,
                                 TAB_ACTIVIDAD_COD                   = "cod",
@@ -273,8 +284,8 @@ public class DataBaseDesign {
                                 TAB_TAREO_IDACTIVIDAD_TYPE      = TYPE_INTEGER,
                                 TAB_TAREO_IDMODULO              = "idModulo",
                                 TAB_TAREO_IDMODULO_TYPE         = TYPE_INTEGER,
-                                TAB_TAREO_IDCCOSTO              = "idCentroCosto",
-                                TAB_TAREO_IDCCOSTO_TYPE         = TYPE_INTEGER,
+                                TAB_TAREO_IDCCOSTE              = "idCentroCoste",
+                                TAB_TAREO_IDCCOSTE_TYPE         = TYPE_INTEGER,
                                 TAB_TAREO_IDSEDE                = "idSede",
                                 TAB_TAREO_IDSEDE_TYPE           = TYPE_INTEGER,
                                 TAB_TAREO_DATESTART             = "dateStart",
@@ -295,7 +306,7 @@ public class DataBaseDesign {
                     AND +
                     TAB_TAREO_IDMODULO + TAB_TAREO_IDMODULO_TYPE +
                     AND +
-                    TAB_TAREO_IDCCOSTO + TAB_TAREO_IDCCOSTO_TYPE +
+                    TAB_TAREO_IDCCOSTE + TAB_TAREO_IDCCOSTE_TYPE +
                     AND +
                     TAB_TAREO_IDSEDE + TAB_TAREO_IDSEDE_TYPE+
                     AND +
@@ -334,7 +345,7 @@ public class DataBaseDesign {
                     ")";
 
 
-    public static final String  TAB_PRODUCTIVIDAD                       = "TareoTrabajador",
+    public static final String  TAB_PRODUCTIVIDAD                       = "Productividad",
                                 TAB_PRODUCTIVIDAD_ID                        = "id",
                                 TAB_PRODUCTIVIDAD_ID_TYPE                   = TYPE_INTEGER,
                                 TAB_PRODUCTIVIDAD_IDTAREOTRABAJADOR         = "idTareo",

@@ -1,13 +1,14 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class Empresa {
-
+public class FundoVO {
     private int id;
     private String name;
+    private int idEmpresa;
 
-    public Empresa(){
+    public FundoVO(){
         this.id=0;
         this.name="";
+        this.idEmpresa=0;
     }
 
     public int getId() {
@@ -26,5 +27,12 @@ public class Empresa {
         this.name = name;
     }
 
+    public int getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(int idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
 
 }

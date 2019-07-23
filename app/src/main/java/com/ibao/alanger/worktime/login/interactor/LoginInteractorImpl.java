@@ -7,7 +7,7 @@ import android.util.Log;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenter;
 import com.ibao.alanger.worktime.login.repository.LoginRepository;
 import com.ibao.alanger.worktime.login.repository.LoginRepositoryImpl;
-import com.ibao.alanger.worktime.models.SharedPreferencesManager;
+import com.ibao.alanger.worktime.database.SharedPreferencesManager;
 import com.ibao.alanger.worktime.models.User;
 
 

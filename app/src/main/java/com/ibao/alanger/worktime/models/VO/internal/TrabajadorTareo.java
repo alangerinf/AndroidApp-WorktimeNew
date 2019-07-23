@@ -1,6 +1,6 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
-import com.ibao.alanger.worktime.models.VO.external.Trabajador;
+import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,13 @@ public class TrabajadorTareo {
 
     private int id;
     private int idTareo;
-    private Trabajador trabajador;
+    private TrabajadorVO trabajadorVO;
     private List<Productividad> productividadList;
 
     public TrabajadorTareo(){
         this.id=0;
         this.idTareo=0;
-        this.trabajador=null;
+        this.trabajadorVO =null;
         this.productividadList=new ArrayList<>();
     }
 
@@ -35,12 +35,12 @@ public class TrabajadorTareo {
         this.idTareo = idTareo;
     }
 
-    public Trabajador getTrabajador() {
-        return trabajador;
+    public TrabajadorVO getTrabajadorVO() {
+        return trabajadorVO;
     }
 
-    public void setTrabajador(Trabajador trabajador) {
-        this.trabajador = trabajador;
+    public void setTrabajadorVO(TrabajadorVO trabajadorVO) {
+        this.trabajadorVO = trabajadorVO;
     }
 
     public List<Productividad> getProductividadList() {
