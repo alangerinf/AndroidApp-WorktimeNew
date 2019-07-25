@@ -4,7 +4,7 @@ import com.ibao.alanger.worktime.models.VO.external.Actividad;
 import com.ibao.alanger.worktime.models.VO.external.CentroCosteVO;
 import com.ibao.alanger.worktime.models.VO.external.CultivoVO;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
-import com.ibao.alanger.worktime.models.VO.external.ModuloVO;
+import com.ibao.alanger.worktime.models.VO.external.LoteVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Tareo {
     private String dateTimeStart;
     private String dateTimeEnd;
     private CentroCosteVO centroCosteVO;
-    private ModuloVO moduloVO;
+    private LoteVO loteVO;
     private int nHorasTareadas;
     private int nTrabajadores;
     private int idFundoCultivo;
@@ -34,7 +34,7 @@ public class Tareo {
         this.dateTimeStart ="";
         this.dateTimeEnd ="";
         this.centroCosteVO =null;
-        this.moduloVO =null;
+        this.loteVO =null;
         this.nHorasTareadas=0;
         this.nTrabajadores=0;
         this.idFundoCultivo=0;
@@ -98,12 +98,12 @@ public class Tareo {
         this.centroCosteVO = centroCosteVO;
     }
 
-    public ModuloVO getModuloVO() {
-        return moduloVO;
+    public LoteVO getLoteVO() {
+        return loteVO;
     }
 
-    public void setModuloVO(ModuloVO moduloVO) {
-        this.moduloVO = moduloVO;
+    public void setLoteVO(LoteVO loteVO) {
+        this.loteVO = loteVO;
     }
 
     public int getnHorasTareadas() {

@@ -24,13 +24,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_NAME
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_IDEMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_IDEMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_IDEMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._n;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -111,10 +105,10 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_ID+ _n +
                             "E."+TAB_EMPRESA_NAME+
                         _FROM+
-                            TAB_EMPRESA +" as E "+ _ +
+                            TAB_EMPRESA +" as E "+ _n +
                             TAB_FUNDO   +" as F "+
                         _WHERE+
                             "F."+TAB_FUNDO_ID+" = "+ idFundo +
@@ -137,72 +131,9 @@ public class EmpresaDAO {
     }
 
 
-    public EmpresaVO selectByIdSede(int idSede){
-        ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
-
-        SQLiteDatabase db = c.getReadableDatabase();
-        EmpresaVO temp = null;
-        try{
-            Cursor cursor = db.rawQuery(
-                    _SELECT +
-                            "E."+TAB_EMPRESA_ID+ _ +
-                            "E."+TAB_EMPRESA_NAME+
-                        _FROM+
-                            TAB_EMPRESA +" as E "+ _ +
-                            TAB_SEDE    +" as S "+
-                        _WHERE+
-                            "S."+TAB_SEDE_ID+" = "+ idSede +
-                            _AND+
-                            "S."+TAB_SEDE_IDEMPRESA+" = "+"E."+TAB_EMPRESA_ID
-                    ,null);
-            if(cursor.getCount()>0){
-                cursor.moveToFirst();
-                temp = getAtributtes(cursor);
-            }
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectByIdSede "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," selectByIdSede "+e.toString());
-        }finally {
-            db.close();
-            c.close();
-        }
-        return temp;
-    }
 
 
-    public EmpresaVO selectByIdTrabajador(int idTrabajador){
-        ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
 
-        SQLiteDatabase db = c.getReadableDatabase();
-        EmpresaVO temp = null;
-        try{
-            Cursor cursor = db.rawQuery(
-                    _SELECT +
-                            "E."+TAB_EMPRESA_ID+ _ +
-                            "E."+TAB_EMPRESA_NAME+
-                        _FROM+
-                            TAB_EMPRESA     +" as E "+ _ +
-                            TAB_TRABAJADOR  +" as T "+
-                        _WHERE+
-                            "T."+TAB_TRABAJADOR_ID+" = "+ idTrabajador +
-                            _AND+
-                            "T."+TAB_TRABAJADOR_IDEMPRESA+" = "+"E."+TAB_EMPRESA_ID
-                    ,null);
-            if(cursor.getCount()>0){
-                cursor.moveToFirst();
-                temp = getAtributtes(cursor);
-            }
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectByIdTrabajador "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," selectByIdTrabajador "+e.toString());
-        }finally {
-            db.close();
-            c.close();
-        }
-        return temp;
-    }
 
 
     public EmpresaVO selectByIdCCoste(int idCCoste){
@@ -213,10 +144,10 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_ID+ _n +
                             "E."+TAB_EMPRESA_NAME+
                             _FROM+
-                            TAB_EMPRESA +" as E "+ _ +
+                            TAB_EMPRESA +" as E "+ _n +
                             TAB_CCOSTE +" as CC "+
                             _WHERE+
                             "CC."+ TAB_CCOSTE_ID +" = "+ idCCoste +

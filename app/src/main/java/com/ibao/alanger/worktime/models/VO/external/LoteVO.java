@@ -1,14 +1,16 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class SedeVO {
+public class LoteVO {
     private int id;
+    private String cod;
     private String name;
     private int idEmpresa;
 
-    public SedeVO(){
+    public LoteVO(){
         this.id=0;
+        this.cod="";
         this.name="";
-        this.idEmpresa=0;
+        this.idEmpresa =0;
     }
 
     public int getId() {
@@ -35,4 +37,11 @@ public class SedeVO {
         this.idEmpresa = idEmpresa;
     }
 
+    public String getCod() {
+        return cod;
+    }
+
+    public void setCod(String cod) {
+        this.cod = cod;
+    }
 }

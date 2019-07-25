@@ -22,7 +22,7 @@ public class DataBaseDesign {
                                 _WHERE      = " WHERE ",
                                 _ORDERBY    = " ORDER BY ",
                                 _STRASC     = " COLLATE UNICODE ASC ",
-                                _           = " , ";
+                                _n = " , ";
 
     //TIPOS DE DATOS
     private static final String TYPE_INTEGER    = " INTEGER ",

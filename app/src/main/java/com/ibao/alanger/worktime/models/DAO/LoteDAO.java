@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
-
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.models.VO.external.FundoVO;
-import com.ibao.alanger.worktime.models.VO.external.SedeVO;
+import com.ibao.alanger.worktime.models.VO.external.LoteVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +15,12 @@ import java.util.List;
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_IDEMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDCULTIVO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_NUM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -28,12 +28,12 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
 
 
-public class SedeDAO {
+public class LoteDAO {
 
-    private final static String TAG = SedeDAO.class.getSimpleName();
+    private static String TAG = LoteDAO.class.getSimpleName();
     private Context ctx;
 
-    public SedeDAO(Context ctx) {
+    public LoteDAO(Context ctx) {
         this.ctx=ctx;
     }
 
@@ -41,7 +41,7 @@ public class SedeDAO {
         boolean flag = false;
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null, VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
-        int res = db.delete(TAB_SEDE,null,null);
+        int res = db.delete(TAB_LOTE,null,null);
         if(res>0){
             flag=true;
         }
@@ -51,33 +51,35 @@ public class SedeDAO {
     }
 
 
-    public boolean insert(int id, String name, int idEmpresa){
+    public boolean insert(int id, String cod, String num, int idFundo,int idCultivo){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TAB_SEDE_ID,id);
-        values.put(TAB_SEDE_NAME,name);
-        values.put(TAB_SEDE_IDEMPRESA,idEmpresa);
-        long temp = db.insert(TAB_SEDE,TAB_SEDE_ID,values);
+        values.put(TAB_LOTE_ID,id);
+        values.put(TAB_LOTE_COD,cod);
+        values.put(TAB_LOTE_NUM,num);
+        values.put(TAB_LOTE_IDFUNDO,idFundo);
+        values.put(TAB_LOTE_IDCULTIVO,idCultivo);
+        long temp = db.insert(TAB_LOTE,TAB_LOTE_ID,values);
         db.close();
         conn.close();
         return temp > 0;
     }
-
-    public SedeVO selectById(int id) {
+    public LoteVO selectById(int id) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        SedeVO temp = null;
+        LoteVO temp = null;
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_SEDE+" as F"+
+                            TAB_LOTE+" as F"+
                         _WHERE+
-                            "F."+TAB_SEDE_ID+"="+ id
+                            "F."+TAB_LOTE_ID+"="+ id
                     ,null);
+
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
                 temp = getAtributtes(cursor);
@@ -85,59 +87,66 @@ public class SedeDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectById "+e.toString());
+        }finally {
+            db.close();
+            c.close();
         }
-        db.close();
-        c.close();
         return temp;
     }
 
-    public List<SedeVO> listByIdEmpresa(int idEmpresa){
+    public List<LoteVO> listByIdFundo(int idFundo){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        List<SedeVO> sedeVOS = new ArrayList<>();
+        List<LoteVO> fundoVOS = new ArrayList<>();
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT+
                             "*"+
                         _FROM+
-                            TAB_SEDE+" as F"+
+                            TAB_LOTE+" as F"+
                         _WHERE+
-                            "F."+TAB_SEDE_IDEMPRESA+"="+ idEmpresa +
+                            "F."+TAB_LOTE_IDFUNDO+"="+ idFundo +
                         _ORDERBY+
-                            "F."+TAB_SEDE_NAME+
+                            "F."+TAB_LOTE_COD+
                             _STRASC
                     ,null);
             while (cursor.getCount()>0 && cursor.moveToNext()){
-                SedeVO temp = getAtributtes(cursor);
-                sedeVOS.add(temp);
+                LoteVO temp = getAtributtes(cursor);
+                fundoVOS.add(temp);
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" listByIdEmpresa "+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,TAG+" listByIdFundo "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listByIdFundo "+e.toString());
+        }finally {
+            db.close();
+            c.close();
         }
-        db.close();
-        c.close();
-        return sedeVOS;
+        return fundoVOS;
     }
-    
-    private SedeVO getAtributtes(Cursor cursor){
-        SedeVO sedeVO = new SedeVO();
+
+    private LoteVO getAtributtes(Cursor cursor){
+        LoteVO loteVO = new LoteVO();
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
-                case TAB_SEDE_ID:
-                    sedeVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
+                case TAB_LOTE_ID:
+                    loteVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
                     break;
-                case TAB_SEDE_NAME:
-                    sedeVO.setName(cursor.getString(cursor.getColumnIndex(TAB_SEDE_NAME)));
+                case TAB_LOTE_COD:
+                    loteVO.setCod(cursor.getString(cursor.getColumnIndex(TAB_LOTE_COD)));
                     break;
-                case TAB_SEDE_IDEMPRESA:
-                    sedeVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_SEDE_IDEMPRESA)));
+                case TAB_LOTE_NUM:
+                    loteVO.setName(cursor.getString(cursor.getColumnIndex(TAB_LOTE_NUM)));
+                    break;
+                case TAB_LOTE_IDFUNDO:
+                    loteVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_LOTE_IDFUNDO)));
                     break;
             }
         }
-        return sedeVO;
+        return loteVO;
     }
 
 }

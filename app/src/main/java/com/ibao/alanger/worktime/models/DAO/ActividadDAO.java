@@ -8,28 +8,28 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.models.VO.external.AgrupadorActividadVO;
+import com.ibao.alanger.worktime.models.VO.external.ActividadVO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_AGRUPADORACT;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_AGRUPADORACT_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_AGRUPADORACT_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_AGRUPADORACT_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
 
-public class AgrupadorActividadDAO {
+public class ActividadDAO {
 
     private Context ctx;
-    private static String TAG = AgrupadorActividadDAO.class.getSimpleName();
-    public AgrupadorActividadDAO(Context ctx) {
+    private static String TAG = ActividadDAO.class.getSimpleName();
+    public ActividadDAO(Context ctx) {
         this.ctx=ctx;
     }
 
@@ -37,7 +37,7 @@ public class AgrupadorActividadDAO {
         boolean flag = false;
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null, VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
-        int res = db.delete(TAB_AGRUPADORACT,null,null);
+        int res = db.delete(TAB_ACTIVIDAD,null,null);
         if(res>0){
             flag=true;
         }
@@ -50,31 +50,31 @@ public class AgrupadorActividadDAO {
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TAB_AGRUPADORACT_ID,id);
-        values.put(TAB_AGRUPADORACT_COD,cod);
-        values.put(TAB_AGRUPADORACT_NAME,name);
-        long temp = db.insert(TAB_AGRUPADORACT,TAB_AGRUPADORACT_ID,values);
+        values.put(TAB_ACTIVIDAD_ID,id);
+        values.put(TAB_ACTIVIDAD_COD,cod);
+        values.put(TAB_ACTIVIDAD_NAME,name);
+        long temp = db.insert(TAB_ACTIVIDAD,TAB_ACTIVIDAD_ID,values);
         db.close();
         conn.close();
         return temp > 0;
     }
 
-    public AgrupadorActividadVO selectById(int id){
+    public ActividadVO selectById(int id){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        AgrupadorActividadVO temp = null;
+        ActividadVO temp = null;
         try{
-            temp = new AgrupadorActividadVO();
+            temp = new ActividadVO();
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_AGRUPADORACT+" as C"+
+                            TAB_ACTIVIDAD+" as C"+
                         _WHERE+
-                            "C."+TAB_AGRUPADORACT_ID+" = "+ id +
+                            "C."+TAB_ACTIVIDAD_ID+" = "+ id +
                         _ORDERBY+
-                            "C."+TAB_AGRUPADORACT_NAME+
+                            "C."+TAB_ACTIVIDAD_NAME+
                             _STRASC
                     ,null);
             cursor.moveToFirst();
@@ -91,16 +91,16 @@ public class AgrupadorActividadDAO {
         return temp;
     }
 
-    public List<AgrupadorActividadVO> listAll(){
+    public List<ActividadVO> listAll(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
         SQLiteDatabase db = c.getReadableDatabase();
-        List<AgrupadorActividadVO> cultivos = new ArrayList<>();
+        List<ActividadVO> cultivos = new ArrayList<>();
         try{
-            String[] campos = {TAB_AGRUPADORACT_ID,TAB_AGRUPADORACT_COD,TAB_AGRUPADORACT_NAME};
-            Cursor cursor= db.query(TAB_AGRUPADORACT,campos,null,null,null,null,null);
+            String[] campos = {TAB_ACTIVIDAD_ID,TAB_ACTIVIDAD_COD,TAB_ACTIVIDAD_NAME};
+            Cursor cursor= db.query(TAB_ACTIVIDAD,campos,null,null,null,null,null);
             while(cursor.moveToNext()){
-                AgrupadorActividadVO temp = getAtributtes(cursor);
+                ActividadVO temp = getAtributtes(cursor);
                 cultivos.add(temp);
             }
             cursor.close();
@@ -114,23 +114,23 @@ public class AgrupadorActividadDAO {
         return cultivos;
     }
 
-    private AgrupadorActividadVO getAtributtes(Cursor cursor){
-        AgrupadorActividadVO AgrupadorActividadVO = new AgrupadorActividadVO();
+    private ActividadVO getAtributtes(Cursor cursor){
+        ActividadVO ActividadVO = new ActividadVO();
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
-                case TAB_AGRUPADORACT_ID:
-                    AgrupadorActividadVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_AGRUPADORACT_ID)));
+                case TAB_ACTIVIDAD_ID:
+                    ActividadVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_ACTIVIDAD_ID)));
                     break;
-                case TAB_AGRUPADORACT_COD:
-                    AgrupadorActividadVO.setCod(cursor.getString(cursor.getColumnIndex(TAB_AGRUPADORACT_COD)));
+                case TAB_ACTIVIDAD_COD:
+                    ActividadVO.setCod(cursor.getString(cursor.getColumnIndex(TAB_ACTIVIDAD_COD)));
                     break;
-                case TAB_AGRUPADORACT_NAME:
-                    AgrupadorActividadVO.setName(cursor.getString(cursor.getColumnIndex(TAB_AGRUPADORACT_NAME)));
+                case TAB_ACTIVIDAD_NAME:
+                    ActividadVO.setName(cursor.getString(cursor.getColumnIndex(TAB_ACTIVIDAD_NAME)));
                     break;
             }
         }
-        return AgrupadorActividadVO;
+        return ActividadVO;
     }
 
 

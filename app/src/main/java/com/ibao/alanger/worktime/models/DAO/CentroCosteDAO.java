@@ -16,13 +16,11 @@ import java.util.List;
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE_DESC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CCOSTE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -53,14 +51,13 @@ public class CentroCosteDAO {
     }
 
 
-    public boolean insert(int id,String cod ,String name ,String desc  , int idEmpresa){
+    public boolean insert(int id,String cod ,String name , int idEmpresa){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
             values.put(TAB_CCOSTE_ID,id);
             values.put(TAB_CCOSTE_COD,cod);
             values.put(TAB_CCOSTE_NAME,name);
-            values.put(TAB_CCOSTE_DESC,desc);
             values.put(TAB_CCOSTE_IDEMPRESA,idEmpresa);
         long temp = db.insert(TAB_CCOSTE,TAB_CCOSTE_ID,values);
         db.close();
@@ -139,9 +136,7 @@ public class CentroCosteDAO {
                 case TAB_CCOSTE_NAME:
                     centroCosteVO.setName(cursor.getString(cursor.getColumnIndex(TAB_CCOSTE_NAME)));
                     break;
-                case TAB_CCOSTE_DESC:
-                    centroCosteVO.setDesc(cursor.getString(cursor.getColumnIndex(TAB_CCOSTE_DESC)));
-                    break;
+
                 case TAB_CCOSTE_IDEMPRESA:
                     centroCosteVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_CCOSTE_IDEMPRESA)));
                     break;

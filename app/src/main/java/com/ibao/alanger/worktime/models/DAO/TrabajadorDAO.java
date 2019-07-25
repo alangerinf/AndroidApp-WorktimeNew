@@ -14,13 +14,11 @@ import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_STATUS;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -51,16 +49,14 @@ public class TrabajadorDAO {
     }
 
 
-    public boolean insert(int id,String cod,String dni, String name, int idEmpresa){
+    public boolean insert(String dni,String cod, String name){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-            values.put(TAB_TRABAJADOR_ID,id);
-            values.put(TAB_TRABAJADOR_COD,cod);
             values.put(TAB_TRABAJADOR_DNI,dni);
+            values.put(TAB_TRABAJADOR_COD,cod);
             values.put(TAB_TRABAJADOR_NAME,name);
-            values.put(TAB_TRABAJADOR_IDEMPRESA,idEmpresa);
-        long temp = db.insert(TAB_TRABAJADOR,TAB_TRABAJADOR_ID,values);
+        long temp = db.insert(TAB_TRABAJADOR,null,values);
         db.close();
         conn.close();
         return temp > 0;
@@ -78,7 +74,7 @@ public class TrabajadorDAO {
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "T."+TAB_TRABAJADOR_ID+"="+ id
+                            "T."+TAB_TRABAJADOR_DNI+"="+ id
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
@@ -93,7 +89,7 @@ public class TrabajadorDAO {
         return temp;
     }
 
-    public List<TrabajadorVO> listByIdEmpresa(int idEmpresa){
+    public List<TrabajadorVO> listAll(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
@@ -105,7 +101,7 @@ public class TrabajadorDAO {
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "T."+TAB_TRABAJADOR_IDEMPRESA+"="+ idEmpresa +
+                            TAB_TRABAJADOR_STATUS+ " = "+ 1 +
                         _ORDERBY+
                             "T."+TAB_TRABAJADOR_NAME+
                             _STRASC
@@ -128,9 +124,6 @@ public class TrabajadorDAO {
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
-                case TAB_TRABAJADOR_ID:
-                    trabajadorVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
-                    break;
                 case TAB_TRABAJADOR_COD:
                     trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_COD)));
                     break;
@@ -139,9 +132,6 @@ public class TrabajadorDAO {
                     break;
                 case TAB_TRABAJADOR_NAME:
                     trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_NAME)));
-                    break;
-                case TAB_TRABAJADOR_IDEMPRESA:
-                    trabajadorVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_TRABAJADOR_IDEMPRESA)));
                     break;
             }
         }
