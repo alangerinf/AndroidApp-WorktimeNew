@@ -8,7 +8,6 @@
     android:focusableInTouchMode="true"
     tools:context=".views.CreateTareoActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,22 +16,23 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ctareo_btnDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints">
 
         <LinearLayout
+            android:id="@+id/ctareo_lLayoutEmpresa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/enterprise"
-                style="@style/tView_Tittle" />
+                android:text="@string/enterprise" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -45,16 +45,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ctareo_lLayoutFundo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
             <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fundo"
-                style="@style/tView_Tittle" />
+                android:text="Fundo" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -67,16 +68,41 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ctareo_lLayoutCultivo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
             <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lote"
-                style="@style/tView_Tittle" />
+                android:text="@string/cultivo" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ctareo_lLayoutAgrupadorActividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_starndar"
+            android:orientation="vertical">
+
+            <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/agrupador_actividad" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -89,16 +115,17 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ctareo_lLayoutActividad"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
             <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cultivo"
-                style="@style/tView_Tittle" />
+                android:text="@string/actividad" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -111,16 +138,42 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ctareo_lLayoutLote"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
             <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/centro_de_coste"
-                style="@style/tView_Tittle" />
+                android:text="@string/lote" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/ctareo_lLayoutCentroCosto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_starndar"
+            android:orientation="vertical">
+
+            <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/centro_de_costo" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -135,15 +188,17 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ctareo_btnDone"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="Listo"
-        android:background="@color/colorPrimaryDark"
+        app:rippleColor="@color/colorAccent"
+        app:backgroundTint="@color/colorPrimaryDark"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

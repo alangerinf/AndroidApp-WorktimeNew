@@ -19,7 +19,6 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -70,9 +69,7 @@ public class FundoDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "F."+TAB_FUNDO_ID+_ +
-                            "F."+TAB_FUNDO_NAME+_ +
-                            "F."+TAB_FUNDO_IDEMPRESA+
+                            "*"+
                         _FROM+
                             TAB_FUNDO+" as F"+
                         _WHERE+
@@ -100,9 +97,7 @@ public class FundoDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT+
-                            "F."+TAB_FUNDO_ID+_ +
-                            "F."+TAB_FUNDO_NAME+_ +
-                            "F."+TAB_FUNDO_IDEMPRESA+
+                            "*"+
                         _FROM+
                             TAB_FUNDO+" as F"+
                         _WHERE+

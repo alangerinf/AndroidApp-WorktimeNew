@@ -67,7 +67,7 @@ public class CentroCosteDAO {
         conn.close();
         return temp > 0;
     }
-    
+
     public CentroCosteVO selectById(int id) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
@@ -124,7 +124,7 @@ public class CentroCosteDAO {
         c.close();
         return centroCosteVOS;
     }
-    
+
     private CentroCosteVO getAtributtes(Cursor cursor){
         CentroCosteVO centroCosteVO = new CentroCosteVO();
         String[] columnNames = cursor.getColumnNames();

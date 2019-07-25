@@ -1,13 +1,13 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class AgrupadorActividad {
+public class CultivoVO {
 
     private int id;
     private String cod;
     private String name;
 
 
-    public AgrupadorActividad() {
+    public CultivoVO() {
         this.id=0;
         this.cod="";
         this.name="";

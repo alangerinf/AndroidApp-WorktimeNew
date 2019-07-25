@@ -44,18 +44,6 @@ public class ActivityPreloader extends Activity {
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
 
-        try{
-
-            Cursor cursor = db.rawQuery(
-                    "SELECT " +
-                            "*"+
-                            " FROM "+
-                            TAB_EMPRESA
-                    ,null);
-
-        }catch (Exception e){
-            Toast.makeText(ctx,e.toString(),Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void declare() {

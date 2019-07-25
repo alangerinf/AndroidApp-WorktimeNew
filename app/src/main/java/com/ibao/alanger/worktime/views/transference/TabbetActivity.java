@@ -4,11 +4,13 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.widget.Toolbar;
@@ -21,12 +23,19 @@ import com.ibao.alanger.worktime.views.transference.ui.main.AddPersonalFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.ListPersonalAddedFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.SectionsPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class TabbetActivity extends AppCompatActivity
         implements
-            AddPersonalFragment.OnFragmentInteractionListener,
+        AddPersonalFragment.OnFragmentInteractionListener,
         ListPersonalAddedFragment.OnFragmentInteractionListener {
+
+    private static FloatingActionButton fab;
+    private static CustomViewPager viewPager;
+    private static TabLayout tabs;
+    private static SectionsPagerAdapter sectionsPagerAdapter;
+    ArrayList<String> tittles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +46,9 @@ public class TabbetActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
-        TabLayout tabs = findViewById(R.id.tabs);
-        tabs.setupWithViewPager(viewPager);
+
+
+       // viewPager.setPagingEnabled(false);
         /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +58,42 @@ public class TabbetActivity extends AppCompatActivity
             }
         });
         */
+
+        declare();
+        events();
+    }
+
+    private void events() {
+        fab.setOnClickListener(v->{
+            if(viewPager.getCurrentItem()!=1){//si esta en el segundo fragment
+                viewPager.setCurrentItem(1);
+            }else {
+                finish();
+            }
+
+        });
+
+
+
+    }
+
+    private void declare() {
+        tittles = new ArrayList<>();
+        tittles.add(getString(R.string.tab_text_1));
+        tittles.add(getString(R.string.tab_text_2));
+
+
+        sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager(),tittles);
+
+
+        fab = findViewById(R.id.fab);
+        viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(sectionsPagerAdapter);
+
+        tabs = findViewById(R.id.tabs);
+        tabs.setupWithViewPager(viewPager);
+
+     //   viewPager.setPagingEnabled(false);  //cancelar el movimiento de swipe
 
     }
 
@@ -81,7 +124,10 @@ public class TabbetActivity extends AppCompatActivity
     }
 
 
+    @Override
+    public void onFragmentInteraction_upd_eTextDNI(String mensaje) {
 
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

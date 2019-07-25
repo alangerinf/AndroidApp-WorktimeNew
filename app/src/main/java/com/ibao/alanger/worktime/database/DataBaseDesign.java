@@ -9,7 +9,7 @@ public class DataBaseDesign {
     public static final String DATABASE_NAME="dataWorktime";
 
     //PALABRAS CLAVE
-    private static final String TABLE_CREATE        = " CREATE TABLE ",// IF NOT EXISTS
+    private static final String TABLE_CREATE        = " CREATE TABLE IF NOT EXISTS ",// IF NOT EXISTS
                                 AUTOINCREMET        = "  AUTOINCREMENT ",
                                 PK                  = " PRIMARY KEY ",
                                 N_NULL              = " NOT NULL ",
@@ -37,67 +37,105 @@ public class DataBaseDesign {
 
     //TODO: TABLAS MAESTRAS
     //TABLE EMPRESA
-    public static final String  TAB_EMPRESA         = "EmpresaVO",
+    public static final String  TAB_EMPRESA         = "Empresa",
                                 TAB_EMPRESA_ID          = "id",
                                 TAB_EMPRESA_ID_TYPE     = TYPE_INTEGER,
+                                TAB_EMPRESA_COD         = "code",
+                                TAB_EMPRESA_COD_TYPE    = TYPE_VARCHAR,
+                                TAB_EMPRESA_RAZON       = "razonSocial",
+                                TAB_EMPRESA_RAZON_TYPE  = TYPE_VARCHAR,
+                                TAB_EMPRESA_RUC         = "RUC",
+                                TAB_EMPRESA_RUC_TYPE    = TYPE_VARCHAR,
                                 TAB_EMPRESA_NAME        = "name",
-                                TAB_EMPRESA_NAME_TYPE   = TYPE_VARCHAR;
+                                TAB_EMPRESA_NAME_TYPE   = TYPE_VARCHAR,
+                                TAB_EMPRESA_STATUS      = "status",
+                                TAB_EMPRESA_STATUS_TYPE = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_EMPRESA =
             TABLE_CREATE+TAB_EMPRESA+"("+
                 TAB_EMPRESA_ID   + TAB_EMPRESA_ID_TYPE   + PK+ N_NULL+
                 AND+
+                TAB_EMPRESA_COD   + TAB_EMPRESA_COD_TYPE   +
+                AND+
+                TAB_EMPRESA_RAZON   + TAB_EMPRESA_RAZON_TYPE   +
+                AND+
+                TAB_EMPRESA_RUC   + TAB_EMPRESA_RUC_TYPE   +
+                AND+
                 TAB_EMPRESA_NAME + TAB_EMPRESA_NAME_TYPE + N_NULL+
+                AND+
+                TAB_EMPRESA_STATUS + TAB_EMPRESA_STATUS_TYPE + N_NULL+
             ")";
 
     //TABLE FUNDO
-    public static final String  TAB_FUNDO               = "FundoVO",
+    public static final String  TAB_FUNDO               = "Fundo",
                                 TAB_FUNDO_ID                = "id",
                                 TAB_FUNDO_ID_TYPE           = TYPE_INTEGER,
+                                TAB_FUNDO_COD               = "code",
+                                TAB_FUNDO_COD_TYPE          = TYPE_VARCHAR,
                                 TAB_FUNDO_NAME              = "name",
                                 TAB_FUNDO_NAME_TYPE         = TYPE_VARCHAR,
                                 TAB_FUNDO_IDEMPRESA         = "idEmpresa",
-                                TAB_FUNDO_IDEMPRESA_TYPE    = TYPE_INTEGER;
+                                TAB_FUNDO_IDEMPRESA_TYPE    = TYPE_INTEGER,
+                                TAB_FUNDO_STATUS            = "status",
+                                TAB_FUNDO_STATUS_TYPE       = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_FUNDO =
             TABLE_CREATE+TAB_FUNDO+"("+
-                    TAB_FUNDO_ID   + TAB_FUNDO_ID_TYPE   + PK+ N_NULL+
+                    TAB_FUNDO_ID   + TAB_FUNDO_ID_TYPE   + PK+ N_NULL+AND +
+                    AND+
+                    TAB_FUNDO_COD + TAB_FUNDO_COD_TYPE +
                     AND +
                     TAB_FUNDO_NAME + TAB_FUNDO_NAME_TYPE + N_NULL+
                     AND +
                     TAB_FUNDO_IDEMPRESA + TAB_FUNDO_IDEMPRESA_TYPE + N_NULL+
+                    AND +
+                    TAB_FUNDO_STATUS + TAB_FUNDO_STATUS_TYPE + N_NULL+
                     ")";
 
-    //TABLE SEDE
-    public static final String  TAB_SEDE                = "Sede",
-                                TAB_SEDE_ID                 = "id",
-                                TAB_SEDE_ID_TYPE            = TYPE_INTEGER,
-                                TAB_SEDE_NAME               = "name",
-                                TAB_SEDE_NAME_TYPE          = TYPE_VARCHAR,
-                                TAB_SEDE_IDEMPRESA          = "idEmpresa",
-                                TAB_SEDE_IDEMPRESA_TYPE     = TYPE_INTEGER;
 
-    public static final String CREATETABLE_SEDE =
-            TABLE_CREATE+TAB_SEDE+"("+
-                    TAB_SEDE_ID   + TAB_SEDE_ID_TYPE   + PK+ N_NULL+
+
+    //TABLE MODULO
+    public static final String  TAB_LOTE              = "lote",
+                                TAB_LOTE_ID               = "id",
+                                TAB_LOTE_ID_TYPE          = TYPE_INTEGER,
+                                TAB_LOTE_IDFUNDO          = "idFundo",
+                                TAB_LOTE_IDFUNDO_TYPE     = TYPE_INTEGER,
+                                TAB_LOTE_IDCULTIVO        = "idCultivo",
+                                TAB_LOTE_IDCULTIVO_TYPE   = TYPE_INTEGER,
+                                TAB_LOTE_NUM              = "numero",
+                                TAB_LOTE_NUM_TYPE         = TYPE_VARCHAR,
+                                TAB_LOTE_COD              = "code",//ocdiog completo pk
+                                TAB_LOTE_COD_TYPE         = TYPE_VARCHAR,
+                                TAB_LOTE_STATUS           = "status",
+                                TAB_LOTE_STATUS_TYPE      = TYPE_BOOLEAN;
+
+    public static final String CREATETABLE_LOTE =
+            TABLE_CREATE+TAB_LOTE+"("+
+                    TAB_LOTE_ID   + TAB_LOTE_ID_TYPE   + PK+ N_NULL+
                     AND +
-                    TAB_SEDE_NAME + TAB_SEDE_NAME_TYPE + N_NULL+
+                    TAB_LOTE_IDFUNDO + TAB_LOTE_IDFUNDO_TYPE+ N_NULL+
                     AND +
-                    TAB_SEDE_IDEMPRESA + TAB_SEDE_IDEMPRESA_TYPE + N_NULL+
+                    TAB_LOTE_IDCULTIVO + TAB_LOTE_IDCULTIVO_TYPE+ N_NULL+
+                    AND +
+                    TAB_LOTE_NUM + TAB_LOTE_NUM_TYPE+ N_NULL+
+                    AND +
+                    TAB_LOTE_COD + TAB_LOTE_COD_TYPE + N_NULL+
+                    AND +
+                    TAB_LOTE_STATUS + TAB_LOTE_STATUS_TYPE+ N_NULL+
                     ")";
 
     //TABLE CENTRO DE COSTE
-    public static final String TAB_CCOSTE = "CentroCoste",
-                                TAB_CCOSTE_ID               = "id",
-                                TAB_CCOSTE_ID_TYPE          = TYPE_INTEGER,
-                                TAB_CCOSTE_COD              = "code",
-                                TAB_CCOSTE_COD_TYPE         = TYPE_VARCHAR,
-                                TAB_CCOSTE_NAME             = "name",
-                                TAB_CCOSTE_NAME_TYPE        = TYPE_VARCHAR,
-                                TAB_CCOSTE_DESC             = "descripcion",
-                                TAB_CCOSTE_DESC_TYPE        = TYPE_VARCHAR,
-                                TAB_CCOSTE_IDEMPRESA        = "idEmpresa",
-                                TAB_CCOSTE_IDEMPRESA_TYPE   = TYPE_INTEGER;
+    public static final String TAB_CCOSTE                       = "CentroCoste",
+                                TAB_CCOSTE_ID                       = "id",
+                                TAB_CCOSTE_ID_TYPE                  = TYPE_INTEGER,
+                                TAB_CCOSTE_COD                      = "code",
+                                TAB_CCOSTE_COD_TYPE                 = TYPE_VARCHAR,
+                                TAB_CCOSTE_NAME                     = "name",
+                                TAB_CCOSTE_NAME_TYPE                = TYPE_VARCHAR,
+                                TAB_CCOSTE_IDEMPRESA                = "idEmpresa",
+                                TAB_CCOSTE_IDEMPRESA_TYPE           = TYPE_INTEGER,
+                                TAB_CCOSTE_STATUS                   = "status",
+                                TAB_CCOSTE_STATUS_TYPE              = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_CCOSTE =
             TABLE_CREATE+ TAB_CCOSTE +"("+
@@ -107,70 +145,35 @@ public class DataBaseDesign {
                     AND +
                     TAB_CCOSTE_NAME + TAB_CCOSTE_NAME_TYPE + N_NULL+
                     AND +
-                    TAB_CCOSTE_DESC + TAB_CCOSTE_DESC_TYPE + N_NULL+
-                    AND +
                     TAB_CCOSTE_IDEMPRESA + TAB_CCOSTE_IDEMPRESA_TYPE + N_NULL+
+                    AND +
+                    TAB_CCOSTE_STATUS + TAB_CCOSTE_STATUS_TYPE + N_NULL+
                     ")";
     
-    //TABLE MODULO
-    public static final String  TAB_MODULO              = "Modulo",
-                                TAB_MODULO_ID               = "id",
-                                TAB_MODULO_ID_TYPE          = TYPE_INTEGER,
-                                TAB_MODULO_COD              = "code",
-                                TAB_MODULO_COD_TYPE         = TYPE_VARCHAR,
-                                TAB_MODULO_NAME             = "name",
-                                TAB_MODULO_NAME_TYPE        = TYPE_VARCHAR,
-                                TAB_MODULO_IDFUNDO          = "idFundo",
-                                TAB_MODULO_IDFUNDO_TYPE     = TYPE_INTEGER;
 
-    public static final String CREATETABLE_MODULO =
-            TABLE_CREATE+TAB_MODULO+"("+
-                    TAB_MODULO_ID   + TAB_MODULO_ID_TYPE   + PK+ N_NULL+
-                    AND +
-                    TAB_MODULO_COD + TAB_MODULO_COD_TYPE + N_NULL+
-                    AND +
-                    TAB_MODULO_NAME + TAB_MODULO_NAME_TYPE + N_NULL+
-                    AND +
-                    TAB_CCOSTE_DESC + TAB_CCOSTE_DESC_TYPE + N_NULL+
-                    AND +
-                    TAB_MODULO_IDFUNDO + TAB_MODULO_IDFUNDO_TYPE+ N_NULL+
-                    ")";
     
     //TABLE AGRUPACION_ACTIVIDAD
-    public static final String  TAB_AGRUPADORACT              = "AgrupadorActividad",
-                                TAB_AGRUPADORACT_ID               = "id",
-                                TAB_AGRUPADORACT_ID_TYPE          = TYPE_INTEGER,
-                                TAB_AGRUPADORACT_COD              = "code",
-                                TAB_AGRUPADORACT_COD_TYPE         = TYPE_VARCHAR,
-                                TAB_AGRUPADORACT_NAME             = "name",
-                                TAB_AGRUPADORACT_NAME_TYPE        = TYPE_VARCHAR;
+    public static final String  TAB_ACTIVIDAD              = "Actividad",
+                                TAB_ACTIVIDAD_ID               = "id",
+                                TAB_ACTIVIDAD_ID_TYPE          = TYPE_INTEGER,
+                                TAB_ACTIVIDAD_COD              = "code",
+                                TAB_ACTIVIDAD_COD_TYPE         = TYPE_VARCHAR,
+                                TAB_ACTIVIDAD_NAME             = "name",
+                                TAB_ACTIVIDAD_NAME_TYPE        = TYPE_VARCHAR,
+                                TAB_ACTIVIDAD_STATUS           = "status",
+                                TAB_ACTIVIDAD_STATUS_TYPE      = TYPE_BOOLEAN;
 
-    public static final String CREATETABLE_AGRUPADORACT =
-            TABLE_CREATE+TAB_AGRUPADORACT+"("+
-                    TAB_AGRUPADORACT_ID   + TAB_AGRUPADORACT_ID_TYPE + PK + N_NULL+
+    public static final String CREATETABLE_ACTIVIDAD =
+            TABLE_CREATE+TAB_ACTIVIDAD+"("+
+                    TAB_ACTIVIDAD_ID   + TAB_ACTIVIDAD_ID_TYPE + PK + N_NULL+
                     AND +
-                    TAB_AGRUPADORACT_COD + TAB_AGRUPADORACT_COD_TYPE + N_NULL+
+                    TAB_ACTIVIDAD_COD + TAB_ACTIVIDAD_COD_TYPE + N_NULL+
                     AND +
-                    TAB_AGRUPADORACT_NAME + TAB_AGRUPADORACT_NAME_TYPE + N_NULL+
+                    TAB_ACTIVIDAD_NAME + TAB_ACTIVIDAD_NAME_TYPE + N_NULL+
+                    AND +
+                    TAB_ACTIVIDAD_STATUS + TAB_ACTIVIDAD_STATUS_TYPE + N_NULL+
                     ")";
 
-    //TABLE CULTIVO_ACTIVIDAD
-    public static final String  TAB_CULTIVOACTIVIDAD                = "CultivoActividad",
-                                TAB_CULTIVOACTIVIDAD_ID                 = "id",
-                                TAB_CULTIVOACTIVIDAD_ID_TYPE            = TYPE_INTEGER,
-                                TAB_CULTIVOACTIVIDAD_IDACTIVIDAD        = "idActividad",
-                                TAB_CULTIVOACTIVIDAD_IDACTIVIDAD_TYPE   = TYPE_INTEGER,
-                                TAB_CULTIVOACTIVIDAD_IDCULTIVO          = "idCultivo",
-                                TAB_CULTIVOACTIVIDAD_IDCULTIVO_TYPE     = TYPE_INTEGER;
-
-    public static final String CREATETABLE_CULTIVOACTIVIDAD =
-            TABLE_CREATE+TAB_CULTIVOACTIVIDAD+"("+
-                    TAB_CULTIVOACTIVIDAD_ID   + TAB_CULTIVOACTIVIDAD_ID_TYPE   + PK + N_NULL+
-                    AND +
-                    TAB_CULTIVOACTIVIDAD_IDACTIVIDAD + TAB_CULTIVOACTIVIDAD_IDACTIVIDAD_TYPE + N_NULL+
-                    AND +
-                    TAB_CULTIVOACTIVIDAD_IDCULTIVO + TAB_CULTIVOACTIVIDAD_IDCULTIVO_TYPE+ N_NULL+
-                    ")";
 
     public static final String  TAB_CULTIVO             = "Cultivo",
                                 TAB_CULTIVO_ID              = "id",
@@ -178,7 +181,11 @@ public class DataBaseDesign {
                                 TAB_CULTIVO_COD             = "code",
                                 TAB_CULTIVO_COD_TYPE        = TYPE_VARCHAR,
                                 TAB_CULTIVO_NAME            = "name",
-                                TAB_CULTIVO_NAME_TYPE       = TYPE_VARCHAR;
+                                TAB_CULTIVO_NAME_TYPE       = TYPE_VARCHAR,
+                                TAB_CULTIVO_HASLABOR        = "hasLabor",
+                                TAB_CULTIVO_HASLABOR_TYPE   = TYPE_BOOLEAN,
+                                TAB_CULTIVO_STATUS          = "status",
+                                TAB_CULTIVO_STATUS_TYPE     = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_CULTIVO =
             TABLE_CREATE+TAB_CULTIVO+"("+
@@ -187,90 +194,82 @@ public class DataBaseDesign {
                     TAB_CULTIVO_COD + TAB_CULTIVO_COD_TYPE + N_NULL+
                     AND +
                     TAB_CULTIVO_NAME + TAB_CULTIVO_NAME_TYPE+ N_NULL+
+                    AND +
+                    TAB_CULTIVO_HASLABOR + TAB_CULTIVO_HASLABOR_TYPE+ N_NULL+
+                    AND +
+                    TAB_CULTIVO_STATUS + TAB_CULTIVO_STATUS_TYPE+ N_NULL+
                     ")";
 
-    public static final String  TAB_FUND0CULTIVO            = "FundoCultivo",
-                                TAB_FUND0CULTIVO_ID             = "id",
-                                TAB_FUND0CULTIVO_ID_TYPE        = TYPE_INTEGER,
-                                TAB_FUND0CULTIVO_IDFUNDO        = "idFundo",
-                                TAB_FUND0CULTIVO_IDFUNDO_TYPE   = TYPE_INTEGER,
-                                TAB_FUND0CULTIVO_IDCULTIVO      = "idCultivo",
-                                TAB_FUND0CULTIVO_IDCULTIVO_TYPE = TYPE_INTEGER;
 
-    public static final String CREATETABLE_FUND0CULTIVO =
-            TABLE_CREATE+TAB_FUND0CULTIVO+"("+
-                    TAB_FUND0CULTIVO_ID   + TAB_FUND0CULTIVO_ID_TYPE   + PK+ N_NULL+
-                    AND +
-                    TAB_FUND0CULTIVO_IDFUNDO + TAB_FUND0CULTIVO_IDFUNDO_TYPE + N_NULL+
-                    AND +
-                    TAB_FUND0CULTIVO_IDCULTIVO + TAB_FUND0CULTIVO_IDCULTIVO_TYPE+ N_NULL+
-                    ")";
-
-    public static final String  TAB_TRABAJADOR              = "TrabajadorVO",
-                                TAB_TRABAJADOR_ID               = "id",
-                                TAB_TRABAJADOR_ID_TYPE          = TYPE_INTEGER,
-                                TAB_TRABAJADOR_COD              = "cod",
-                                TAB_TRABAJADOR_COD_TYPE         = TYPE_VARCHAR,
+    public static final String  TAB_TRABAJADOR              = "Trabajador",
                                 TAB_TRABAJADOR_DNI              = "dni",
                                 TAB_TRABAJADOR_DNI_TYPE         = TYPE_VARCHAR,
+                                TAB_TRABAJADOR_COD              = "cod",
+                                TAB_TRABAJADOR_COD_TYPE         = TYPE_VARCHAR,
                                 TAB_TRABAJADOR_NAME             = "name",
                                 TAB_TRABAJADOR_NAME_TYPE        = TYPE_VARCHAR,
-                                TAB_TRABAJADOR_IDEMPRESA        = "idEmpresa",
-                                TAB_TRABAJADOR_IDEMPRESA_TYPE   = TYPE_INTEGER;
+                                TAB_TRABAJADOR_STATUS           = "status",
+                                TAB_TRABAJADOR_STATUS_TYPE      = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_TRABAJADOR =
             TABLE_CREATE+TAB_TRABAJADOR+"("+
-                    TAB_TRABAJADOR_ID   + TAB_TRABAJADOR_ID_TYPE   + PK + N_NULL+
+                    TAB_TRABAJADOR_DNI + TAB_TRABAJADOR_DNI_TYPE +  PK + N_NULL+
                     AND +
                     TAB_TRABAJADOR_COD + TAB_TRABAJADOR_COD_TYPE + N_NULL+
                     AND +
-                    TAB_TRABAJADOR_DNI + TAB_TRABAJADOR_DNI_TYPE + N_NULL+
-                    AND +
                     TAB_TRABAJADOR_NAME + TAB_TRABAJADOR_NAME_TYPE + N_NULL+
                     AND +
-                    TAB_TRABAJADOR_IDEMPRESA + TAB_TRABAJADOR_IDEMPRESA_TYPE+ N_NULL+
+                    TAB_TRABAJADOR_STATUS + TAB_TRABAJADOR_STATUS_TYPE + N_NULL+
                     ")";
 
-    public static final String  TAB_ACTIVIDAD                   = "Actividad",
-                                TAB_ACTIVIDAD_ID                    = "id",
-                                TAB_ACTIVIDAD_ID_TYPE               = TYPE_INTEGER,
-                                TAB_ACTIVIDAD_COD                   = "cod",
-                                TAB_ACTIVIDAD_COD_TYPE              = TYPE_VARCHAR,
-                                TAB_ACTIVIDAD_NAME                  = "name",
-                                TAB_ACTIVIDAD_NAME_TYPE             = TYPE_VARCHAR,
-                                TAB_ACTIVIDAD_ISDIRECTO             = "isDirecto",
-                                TAB_ACTIVIDAD_ISDIRECTO_TYPE        = TYPE_BOOLEAN,
-                                TAB_ACTIVIDAD_THEORICALCOST         = "theoricalCost",
-                                TAB_ACTIVIDAD_THEORICALCOST_TYPE    = TYPE_FLOAT,
-                                TAB_ACTIVIDAD_THEORICALHOURS        = "theoricalHours",
-                                TAB_ACTIVIDAD_THEORICALHOURS_TYPE   = TYPE_FLOAT,
-                                TAB_ACTIVIDAD_ISTAREA               = "isTarea",
-                                TAB_ACTIVIDAD_ISTAREA_TYPE          = TYPE_BOOLEAN,
-                                TAB_ACTIVIDAD_ISASISTENCIA          = "isAsistencia",
-                                TAB_ACTIVIDAD_ISASISTENCIA_TYPE     = TYPE_BOOLEAN,
-                                TAB_ACTIVIDAD_IDAGRUPADORACT        = "idAgrupadorActividad",
-                                TAB_ACTIVIDAD_IDAGRUPADORACT_TYPE   = TYPE_INTEGER;
+    public static final String  TAB_LABOR                   = "Labor",
+                                TAB_LABOR_ID                    = "id",
+                                TAB_LABOR_ID_TYPE               = TYPE_INTEGER,
+                                TAB_LABOR_COD                   = "cod",
+                                TAB_LABOR_COD_TYPE              = TYPE_VARCHAR,
+                                TAB_LABOR_NAME                  = "name",
+                                TAB_LABOR_NAME_TYPE             = TYPE_VARCHAR,
+                                TAB_LABOR_ISDIRECT              = "isDirecto",
+                                TAB_LABOR_ISDIRECT_TYPE         = TYPE_BOOLEAN,
+                                TAB_LABOR_THEORICALCOST         = "theoricalCost",
+                                TAB_LABOR_THEORICALCOST_TYPE    = TYPE_FLOAT,
+                                TAB_LABOR_THEORICALHOURS        = "theoricalHours",
+                                TAB_LABOR_THEORICALHOURS_TYPE   = TYPE_FLOAT,
+                                TAB_LABOR_ISTAREA               = "isTarea",
+                                TAB_LABOR_ISTAREA_TYPE          = TYPE_BOOLEAN,
+                                TAB_LABOR_IDACTIVIDAD           = "idActividad",
+                                TAB_LABOR_IDACTIVIDAD_TYPE      = TYPE_INTEGER,
+                                TAB_LABOR_LISTIDCULTIVO         = "listIdCultivos",
+                                TAB_LABOR_LISTIDCULTIVO_TYPE    = TYPE_VARCHAR,
+                                TAB_LABOR_UNIDADES              = "unidades",
+                                TAB_LABOR_UNIDADES_TYPE         = TYPE_VARCHAR,
+                                TAB_LABOR_STATUS                = "status",
+                                TAB_LABOR_STATUS_TYPE           = TYPE_BOOLEAN;
 
 
-    public static final String CREATETABLE_ACTIVIDAD =
-            TABLE_CREATE+TAB_ACTIVIDAD+"("+
-                    TAB_ACTIVIDAD_ID   + TAB_ACTIVIDAD_ID_TYPE   + PK + N_NULL+
+    public static final String CREATETABLE_LABOR =
+            TABLE_CREATE+TAB_LABOR+"("+
+                    TAB_LABOR_ID   + TAB_LABOR_ID_TYPE   + PK + N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_COD + TAB_ACTIVIDAD_COD_TYPE + N_NULL+
+                    TAB_LABOR_COD + TAB_LABOR_COD_TYPE + N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_NAME + TAB_ACTIVIDAD_NAME_TYPE + N_NULL+
+                    TAB_LABOR_NAME + TAB_LABOR_NAME_TYPE + N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_ISDIRECTO + TAB_ACTIVIDAD_ISDIRECTO_TYPE + N_NULL+
+                    TAB_LABOR_ISDIRECT + TAB_LABOR_ISDIRECT_TYPE + N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_THEORICALCOST + TAB_ACTIVIDAD_THEORICALCOST_TYPE+ N_NULL+
+                    TAB_LABOR_THEORICALCOST + TAB_LABOR_THEORICALCOST_TYPE+ N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_THEORICALHOURS + TAB_ACTIVIDAD_THEORICALHOURS_TYPE+ N_NULL+
+                    TAB_LABOR_THEORICALHOURS + TAB_LABOR_THEORICALHOURS_TYPE+ N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_ISTAREA + TAB_ACTIVIDAD_ISTAREA_TYPE+ N_NULL+
+                    TAB_LABOR_ISTAREA + TAB_LABOR_ISTAREA_TYPE+ N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_ISASISTENCIA + TAB_ACTIVIDAD_ISASISTENCIA_TYPE+ N_NULL+
+                    TAB_LABOR_IDACTIVIDAD + TAB_LABOR_IDACTIVIDAD_TYPE + N_NULL+
                     AND +
-                    TAB_ACTIVIDAD_IDAGRUPADORACT + TAB_ACTIVIDAD_IDAGRUPADORACT_TYPE+ N_NULL+
+                    TAB_LABOR_LISTIDCULTIVO + TAB_LABOR_LISTIDCULTIVO_TYPE + N_NULL+
+                    AND +
+                    TAB_LABOR_UNIDADES + TAB_LABOR_UNIDADES_TYPE + N_NULL+
+                    AND +
+                    TAB_LABOR_STATUS + TAB_LABOR_STATUS_TYPE + N_NULL+
                     ")";
 
     //TODO: TABLAS DE INSERSION
@@ -278,20 +277,20 @@ public class DataBaseDesign {
     public static final String  TAB_TAREO                   = "Tareo",
                                 TAB_TAREO_ID                    = "id",
                                 TAB_TAREO_ID_TYPE               = TYPE_INTEGER,
-                                TAB_TAREO_IDFUNDOCULTIVO        = "idFundoCultivo",
-                                TAB_TAREO_IDFUNDOCULTIVO_TYPE   = TYPE_INTEGER,
-                                TAB_TAREO_IDACTIVIDAD           = "idActividad",
-                                TAB_TAREO_IDACTIVIDAD_TYPE      = TYPE_INTEGER,
-                                TAB_TAREO_IDMODULO              = "idModulo",
-                                TAB_TAREO_IDMODULO_TYPE         = TYPE_INTEGER,
+                                TAB_TAREO_IDLABOR               = "idActividad",
+                                TAB_TAREO_IDLABOR_TYPE          = TYPE_INTEGER,
+                                TAB_TAREO_IDLOTE                = "idLote",
+                                TAB_TAREO_IDLOTE_TYPE           = TYPE_INTEGER,
                                 TAB_TAREO_IDCCOSTE              = "idCentroCoste",
                                 TAB_TAREO_IDCCOSTE_TYPE         = TYPE_INTEGER,
-                                TAB_TAREO_IDSEDE                = "idSede",
-                                TAB_TAREO_IDSEDE_TYPE           = TYPE_INTEGER,
+                                TAB_TAREO_IDFUNDO               = "idFundo",
+                                TAB_TAREO_IDFUNDO_TYPE          = TYPE_INTEGER,
                                 TAB_TAREO_DATESTART             = "dateStart",
                                 TAB_TAREO_DATESTART_TYPE        = TYPE_DATETIME,
                                 TAB_TAREO_DATEEND               = "dateEnd",
                                 TAB_TAREO_DATEEND_TYPE          = TYPE_DATETIME,
+                                TAB_TAREO_PRODUCTIVIDAD         = "producitividad",
+                                TAB_TAREO_PRODUCTIVIDAD_TYPE    = TYPE_FLOAT,
                                 TAB_TAREO_ISACTIVE              = "isActive",
                                 TAB_TAREO_ISACTIVE_TYPE         = TYPE_BOOLEAN;
 
@@ -300,71 +299,91 @@ public class DataBaseDesign {
             TABLE_CREATE+TAB_TAREO+"("+
                     TAB_TAREO_ID   + TAB_TAREO_ID_TYPE   + PK + AUTOINCREMET+
                     AND +
-                    TAB_TAREO_IDFUNDOCULTIVO + TAB_TAREO_IDFUNDOCULTIVO_TYPE + N_NULL+
+                    TAB_TAREO_IDLABOR + TAB_TAREO_IDLABOR_TYPE + N_NULL+
                     AND +
-                    TAB_TAREO_IDACTIVIDAD + TAB_TAREO_IDACTIVIDAD_TYPE + N_NULL+
-                    AND +
-                    TAB_TAREO_IDMODULO + TAB_TAREO_IDMODULO_TYPE +
+                    TAB_TAREO_IDLOTE + TAB_TAREO_IDLOTE_TYPE +
                     AND +
                     TAB_TAREO_IDCCOSTE + TAB_TAREO_IDCCOSTE_TYPE +
                     AND +
-                    TAB_TAREO_IDSEDE + TAB_TAREO_IDSEDE_TYPE+
+                    TAB_TAREO_IDFUNDO + TAB_TAREO_IDFUNDO_TYPE + N_NULL+
                     AND +
                     TAB_TAREO_DATESTART + TAB_TAREO_DATESTART_TYPE+ DEF_DATE_NOW+
                     AND +
                     TAB_TAREO_DATEEND + TAB_TAREO_DATEEND_TYPE+
                     AND +
+                    TAB_TAREO_PRODUCTIVIDAD + TAB_TAREO_PRODUCTIVIDAD_TYPE +
+                    AND +
                     TAB_TAREO_ISACTIVE + TAB_TAREO_ISACTIVE_TYPE+ " DEFAULT 1 "+
                     ")";
 
-    public static final String  TAB_TAREOTRABAJADOR                 = "TareoTrabajador",
-                                TAB_TAREOTRABAJADOR_ID                  = "id",
-                                TAB_TAREOTRABAJADOR_ID_TYPE             = TYPE_INTEGER,
-                                TAB_TAREOTRABAJADOR_IDTAREO             = "idTareo",
-                                TAB_TAREOTRABAJADOR_IDTAREO_TYPE        = TYPE_INTEGER,
-                                TAB_TAREOTRABAJADOR_IDTRABAJADOR        = "idTrabajador",
-                                TAB_TAREOTRABAJADOR_IDTRABAJADOR_TYPE   = TYPE_INTEGER,
-                                TAB_TAREOTRABAJADOR_DATESTART           = "dateStart",
-                                TAB_TAREOTRABAJADOR_DATESTART_TYPE      = TYPE_DATETIME,
-                                TAB_TAREOTRABAJADOR_DATEEND             = "dateEnd",
-                                TAB_TAREOTRABAJADOR_DATEEND_TYPE        = TYPE_DATETIME;
+    public static final String  TAB_TAREODETALLE                = "TareoTrabajador",
+                                TAB_TAREODETALLE_ID                 = "id",
+                                TAB_TAREODETALLE_ID_TYPE            = TYPE_INTEGER,
+                                TAB_TAREODETALLE_IDTAREO            = "idTareo",
+                                TAB_TAREODETALLE_IDTAREO_TYPE       = TYPE_INTEGER,
+                                TAB_TAREODETALLE_DNI                = "DNI",
+                                TAB_TAREODETALLE_DNI_TYPE           = TYPE_VARCHAR,
+                                TAB_TAREODETALLE_DATESTART          = "dateStart",
+                                TAB_TAREODETALLE_DATESTART_TYPE     = TYPE_DATETIME,
+                                TAB_TAREODETALLE_DATEEND            = "dateEnd",
+                                TAB_TAREODETALLE_DATEEND_TYPE       = TYPE_DATETIME,
+                                TAB_TAREODETALLE_IDSALIDA           = "idSalida",
+                                TAB_TAREODETALLE_IDSALIDA_TYPE      = TYPE_INTEGER;
 
-    public static final String CREATETABLE_TAREOTRABAJADOR =
-            TABLE_CREATE+TAB_TAREOTRABAJADOR+"("+
-                    TAB_TAREOTRABAJADOR_ID   + TAB_TAREOTRABAJADOR_ID_TYPE   + PK + AUTOINCREMET+
+    public static final String CREATETABLE_TAREODETALLE =
+            TABLE_CREATE+TAB_TAREODETALLE+"("+
+                    TAB_TAREODETALLE_ID         + TAB_TAREODETALLE_ID_TYPE   + PK + AUTOINCREMET+
                     AND +
-                    TAB_TAREOTRABAJADOR_IDTAREO + TAB_TAREOTRABAJADOR_IDTAREO_TYPE + N_NULL+
+                    TAB_TAREODETALLE_IDTAREO    + TAB_TAREODETALLE_IDTAREO_TYPE + N_NULL+
                     AND +
-                    TAB_TAREOTRABAJADOR_IDTRABAJADOR + TAB_TAREOTRABAJADOR_IDTRABAJADOR_TYPE + N_NULL+
+                    TAB_TAREODETALLE_DNI        + TAB_TAREODETALLE_DNI_TYPE + N_NULL+
                     AND +
-                    TAB_TAREO_IDMODULO + TAB_TAREOTRABAJADOR_IDTRABAJADOR_TYPE +
+                    TAB_TAREODETALLE_DATESTART  + TAB_TAREODETALLE_DATESTART_TYPE + DEF_DATE_NOW+
                     AND +
-                    TAB_TAREOTRABAJADOR_DATESTART + TAB_TAREOTRABAJADOR_DATESTART_TYPE + DEF_DATE_NOW+
+                    TAB_TAREODETALLE_DATEEND    + TAB_TAREODETALLE_DATEEND_TYPE+
                     AND +
-                    TAB_TAREOTRABAJADOR_DATEEND + TAB_TAREOTRABAJADOR_DATEEND_TYPE+
+                    TAB_TAREODETALLE_IDSALIDA    + TAB_TAREODETALLE_IDSALIDA_TYPE+
                     ")";
 
 
     public static final String  TAB_PRODUCTIVIDAD                       = "Productividad",
                                 TAB_PRODUCTIVIDAD_ID                        = "id",
                                 TAB_PRODUCTIVIDAD_ID_TYPE                   = TYPE_INTEGER,
-                                TAB_PRODUCTIVIDAD_IDTAREOTRABAJADOR         = "idTareo",
-                                TAB_PRODUCTIVIDAD_IDTAREOTRABAJADOR_TYPE    = TYPE_INTEGER,
-                                TAB_PRODUCTIVIDAD_VALUE                     = "idTrabajador",
-                                TAB_PRODUCTIVIDAD_VALUE_TYPE                = TYPE_INTEGER,
-                                TAB_TAREOTRABAJADOR_DATETIME                = "date",
-                                TAB_TAREOTRABAJADOR_DATETIME_TYPE           = TYPE_DATETIME;
+                                TAB_PRODUCTIVIDAD_IDTAREODETALLE            = "idTareoDetalle",
+                                TAB_PRODUCTIVIDAD_IDTAREODETALLE_TYPE       = TYPE_INTEGER,
+                                TAB_PRODUCTIVIDAD_VALUE                     = "value",
+                                TAB_PRODUCTIVIDAD_VALUE_TYPE                = TYPE_FLOAT,
+                                TAB_TAREODETALLE_DATETIME                   = "datetime",
+                                TAB_TAREODETALLE_DATETIME_TYPE              = TYPE_DATETIME;
 
 
     public static final String CREATETABLE_PRODUCTIVIDAD =
             TABLE_CREATE+TAB_PRODUCTIVIDAD+"("+
                     TAB_PRODUCTIVIDAD_ID   + TAB_PRODUCTIVIDAD_ID_TYPE   + PK + AUTOINCREMET+
                     AND +
-                    TAB_PRODUCTIVIDAD_IDTAREOTRABAJADOR + TAB_PRODUCTIVIDAD_IDTAREOTRABAJADOR_TYPE + N_NULL+
+                    TAB_PRODUCTIVIDAD_IDTAREODETALLE + TAB_PRODUCTIVIDAD_IDTAREODETALLE_TYPE + N_NULL+
                     AND +
                     TAB_PRODUCTIVIDAD_VALUE + TAB_PRODUCTIVIDAD_VALUE_TYPE +
                     AND +
-                    TAB_TAREOTRABAJADOR_DATETIME + TAB_TAREOTRABAJADOR_DATETIME_TYPE + DEF_DATE_NOW+
+                    TAB_TAREODETALLE_DATETIME + TAB_TAREODETALLE_DATETIME_TYPE + DEF_DATE_NOW+
+                    ")";
+
+    public static final String  TAB_SALIDA          = "tipoSalida",
+                                TAB_SALIDA_ID           = "id",
+                                TAB_SALIDA_ID_TYPE      = TYPE_INTEGER,
+                                TAB_SALIDA_COD          = "code",
+                                TAB_SALIDA_COD_TYPE     = TYPE_VARCHAR,
+                                TAB_SALIDA_NAME         = "name",
+                                TAB_SALIDA_NAME_TYPE    = TYPE_VARCHAR;
+
+
+    public static final String CREATETABLE_SALIDA =
+            TABLE_CREATE+TAB_SALIDA+"("+
+                    TAB_SALIDA_ID   + TAB_SALIDA_ID_TYPE   + PK + AUTOINCREMET+
+                    AND +
+                    TAB_SALIDA_COD + TAB_SALIDA_COD_TYPE + N_NULL+
+                    AND +
+                    TAB_SALIDA_NAME + TAB_SALIDA_NAME_TYPE +
                     ")";
 
 

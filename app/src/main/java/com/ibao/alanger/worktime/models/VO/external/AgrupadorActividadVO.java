@@ -1,16 +1,16 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class Modulo {
+public class AgrupadorActividadVO {
+
     private int id;
     private String cod;
     private String name;
-    private int idEmpresa;
 
-    public Modulo(){
+
+    public AgrupadorActividadVO() {
         this.id=0;
         this.cod="";
         this.name="";
-        this.idEmpresa =0;
     }
 
     public int getId() {
@@ -21,27 +21,19 @@ public class Modulo {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(int idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
-
     public String getCod() {
         return cod;
     }
 
     public void setCod(String cod) {
         this.cod = cod;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

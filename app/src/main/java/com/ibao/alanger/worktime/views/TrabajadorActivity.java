@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.ibao.alanger.worktime.R;
 
-public class ProductividadActivity extends AppCompatActivity {
+public class TrabajadorActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

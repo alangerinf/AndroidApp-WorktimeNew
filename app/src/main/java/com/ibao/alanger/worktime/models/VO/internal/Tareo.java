@@ -2,9 +2,9 @@ package com.ibao.alanger.worktime.models.VO.internal;
 
 import com.ibao.alanger.worktime.models.VO.external.Actividad;
 import com.ibao.alanger.worktime.models.VO.external.CentroCosteVO;
-import com.ibao.alanger.worktime.models.VO.external.Cultivo;
+import com.ibao.alanger.worktime.models.VO.external.CultivoVO;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
-import com.ibao.alanger.worktime.models.VO.external.Modulo;
+import com.ibao.alanger.worktime.models.VO.external.ModuloVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ public class Tareo {
     private int id;
     private Actividad actividad;
     private FundoVO fundo;
-    private Cultivo cultivo;
+    private CultivoVO cultivo;
     private String dateTimeStart;
     private String dateTimeEnd;
     private CentroCosteVO centroCosteVO;
-    private Modulo modulo;
+    private ModuloVO moduloVO;
     private int nHorasTareadas;
     private int nTrabajadores;
     private int idFundoCultivo;
@@ -34,7 +34,7 @@ public class Tareo {
         this.dateTimeStart ="";
         this.dateTimeEnd ="";
         this.centroCosteVO =null;
-        this.modulo=null;
+        this.moduloVO =null;
         this.nHorasTareadas=0;
         this.nTrabajadores=0;
         this.idFundoCultivo=0;
@@ -66,11 +66,11 @@ public class Tareo {
         this.fundo = fundo;
     }
 
-    public Cultivo getCultivo() {
+    public CultivoVO getCultivo() {
         return cultivo;
     }
 
-    public void setCultivo(Cultivo cultivo) {
+    public void setCultivo(CultivoVO cultivo) {
         this.cultivo = cultivo;
     }
 
@@ -98,12 +98,12 @@ public class Tareo {
         this.centroCosteVO = centroCosteVO;
     }
 
-    public Modulo getModulo() {
-        return modulo;
+    public ModuloVO getModuloVO() {
+        return moduloVO;
     }
 
-    public void setModulo(Modulo modulo) {
-        this.modulo = modulo;
+    public void setModuloVO(ModuloVO moduloVO) {
+        this.moduloVO = moduloVO;
     }
 
     public int getnHorasTareadas() {

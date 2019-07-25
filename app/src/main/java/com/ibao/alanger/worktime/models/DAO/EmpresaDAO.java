@@ -4,10 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.models.VO.external.EmpresaVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
@@ -63,13 +67,13 @@ public class EmpresaDAO {
         ContentValues values = new ContentValues();
         values.put(TAB_EMPRESA_ID,id);
         values.put(TAB_EMPRESA_NAME,name);
-        Long temp = db.insert(TAB_EMPRESA,TAB_EMPRESA_ID,values);
+        long temp = db.insert(TAB_EMPRESA,TAB_EMPRESA_ID,values);
         db.close();
         conn.close();
         return temp > 0;
     }
 
-    public EmpresaVO selectByid(int id){
+    public EmpresaVO selectById(int id){
         ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
 
         SQLiteDatabase db = c.getReadableDatabase();
@@ -89,7 +93,8 @@ public class EmpresaDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectByid "+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectById "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -106,7 +111,8 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "*"+
+                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_NAME+
                         _FROM+
                             TAB_EMPRESA +" as E "+ _ +
                             TAB_FUNDO   +" as F "+
@@ -122,6 +128,7 @@ public class EmpresaDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectByidFundo "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByidFundo "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -138,7 +145,8 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "*"+
+                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_NAME+
                         _FROM+
                             TAB_EMPRESA +" as E "+ _ +
                             TAB_SEDE    +" as S "+
@@ -154,6 +162,7 @@ public class EmpresaDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectByIdSede "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByIdSede "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -170,7 +179,8 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "*"+
+                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_NAME+
                         _FROM+
                             TAB_EMPRESA     +" as E "+ _ +
                             TAB_TRABAJADOR  +" as T "+
@@ -186,6 +196,7 @@ public class EmpresaDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectByIdTrabajador "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByIdTrabajador "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -202,11 +213,12 @@ public class EmpresaDAO {
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
-                            "*"+
-                        _FROM+
+                            "E."+TAB_EMPRESA_ID+ _ +
+                            "E."+TAB_EMPRESA_NAME+
+                            _FROM+
                             TAB_EMPRESA +" as E "+ _ +
                             TAB_CCOSTE +" as CC "+
-                        _WHERE+
+                            _WHERE+
                             "CC."+ TAB_CCOSTE_ID +" = "+ idCCoste +
                             _AND+
                             "CC."+ TAB_CCOSTE_IDEMPRESA +" = "+"E."+TAB_EMPRESA_ID
@@ -218,11 +230,35 @@ public class EmpresaDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectByIdCCoste "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByIdCCoste "+e.toString());
         }finally {
             db.close();
             c.close();
         }
         return temp;
+    }
+
+    public List<EmpresaVO> listAll(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<EmpresaVO> empresaVOS = new ArrayList<>();
+        try{
+            String[] campos = {TAB_EMPRESA_ID,TAB_EMPRESA_NAME};
+            Cursor cursor= db.query(TAB_EMPRESA,campos,null,null,null,null,null);
+            while(cursor.moveToNext()){
+                EmpresaVO temp = getAtributtes(cursor);
+                empresaVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listAll "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listAll "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return empresaVOS;
     }
 
     private EmpresaVO getAtributtes(Cursor cursor){

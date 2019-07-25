@@ -260,7 +260,7 @@
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/tareo_fab_options"
+        android:id="@+id/tareo_fabOptions"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -275,7 +275,7 @@
         android:scaleY="0.8"
         tools:ignore="MissingConstraints" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/tareo_fab"
+        android:id="@+id/tareo_fabAdddTrabajador"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

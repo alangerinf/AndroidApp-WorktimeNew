@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.views.transference.ui.main;
 
 import android.content.Context;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -10,26 +12,32 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ibao.alanger.worktime.R;
 
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
-    private final Context mContext;
+    private final SparseArray<WeakReference<Fragment>> instantiatedFragments = new SparseArray<>();
 
-    public SectionsPagerAdapter(Context context, FragmentManager fm) {
+
+    private List<String> TAB_TITLES;
+
+
+
+    public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> tabHeader) {
         super(fm);
-        mContext = context;
+        this.TAB_TITLES = tabHeader;
     }
 
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-
 
         Fragment fragment= null;
 
@@ -43,15 +51,42 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     }
 
-    @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return mContext.getResources().getString(TAB_TITLES[position]);
+        return TAB_TITLES.get(position);
     }
 
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 2;
+        return TAB_TITLES.size();
     }
+
+    @Override
+    public Object instantiateItem(final ViewGroup container, final int position) {
+        final Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        instantiatedFragments.put(position, new WeakReference<>(fragment));
+        return fragment;
+    }
+
+    @Override
+    public void destroyItem(final ViewGroup container, final int position, final Object object) {
+        instantiatedFragments.remove(position);
+        super.destroyItem(container, position, object);
+    }
+
+
+
+    @Nullable
+    public Fragment getFragment(final int position) {
+        final WeakReference<Fragment> wr = instantiatedFragments.get(position);
+        if (wr != null) {
+            return wr.get();
+        } else {
+            return null;
+        }
+    }
+
+
+
 }

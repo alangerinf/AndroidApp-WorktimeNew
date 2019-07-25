@@ -1,6 +1,7 @@
 package com.ibao.alanger.worktime.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,11 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.adapters.RViewAdapterMainListTareo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ibao.alanger.worktime.views.CreateTareoActivity.CREATE_MODE_MAIN;
+import static com.ibao.alanger.worktime.views.CreateTareoActivity.EXTRA_CREATE_MODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +44,9 @@ public class MainFragment extends Fragment {
 
 
     private RecyclerView rView;
-    RViewAdapterMainListTareo adapter;
+    private RViewAdapterMainListTareo adapter;
+    private FloatingActionButton fab;
+
 
 
     public MainFragment() {
@@ -74,6 +81,16 @@ public class MainFragment extends Fragment {
     }
 
     void declaration(){
+
+        fab = getView().findViewById(R.id.fmain_fab);
+        fab.setOnClickListener(v->{
+            Intent i = new Intent(getContext(),CreateTareoActivity.class);
+            i.putExtra(EXTRA_CREATE_MODE,CREATE_MODE_MAIN);
+            startActivity(i);
+            fab.setClickable(false);
+            fab.setFocusable(false);
+        });
+
         rView= getView().findViewById(R.id.fmain_rView);
         List<String> list = new ArrayList<>();
         for(int i =0;i<10;i++){

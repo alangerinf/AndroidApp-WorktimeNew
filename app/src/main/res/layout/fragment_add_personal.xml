@@ -9,7 +9,6 @@
     android:focusableInTouchMode="true"
     tools:context=".views.transference.ui.main.AddPersonalFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/includexd"
         android:layout_width="match_parent"
@@ -135,9 +134,24 @@
             android:layout_height="wrap_content"
 
             >
-
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton2"
+                android:id="@+id/ftp_fabSetCancel"
+                app:backgroundTint="@color/red_pastel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_update_black_24dp"
+                android:tint="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/ftp_tFieldHour"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="MissingConstraints" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/ftp_fabSetTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
@@ -152,8 +166,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:ignore="MissingConstraints" />
 
+
+
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/floatingActionButton3"
+                android:id="@+id/ftp_fabQR"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="2dp"
@@ -186,6 +203,7 @@
                 tools:ignore="MissingConstraints">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ftp_tieTextDNI"
                     style="@style/tView_primaryText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -211,13 +229,14 @@
                 tools:ignore="MissingConstraints">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/ftp_tieTextHour"
                     style="@style/tView_primaryText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="datetime"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:textAlignment="center"
-
+                    android:enabled="false"
                     android:textColor="@color/colorPrimaryDark" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -229,7 +248,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/ftp_fabRestart"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -33,7 +33,7 @@
     <string name="productividad">Productividad</string>
     <string name="no_se_agreg_productividad">No se Agregó Productividad</string>
     <string name="select_tareo_activity_name">Seleccione Actividad</string>
-    <string name="centro_de_coste">Centro de Coste</string>
+    <string name="centro_de_costo">Centro de Costo</string>
     <string name="title_activity_tabbet">TabbetActivity</string>
     <string name="tab_text_1">Agregar</string>
     <string name="tab_text_2">Lista</string>
@@ -41,5 +41,19 @@
     <string name="hora">Hora</string>
     <string name="lista_de_cambios">Lista de Cambios</string>
     <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
-    <string name="lista_de_personal">Lista de Personal</string>
+    <string name="lista_de_personal">Lista de Trabajadores</string>
+    <string name="createTareo">Creando Actividad</string>
+    <string name="seleccione_tipo_Actividad">Seleccione Tipo de Actividad</string>
+    <string name="directo">DIRECTA</string>
+    <string name="indirecto">INDIRECTA</string>
+    <string name="seleccionar">Seleccionar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="actividad">Actividad</string>
+    <string name="lote">Lote</string>
+    <string name="agrupador_actividad">Agrupador Actividad</string>
+    <string name="anhadir_productividad_grupal">Añadir Productividad Grupal</string>
+    <string name="transferencia">Transferencia</string>
+    <string name="salida_personal">Salida Personal</string>
+    <string name="finalizar_actividad">Finalizar Actividad</string>
+    <string name="seleccione_opcion">Seleccione una Opción</string>
 </resources>

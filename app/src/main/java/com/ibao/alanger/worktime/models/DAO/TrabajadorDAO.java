@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.models.VO.external.FundoVO;
-import com.ibao.alanger.worktime.models.VO.external.SedeVO;
+import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +15,12 @@ import java.util.List;
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_IDEMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SEDE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_IDEMPRESA;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -28,12 +28,12 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
 
 
-public class SedeDAO {
+public class TrabajadorDAO {
 
-    private final static String TAG = SedeDAO.class.getSimpleName();
+    private final static String TAG = TrabajadorDAO.class.getSimpleName();
     private Context ctx;
 
-    public SedeDAO(Context ctx) {
+    public TrabajadorDAO(Context ctx) {
         this.ctx=ctx;
     }
 
@@ -41,7 +41,7 @@ public class SedeDAO {
         boolean flag = false;
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null, VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
-        int res = db.delete(TAB_SEDE,null,null);
+        int res = db.delete(TAB_TRABAJADOR,null,null);
         if(res>0){
             flag=true;
         }
@@ -51,32 +51,34 @@ public class SedeDAO {
     }
 
 
-    public boolean insert(int id, String name, int idEmpresa){
+    public boolean insert(int id,String cod,String dni, String name, int idEmpresa){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TAB_SEDE_ID,id);
-        values.put(TAB_SEDE_NAME,name);
-        values.put(TAB_SEDE_IDEMPRESA,idEmpresa);
-        long temp = db.insert(TAB_SEDE,TAB_SEDE_ID,values);
+            values.put(TAB_TRABAJADOR_ID,id);
+            values.put(TAB_TRABAJADOR_COD,cod);
+            values.put(TAB_TRABAJADOR_DNI,dni);
+            values.put(TAB_TRABAJADOR_NAME,name);
+            values.put(TAB_TRABAJADOR_IDEMPRESA,idEmpresa);
+        long temp = db.insert(TAB_TRABAJADOR,TAB_TRABAJADOR_ID,values);
         db.close();
         conn.close();
         return temp > 0;
     }
 
-    public SedeVO selectById(int id) {
+    public TrabajadorVO selectById(int id) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        SedeVO temp = null;
+        TrabajadorVO temp = null;
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_SEDE+" as F"+
+                            TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "F."+TAB_SEDE_ID+"="+ id
+                            "T."+TAB_TRABAJADOR_ID+"="+ id
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
@@ -91,26 +93,26 @@ public class SedeDAO {
         return temp;
     }
 
-    public List<SedeVO> listByIdEmpresa(int idEmpresa){
+    public List<TrabajadorVO> listByIdEmpresa(int idEmpresa){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        List<SedeVO> sedeVOS = new ArrayList<>();
+        List<TrabajadorVO> trabajadorVOS = new ArrayList<>();
         try{
             Cursor cursor = db.rawQuery(
                     _SELECT+
                             "*"+
                         _FROM+
-                            TAB_SEDE+" as F"+
+                            TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "F."+TAB_SEDE_IDEMPRESA+"="+ idEmpresa +
+                            "T."+TAB_TRABAJADOR_IDEMPRESA+"="+ idEmpresa +
                         _ORDERBY+
-                            "F."+TAB_SEDE_NAME+
+                            "T."+TAB_TRABAJADOR_NAME+
                             _STRASC
                     ,null);
             while (cursor.getCount()>0 && cursor.moveToNext()){
-                SedeVO temp = getAtributtes(cursor);
-                sedeVOS.add(temp);
+                TrabajadorVO temp = getAtributtes(cursor);
+                trabajadorVOS.add(temp);
             }
             cursor.close();
         }catch (Exception e){
@@ -118,26 +120,32 @@ public class SedeDAO {
         }
         db.close();
         c.close();
-        return sedeVOS;
+        return trabajadorVOS;
     }
     
-    private SedeVO getAtributtes(Cursor cursor){
-        SedeVO sedeVO = new SedeVO();
+    private TrabajadorVO getAtributtes(Cursor cursor){
+        TrabajadorVO trabajadorVO = new TrabajadorVO();
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
-                case TAB_SEDE_ID:
-                    sedeVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
+                case TAB_TRABAJADOR_ID:
+                    trabajadorVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
                     break;
-                case TAB_SEDE_NAME:
-                    sedeVO.setName(cursor.getString(cursor.getColumnIndex(TAB_SEDE_NAME)));
+                case TAB_TRABAJADOR_COD:
+                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_COD)));
                     break;
-                case TAB_SEDE_IDEMPRESA:
-                    sedeVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_SEDE_IDEMPRESA)));
+                case TAB_TRABAJADOR_DNI:
+                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_DNI)));
+                    break;
+                case TAB_TRABAJADOR_NAME:
+                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_NAME)));
+                    break;
+                case TAB_TRABAJADOR_IDEMPRESA:
+                    trabajadorVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_TRABAJADOR_IDEMPRESA)));
                     break;
             }
         }
-        return sedeVO;
+        return trabajadorVO;
     }
 
 }
