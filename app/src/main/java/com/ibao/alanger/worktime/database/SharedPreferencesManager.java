@@ -82,6 +82,7 @@ public class SharedPreferencesManager {
             flag = editor.commit(); // commit changes
         }catch (Exception e) {
             Toast.makeText(ctx, "deleteUser:" + e.toString(), Toast.LENGTH_LONG).show();
+            Log.d(TAG,"deleteUser: "+e.toString());
         }
         return flag;
     }

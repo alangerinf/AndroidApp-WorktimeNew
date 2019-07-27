@@ -5,7 +5,7 @@ public class CentroCosteVO {
     private int id;
     private String cod;
     private String name;
-    private String desc;
+    private boolean status;
     private int idEmpresa;
 
 
@@ -13,7 +13,7 @@ public class CentroCosteVO {
         this.id=0;
         this.cod="";
         this.name="";
-        this.desc="";
+        this.status=true;
         this.idEmpresa =0;
     }
 
@@ -33,14 +33,6 @@ public class CentroCosteVO {
         this.cod = cod;
     }
 
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public int getIdEmpresa() {
         return idEmpresa;
     }
@@ -55,5 +47,13 @@ public class CentroCosteVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

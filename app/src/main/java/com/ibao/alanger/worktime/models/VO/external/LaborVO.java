@@ -1,7 +1,10 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
 
-public class Actividad {
+import java.util.ArrayList;
+import java.util.List;
+
+public class LaborVO {
 
     private int id;
     private String cod;
@@ -10,11 +13,13 @@ public class Actividad {
     private boolean isDirecto;//si es una actividad
     private float theoricalCost;
     private float theoricalHours;
-    private boolean isTarea;
+    private boolean isTarea; //segun cuanto dura para tomar tiempos
     private boolean isAsistencia;
-    private int idAgrupadorActividad;
+    private int idActividad;
+    private List<Integer> listIdCultivos;
+    private boolean status;
 
-    public Actividad(){
+    public LaborVO(){
         this.id=0;
         this.cod="";
         this.name="";
@@ -23,6 +28,10 @@ public class Actividad {
         this.theoricalHours=0.0f;
         this.isTarea=false;
         this.isAsistencia=false;
+        this.magnitud="";
+        this.idActividad=0;
+        this.listIdCultivos = new ArrayList<>();
+        this.status=true;
     }
 
     public int getId() {
@@ -47,6 +56,14 @@ public class Actividad {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getMagnitud() {
+        return magnitud;
+    }
+
+    public void setMagnitud(String magnitud) {
+        this.magnitud = magnitud;
     }
 
     public boolean isDirecto() {
@@ -89,11 +106,27 @@ public class Actividad {
         isAsistencia = asistencia;
     }
 
-    public int getIdAgrupadorActividad() {
-        return idAgrupadorActividad;
+    public int getIdActividad() {
+        return idActividad;
     }
 
-    public void setIdAgrupadorActividad(int idAgrupadorActividad) {
-        this.idAgrupadorActividad = idAgrupadorActividad;
+    public void setIdActividad(int idActividad) {
+        this.idActividad = idActividad;
+    }
+
+    public List<Integer> getListIdCultivos() {
+        return listIdCultivos;
+    }
+
+    public void setListIdCultivos(List<Integer> listIdCultivos) {
+        this.listIdCultivos = listIdCultivos;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

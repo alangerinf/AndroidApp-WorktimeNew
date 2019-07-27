@@ -5,12 +5,16 @@ public class CultivoVO {
     private int id;
     private String cod;
     private String name;
+    private boolean isLabor;
+    private boolean status;
 
 
     public CultivoVO() {
         this.id=0;
         this.cod="";
         this.name="";
+        this.isLabor=false;
+        this.status=true;
     }
 
     public int getId() {
@@ -35,5 +39,21 @@ public class CultivoVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isLabor() {
+        return isLabor;
+    }
+
+    public void setLabor(boolean labor) {
+        isLabor = labor;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

@@ -81,7 +81,7 @@ public class DataBaseDesign {
 
     public static final String CREATETABLE_FUNDO =
             TABLE_CREATE+TAB_FUNDO+"("+
-                    TAB_FUNDO_ID   + TAB_FUNDO_ID_TYPE   + PK+ N_NULL+AND +
+                    TAB_FUNDO_ID   + TAB_FUNDO_ID_TYPE   + PK+ N_NULL+
                     AND+
                     TAB_FUNDO_COD + TAB_FUNDO_COD_TYPE +
                     AND +
@@ -91,7 +91,6 @@ public class DataBaseDesign {
                     AND +
                     TAB_FUNDO_STATUS + TAB_FUNDO_STATUS_TYPE + N_NULL+
                     ")";
-
 
 
     //TABLE MODULO
@@ -153,7 +152,7 @@ public class DataBaseDesign {
 
     
     //TABLE AGRUPACION_ACTIVIDAD
-    public static final String  TAB_ACTIVIDAD              = "Actividad",
+    public static final String  TAB_ACTIVIDAD              = "LaborVO",
                                 TAB_ACTIVIDAD_ID               = "id",
                                 TAB_ACTIVIDAD_ID_TYPE          = TYPE_INTEGER,
                                 TAB_ACTIVIDAD_COD              = "code",
@@ -241,8 +240,8 @@ public class DataBaseDesign {
                                 TAB_LABOR_IDACTIVIDAD_TYPE      = TYPE_INTEGER,
                                 TAB_LABOR_LISTIDCULTIVO         = "listIdCultivos",
                                 TAB_LABOR_LISTIDCULTIVO_TYPE    = TYPE_VARCHAR,
-                                TAB_LABOR_UNIDADES              = "unidades",
-                                TAB_LABOR_UNIDADES_TYPE         = TYPE_VARCHAR,
+                                TAB_LABOR_MAGNITUD              = "magnitud",
+                                TAB_LABOR_MAGNITUD_TYPE         = TYPE_VARCHAR,
                                 TAB_LABOR_STATUS                = "status",
                                 TAB_LABOR_STATUS_TYPE           = TYPE_BOOLEAN;
 
@@ -267,7 +266,7 @@ public class DataBaseDesign {
                     AND +
                     TAB_LABOR_LISTIDCULTIVO + TAB_LABOR_LISTIDCULTIVO_TYPE + N_NULL+
                     AND +
-                    TAB_LABOR_UNIDADES + TAB_LABOR_UNIDADES_TYPE + N_NULL+
+                    TAB_LABOR_MAGNITUD + TAB_LABOR_MAGNITUD_TYPE + N_NULL+
                     AND +
                     TAB_LABOR_STATUS + TAB_LABOR_STATUS_TYPE + N_NULL+
                     ")";
@@ -293,7 +292,6 @@ public class DataBaseDesign {
                                 TAB_TAREO_PRODUCTIVIDAD_TYPE    = TYPE_FLOAT,
                                 TAB_TAREO_ISACTIVE              = "isActive",
                                 TAB_TAREO_ISACTIVE_TYPE         = TYPE_BOOLEAN;
-
 
     public static final String CREATETABLE_TAREO =
             TABLE_CREATE+TAB_TAREO+"("+
@@ -374,7 +372,9 @@ public class DataBaseDesign {
                                 TAB_SALIDA_COD          = "code",
                                 TAB_SALIDA_COD_TYPE     = TYPE_VARCHAR,
                                 TAB_SALIDA_NAME         = "name",
-                                TAB_SALIDA_NAME_TYPE    = TYPE_VARCHAR;
+                                TAB_SALIDA_NAME_TYPE    = TYPE_VARCHAR,
+                                TAB_SALIDA_STATUS       = "status",
+                                TAB_SALIDA_STATUS_TYPE  = TYPE_BOOLEAN;
 
 
     public static final String CREATETABLE_SALIDA =
@@ -383,7 +383,9 @@ public class DataBaseDesign {
                     AND +
                     TAB_SALIDA_COD + TAB_SALIDA_COD_TYPE + N_NULL+
                     AND +
-                    TAB_SALIDA_NAME + TAB_SALIDA_NAME_TYPE +
+                    TAB_SALIDA_NAME + TAB_SALIDA_NAME_TYPE + N_NULL+
+                    AND +
+                    TAB_SALIDA_STATUS + TAB_SALIDA_STATUS_TYPE + N_NULL+
                     ")";
 
 

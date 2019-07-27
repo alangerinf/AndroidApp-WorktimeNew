@@ -67,7 +67,7 @@
                 style="@style/tView_Tittle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre de la Actividad" />
+                android:text="Nombre de la Labor" />
 
 
             <LinearLayout
@@ -104,7 +104,7 @@
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Centro de Coste" />
+                    android:text="@string/centro_de_coste" />
             </LinearLayout>
 
 

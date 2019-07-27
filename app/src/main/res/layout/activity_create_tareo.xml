@@ -35,6 +35,9 @@
                 android:text="@string/enterprise" />
 
             <Spinner
+                android:id="@+id/ctareo_spnEmpresa"
+                tools:listitem="@layout/spinner_item"
+                android:spinnerMode="dialog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -55,9 +58,12 @@
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fundo" />
+                android:text="@string/fundo" />
 
             <Spinner
+                android:id="@+id/ctareo_spnFundo"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -81,6 +87,9 @@
                 android:text="@string/cultivo" />
 
             <Spinner
+                android:id="@+id/ctareo_spnCultivo"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -90,29 +99,6 @@
                 android:background="@color/colorPrimaryDark" />
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/ctareo_lLayoutAgrupadorActividad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_starndar"
-            android:orientation="vertical">
-
-            <com.ibao.alanger.worktime.adapters.GradientTextView
-                style="@style/tView_Tittle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/agrupador_actividad" />
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorPrimaryDark" />
-        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ctareo_lLayoutActividad"
@@ -128,6 +114,35 @@
                 android:text="@string/actividad" />
 
             <Spinner
+                android:id="@+id/ctareo_spnActividad"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ctareo_lLayoutLabor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_starndar"
+            android:orientation="vertical">
+
+            <com.ibao.alanger.worktime.adapters.GradientTextView
+                style="@style/tView_Tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/labor" />
+
+            <Spinner
+                android:id="@+id/ctareo_spnLabor"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -151,6 +166,9 @@
                 android:text="@string/lote" />
 
             <Spinner
+                android:id="@+id/ctareo_spnLote"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -176,6 +194,9 @@
                 android:text="@string/centro_de_costo" />
 
             <Spinner
+                android:id="@+id/ctareo_spnCentroCosto"
+                android:spinnerMode="dialog"
+                tools:listitem="@layout/spinner_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

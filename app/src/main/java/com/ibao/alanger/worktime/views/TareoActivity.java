@@ -45,7 +45,7 @@ public class TareoActivity extends AppCompatActivity {
         items[0] = getString(R.string.anhadir_productividad_grupal);
         items[1] = getString(R.string.transferencia);
         items[2] = getString(R.string.salida_personal);
-        items[3] = getString(R.string.finalizar_actividad);
+        items[3] = getString(R.string.finalizar_labor);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(getString(R.string.seleccione_opcion));

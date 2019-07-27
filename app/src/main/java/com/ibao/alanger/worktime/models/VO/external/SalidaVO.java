@@ -1,19 +1,27 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class TrabajadorVO {
+public class SalidaVO {
 
-    private String dni;
+    private int id;
     private String cod;
     private String name;
     private boolean status;
 
-    public TrabajadorVO(){
+
+    public SalidaVO() {
+        this.id=0;
         this.cod="";
-        this.dni="";
         this.name="";
         this.status=true;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCod() {
         return cod;
@@ -21,14 +29,6 @@ public class TrabajadorVO {
 
     public void setCod(String cod) {
         this.cod = cod;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
     }
 
     public String getName() {

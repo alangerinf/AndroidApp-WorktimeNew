@@ -3,18 +3,16 @@ package com.ibao.alanger.worktime.models.VO.internal;
 public class Productividad {
 
     private int id;
-    private int value;
+    private float value;
     private String dateTime;
-    private int idTareoTrabajador;
-
+    private int idTareoDetalle;
 
     public Productividad(){
         this.id=0;
         this.value=0;
         this.dateTime="";
-        this.idTareoTrabajador=0;
+        this.idTareoDetalle =0;
     }
-
 
     public int getId() {
         return id;
@@ -24,11 +22,11 @@ public class Productividad {
         this.id = id;
     }
 
-    public int getValue() {
+    public float getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(float value) {
         this.value = value;
     }
 
@@ -40,11 +38,11 @@ public class Productividad {
         this.dateTime = dateTime;
     }
 
-    public int getIdTareoTrabajador() {
-        return idTareoTrabajador;
+    public int getIdTareoDetalle() {
+        return idTareoDetalle;
     }
 
-    public void setIdTareoTrabajador(int idTareoTrabajador) {
-        this.idTareoTrabajador = idTareoTrabajador;
+    public void setIdTareoDetalle(int idTareoDetalle) {
+        this.idTareoDetalle = idTareoDetalle;
     }
 }

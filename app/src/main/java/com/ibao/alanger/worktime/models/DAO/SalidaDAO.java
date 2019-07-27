@@ -9,28 +9,31 @@ import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.models.VO.external.ActividadVO;
-import com.ibao.alanger.worktime.models.VO.external.SalidaVO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_SALIDA_STATUS;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
 
-public class ActividadDAO {
+public class SalidaDAO {
 
     private Context ctx;
-    private static String TAG = ActividadDAO.class.getSimpleName();
-    public ActividadDAO(Context ctx) {
+    private static String TAG = SalidaDAO.class.getSimpleName();
+    public SalidaDAO(Context ctx) {
         this.ctx=ctx;
     }
 
@@ -38,7 +41,7 @@ public class ActividadDAO {
         boolean flag = false;
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null, VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
-        int res = db.delete(TAB_ACTIVIDAD,null,null);
+        int res = db.delete(TAB_SALIDA,null,null);
         if(res>0){
             flag=true;
         }
@@ -47,15 +50,15 @@ public class ActividadDAO {
         return flag;
     }
 
-    public boolean insert(int id, String cod ,String name,boolean status){
+    public boolean insert(int id, String cod ,String name, boolean status){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TAB_ACTIVIDAD_ID,id);
-        values.put(TAB_ACTIVIDAD_COD,cod);
-        values.put(TAB_ACTIVIDAD_NAME,name);
-        values.put(TAB_ACTIVIDAD_STATUS,status);
-        long temp = db.insert(TAB_ACTIVIDAD,TAB_ACTIVIDAD_ID,values);
+        values.put(TAB_SALIDA_ID,id);
+        values.put(TAB_SALIDA_COD,cod);
+        values.put(TAB_SALIDA_NAME,name);
+        values.put(TAB_SALIDA_STATUS,status);
+        long temp = db.insert(TAB_SALIDA,TAB_SALIDA_ID,values);
         db.close();
         conn.close();
         return temp > 0;
@@ -72,13 +75,13 @@ public class ActividadDAO {
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_ACTIVIDAD+" as C"+
+                            TAB_SALIDA+" as C"+
                         _WHERE+
-                            "C."+TAB_ACTIVIDAD_ID+" = "+ id
+                            "C."+TAB_SALIDA_ID+" = "+ id 
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
-                temp=getAtributtes(cursor);
+                temp = getAtributtes(cursor);
             }
             cursor.close();
         }catch (Exception e){
@@ -95,16 +98,16 @@ public class ActividadDAO {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
         SQLiteDatabase db = c.getReadableDatabase();
-        List<ActividadVO> salidaVOList = new ArrayList<>();
+        List<ActividadVO> cultivos = new ArrayList<>();
         try{
-          //  String[] campos = {TAB_ACTIVIDAD_ID,TAB_ACTIVIDAD_COD,TAB_ACTIVIDAD_NAME,TAB_ACTIVIDAD_STATUS};
+           // String[] campos = {TAB_SALIDA_ID,TAB_SALIDA_COD,TAB_SALIDA_NAME,TAB_SALIDA_STATUS};
             String[] args = {
                     "1"
             };
-            Cursor cursor= db.query(TAB_ACTIVIDAD,null,TAB_ACTIVIDAD_STATUS+"=?",args,null,null,TAB_ACTIVIDAD_NAME+_STRASC);
+            Cursor cursor= db.query(TAB_SALIDA,null,TAB_SALIDA_STATUS+"=?",args,TAB_SALIDA_NAME,null,TAB_SALIDA_NAME+_STRASC);
             while(cursor.moveToNext()){
                 ActividadVO temp = getAtributtes(cursor);
-                salidaVOList.add(temp);
+                cultivos.add(temp);
             }
             cursor.close();
         }catch (Exception e){
@@ -114,29 +117,29 @@ public class ActividadDAO {
             db.close();
             c.close();
         }
-        return salidaVOList;
+        return cultivos;
     }
 
     private ActividadVO getAtributtes(Cursor cursor){
-        ActividadVO salidaVO = new ActividadVO();
+        ActividadVO ActividadVO = new ActividadVO();
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
-                case TAB_ACTIVIDAD_ID:
-                    salidaVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
+                case TAB_SALIDA_ID:
+                    ActividadVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
-                case TAB_ACTIVIDAD_COD:
-                    salidaVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
+                case TAB_SALIDA_COD:
+                    ActividadVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
                     break;
-                case TAB_ACTIVIDAD_NAME:
-                    salidaVO.setName(cursor.getString(cursor.getColumnIndex(name)));
+                case TAB_SALIDA_NAME:
+                    ActividadVO.setName(cursor.getString(cursor.getColumnIndex(name)));
                     break;
-                case TAB_ACTIVIDAD_STATUS:
-                    salidaVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
+                case TAB_SALIDA_STATUS:
+                    ActividadVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                     break;
             }
         }
-        return salidaVO;
+        return ActividadVO;
     }
 
 

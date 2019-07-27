@@ -16,9 +16,12 @@ import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -49,18 +52,21 @@ public class FundoDAO {
     }
 
 
-    public boolean insert(int id, String name, int idEmpresa){
+    public boolean insert(int id,String cod, String name, int idEmpresa,boolean status){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TAB_FUNDO_ID,id);
+        values.put(TAB_FUNDO_COD,cod);
         values.put(TAB_FUNDO_NAME,name);
         values.put(TAB_FUNDO_IDEMPRESA,idEmpresa);
+        values.put(TAB_FUNDO_STATUS,status);
         long temp = db.insert(TAB_FUNDO,TAB_FUNDO_ID,values);
         db.close();
         conn.close();
         return temp > 0;
     }
+
     public FundoVO selectById(int id) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
@@ -102,6 +108,8 @@ public class FundoDAO {
                             TAB_FUNDO+" as F"+
                         _WHERE+
                             "F."+TAB_FUNDO_IDEMPRESA+"="+ idEmpresa +
+                            _AND+
+                            "F."+TAB_FUNDO_STATUS+"=1"+
                         _ORDERBY+
                             "F."+TAB_FUNDO_NAME+
                             _STRASC
@@ -125,14 +133,22 @@ public class FundoDAO {
         for(String name : columnNames){
             switch (name){
                 case TAB_FUNDO_ID:
-                    fundoVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
+                    fundoVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
                 case TAB_FUNDO_NAME:
-                    fundoVO.setName(cursor.getString(cursor.getColumnIndex(TAB_FUNDO_NAME)));
+                    fundoVO.setName(cursor.getString(cursor.getColumnIndex(name)));
+                case TAB_FUNDO_COD:
+                    fundoVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 case TAB_FUNDO_IDEMPRESA:
-                    fundoVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_FUNDO_IDEMPRESA)));
+                    fundoVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
+                case TAB_FUNDO_STATUS:
+                    fundoVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
+                    break;
+                default:
+                    Toast.makeText(ctx,"getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                        break;
             }
         }
         return fundoVO;

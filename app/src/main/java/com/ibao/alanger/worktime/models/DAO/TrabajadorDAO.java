@@ -19,6 +19,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_C
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -49,13 +50,14 @@ public class TrabajadorDAO {
     }
 
 
-    public boolean insert(String dni,String cod, String name){
+    public boolean insert(String dni,String cod, String name,boolean status){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
             values.put(TAB_TRABAJADOR_DNI,dni);
             values.put(TAB_TRABAJADOR_COD,cod);
             values.put(TAB_TRABAJADOR_NAME,name);
+            values.put(TAB_TRABAJADOR_STATUS,status);
         long temp = db.insert(TAB_TRABAJADOR,null,values);
         db.close();
         conn.close();
@@ -74,7 +76,9 @@ public class TrabajadorDAO {
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "T."+TAB_TRABAJADOR_DNI+"="+ id
+                            "T."+TAB_TRABAJADOR_DNI+"="+ id+
+                            _AND+
+                            "T."+TAB_TRABAJADOR_STATUS+"=1"
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
@@ -101,7 +105,7 @@ public class TrabajadorDAO {
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            TAB_TRABAJADOR_STATUS+ " = "+ 1 +
+                            "T."+TAB_TRABAJADOR_STATUS+ " = "+ 1 +
                         _ORDERBY+
                             "T."+TAB_TRABAJADOR_NAME+
                             _STRASC
@@ -125,13 +129,16 @@ public class TrabajadorDAO {
         for(String name : columnNames){
             switch (name){
                 case TAB_TRABAJADOR_COD:
-                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_COD)));
+                    trabajadorVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 case TAB_TRABAJADOR_DNI:
-                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_DNI)));
+                    trabajadorVO.setDni(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 case TAB_TRABAJADOR_NAME:
-                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(TAB_TRABAJADOR_NAME)));
+                    trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(name)));
+                    break;
+                case TAB_TRABAJADOR_STATUS:
+                    trabajadorVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                     break;
             }
         }

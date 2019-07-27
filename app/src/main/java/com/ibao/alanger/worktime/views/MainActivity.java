@@ -1,5 +1,6 @@
 package com.ibao.alanger.worktime.views;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.FakeLoader;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private Fragment myFragment = null;
+    private Context ctx;
 
 
 
@@ -34,6 +37,17 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ctx = this;
+        //FakeLoader
+        FakeLoader fl = new FakeLoader(ctx);
+        fl.loadEmpresas();
+        fl.loadFundos();
+        fl.loadCultivos();
+        fl.loadActividades();
+        fl.loadLotes();
+        fl.loadLabores();
+
 
         myFragment = new MainFragment();
 
@@ -46,6 +60,8 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override

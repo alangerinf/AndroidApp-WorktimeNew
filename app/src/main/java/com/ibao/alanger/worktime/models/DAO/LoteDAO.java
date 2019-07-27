@@ -14,13 +14,14 @@ import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDCULTIVO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_NUM;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -51,7 +52,7 @@ public class LoteDAO {
     }
 
 
-    public boolean insert(int id, String cod, String num, int idFundo,int idCultivo){
+    public boolean insert(int id, String cod, String num, int idFundo,int idCultivo,boolean status){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -60,6 +61,7 @@ public class LoteDAO {
         values.put(TAB_LOTE_NUM,num);
         values.put(TAB_LOTE_IDFUNDO,idFundo);
         values.put(TAB_LOTE_IDCULTIVO,idCultivo);
+        values.put(TAB_LOTE_STATUS,status);
         long temp = db.insert(TAB_LOTE,TAB_LOTE_ID,values);
         db.close();
         conn.close();
@@ -75,9 +77,11 @@ public class LoteDAO {
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_LOTE+" as F"+
+                            TAB_LOTE+" as L"+
                         _WHERE+
-                            "F."+TAB_LOTE_ID+"="+ id
+                            "L."+TAB_LOTE_ID+"="+ id+
+                            _AND+
+                            "L."+TAB_LOTE_STATUS+"=1"
                     ,null);
 
             if(cursor.getCount()>0){
@@ -95,7 +99,7 @@ public class LoteDAO {
         return temp;
     }
 
-    public List<LoteVO> listByIdFundo(int idFundo){
+    public List<LoteVO> listByIdFundoIdCultivo(int idFundo,int idCultivo){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
@@ -107,7 +111,11 @@ public class LoteDAO {
                         _FROM+
                             TAB_LOTE+" as F"+
                         _WHERE+
-                            "F."+TAB_LOTE_IDFUNDO+"="+ idFundo +
+                            "F."+TAB_LOTE_IDFUNDO+"="+idFundo+
+                            _AND+
+                            "F."+TAB_LOTE_IDCULTIVO+"="+idCultivo+
+                            _AND+
+                            "F."+TAB_LOTE_STATUS+"=1"+
                         _ORDERBY+
                             "F."+TAB_LOTE_COD+
                             _STRASC
@@ -133,20 +141,25 @@ public class LoteDAO {
         for(String name : columnNames){
             switch (name){
                 case TAB_LOTE_ID:
-                    loteVO.setId(cursor.getInt(cursor.getColumnIndex(TAB_EMPRESA_ID)));
+                    loteVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
-                case TAB_LOTE_COD:
-                    loteVO.setCod(cursor.getString(cursor.getColumnIndex(TAB_LOTE_COD)));
-                    break;
-                case TAB_LOTE_NUM:
-                    loteVO.setName(cursor.getString(cursor.getColumnIndex(TAB_LOTE_NUM)));
+                case TAB_LOTE_IDCULTIVO:
+                    loteVO.setIdCultivo(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
                 case TAB_LOTE_IDFUNDO:
-                    loteVO.setIdEmpresa(cursor.getInt(cursor.getColumnIndex(TAB_LOTE_IDFUNDO)));
+                    loteVO.setIdFundo(cursor.getInt(cursor.getColumnIndex(name)));
+                    break;
+                case TAB_LOTE_COD:
+                    loteVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
+                    break;
+                case TAB_LOTE_NUM:
+                    loteVO.setNumero(cursor.getString(cursor.getColumnIndex(name)));
+                    break;
+                case TAB_LOTE_STATUS:
+                    loteVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                     break;
             }
         }
         return loteVO;
     }
-
 }

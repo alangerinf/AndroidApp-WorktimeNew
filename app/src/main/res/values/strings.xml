@@ -14,7 +14,7 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
 
-    <string name="lista_de_actividades">Lista de Actividades</string>
+    <string name="lista_de_labores">Lista de Labores</string>
     <string name="separador">/</string>
     <string name="enterprise">Empresa</string>
     <string name="horas_tareadas">Horas Tareadas</string>
@@ -24,7 +24,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cultivo">Cultivo</string>
     <string name="fundo">Fundo</string>
-    <string name="tareo_activity_name">Detalle de Actividad</string>
+    <string name="tareo_labor_name">Detalle de Labor</string>
     <string name="lista_de_trabajadores_activos">Lista de Trabajadores Activos</string>
     <string name="sin_trabajadores_activos">Sin Trabajadores Activos</string>
     <string name="sin_trabajadores_inactivos">Sin Trabajadores Inactivos</string>
@@ -43,17 +43,27 @@
     <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
     <string name="lista_de_personal">Lista de Trabajadores</string>
     <string name="createTareo">Creando Actividad</string>
-    <string name="seleccione_tipo_Actividad">Seleccione Tipo de Actividad</string>
+    <string name="seleccione_tipo_Actividad">Seleccione Tipo de Labor</string>
     <string name="directo">DIRECTA</string>
     <string name="indirecto">INDIRECTA</string>
     <string name="seleccionar">Seleccionar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="actividad">Actividad</string>
+    <string name="labor">Labor</string>
     <string name="lote">Lote</string>
-    <string name="agrupador_actividad">Agrupador Actividad</string>
+    <string name="actividad">Actividad</string>
     <string name="anhadir_productividad_grupal">Añadir Productividad Grupal</string>
     <string name="transferencia">Transferencia</string>
     <string name="salida_personal">Salida Personal</string>
-    <string name="finalizar_actividad">Finalizar Actividad</string>
+    <string name="finalizar_labor">Finalizar Labor</string>
     <string name="seleccione_opcion">Seleccione una Opción</string>
+    <string name="centro_de_coste">Centro de Coste</string>
+    <string name="sin_elementos">Sin Elementos</string>
+    <string name="sin_labores">Sin Labores</string>
+    <string name="sin_lotes">Sin Lotes</string>
+    <string name="sin_fundos">Sin Fundos</string>
+    <string name="sin_actividades">Sin Actividades</string>
+    <string name="sin_cultivos">Sin Cultivos</string>
+    <string name="sin_empresas">Sin Empresas</string>
+    <string name="sin_centro_contes">Sin Centro de Costes</string>
+    <string name="error_complete_configuraciones">Complete todas las configuraciones</string>
 </resources>

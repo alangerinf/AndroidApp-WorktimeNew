@@ -5,12 +5,14 @@ public class ActividadVO {
     private int id;
     private String cod;
     private String name;
+    private boolean status;
 
 
     public ActividadVO() {
         this.id=0;
         this.cod="";
         this.name="";
+        this.status=true;
     }
 
     public int getId() {
@@ -35,5 +37,13 @@ public class ActividadVO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
