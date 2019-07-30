@@ -29,6 +29,9 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._n;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
@@ -123,17 +126,13 @@ public class EmpresaDAO {
                             "E."+TAB_EMPRESA_RAZON+ _n +
                             "E."+TAB_EMPRESA_NAME+_n+
                             "E."+TAB_EMPRESA_STATUS+
-                        _FROM+
+                            _FROM+
                             TAB_EMPRESA +" as E "+ _n +
                             TAB_FUNDO   +" as F "+
-                        _WHERE+
+                            _WHERE+
                             "F."+TAB_FUNDO_ID+" = "+ idFundo +
                             _AND+
-                            "F."+TAB_FUNDO_IDEMPRESA+" = "+"E."+TAB_EMPRESA_ID+
-                            _AND+
-                            "F."+TAB_FUNDO_STATUS+"=1"+
-                            _AND+
-                            "E."+TAB_EMPRESA_STATUS+"=1"
+                            "F."+TAB_FUNDO_IDEMPRESA+" = "+"E."+TAB_EMPRESA_ID
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
@@ -149,7 +148,46 @@ public class EmpresaDAO {
         }
         return temp;
     }
-/*
+
+    public EmpresaVO selectByIdLote(int idLote){
+        ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = c.getReadableDatabase();
+        EmpresaVO temp = null;
+        try{
+            Cursor cursor = db.rawQuery(
+                    _SELECT +
+                            "E."+TAB_EMPRESA_ID+ _n +
+                            "E."+TAB_EMPRESA_COD+ _n +
+                            "E."+TAB_EMPRESA_RUC+ _n +
+                            "E."+TAB_EMPRESA_RAZON+ _n +
+                            "E."+TAB_EMPRESA_NAME+_n+
+                            "E."+TAB_EMPRESA_STATUS+
+                            _FROM+
+                            TAB_EMPRESA +" as E "+ _n +
+                            TAB_FUNDO   +" as F "+ _n+
+                            TAB_LOTE    +" as L "+
+                            _WHERE+
+                            "L."+TAB_LOTE_ID+" = "+ idLote+
+                            _AND+
+                            "F."+TAB_FUNDO_ID+" = "+"L."+TAB_LOTE_IDFUNDO+
+                            _AND+
+                            "F."+TAB_FUNDO_IDEMPRESA+" = "+"E."+TAB_EMPRESA_ID
+                    ,null);
+            if(cursor.getCount()>0){
+                cursor.moveToFirst();
+                temp = getAtributtes(cursor);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" selectByIdLote "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByIdLote "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return temp;
+    }
+
     public EmpresaVO selectByIdCCoste(int idCCoste){
         ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
 
@@ -159,7 +197,11 @@ public class EmpresaDAO {
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "E."+TAB_EMPRESA_ID+ _n +
-                            "E."+TAB_EMPRESA_NAME+
+                            "E."+TAB_EMPRESA_COD+ _n +
+                            "E."+TAB_EMPRESA_RUC+ _n +
+                            "E."+TAB_EMPRESA_RAZON+ _n +
+                            "E."+TAB_EMPRESA_NAME+_n+
+                            "E."+TAB_EMPRESA_STATUS+
                             _FROM+
                             TAB_EMPRESA +" as E "+ _n +
                             TAB_CCOSTE +" as CC "+
@@ -182,7 +224,7 @@ public class EmpresaDAO {
         }
         return temp;
     }
-*/
+
     public List<EmpresaVO> listAll(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);

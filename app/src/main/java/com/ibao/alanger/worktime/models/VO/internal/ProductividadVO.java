@@ -1,13 +1,13 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
-public class Productividad {
+public class ProductividadVO {
 
     private int id;
     private float value;
     private String dateTime;
     private int idTareoDetalle;
 
-    public Productividad(){
+    public ProductividadVO(){
         this.id=0;
         this.value=0;
         this.dateTime="";

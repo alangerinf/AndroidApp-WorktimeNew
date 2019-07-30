@@ -13,16 +13,17 @@ public class TareoDetalleVO {
     private String timeStart;
     private String timeEnd;
     private TrabajadorVO trabajadorVO;
-    private List<Productividad> productividadList;
+    private List<ProductividadVO> productividadVOList;
     private SalidaVO salidaVO;
-
+    private float productividad;
     public TareoDetalleVO(){
         this.id=0;
         this.idTareo=0;
         this.timeStart="";
+        this.productividad=0f;
         this.timeEnd="";
         this.trabajadorVO =null;
-        this.productividadList=new ArrayList<>();
+        this.productividadVOList =new ArrayList<>();
         this.salidaVO=null;
     }
 
@@ -67,12 +68,12 @@ public class TareoDetalleVO {
         this.trabajadorVO = trabajadorVO;
     }
 
-    public List<Productividad> getProductividadList() {
-        return productividadList;
+    public List<ProductividadVO> getProductividadVOList() {
+        return productividadVOList;
     }
 
-    public void setProductividadList(List<Productividad> productividadList) {
-        this.productividadList = productividadList;
+    public void setProductividadVOList(List<ProductividadVO> productividadVOList) {
+        this.productividadVOList = productividadVOList;
     }
 
     public SalidaVO getSalidaVO() {
@@ -81,5 +82,13 @@ public class TareoDetalleVO {
 
     public void setSalidaVO(SalidaVO salidaVO) {
         this.salidaVO = salidaVO;
+    }
+
+    public float getProductividad() {
+        return productividad;
+    }
+
+    public void setProductividad(float productividad) {
+        this.productividad = productividad;
     }
 }

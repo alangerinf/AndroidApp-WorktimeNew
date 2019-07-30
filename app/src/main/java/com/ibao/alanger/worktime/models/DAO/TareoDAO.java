@@ -121,7 +121,6 @@ public class TareoDAO {
         return tareoVOS;
     }
 
-
     private TareoVO getAtributtes(Cursor cursor){
          TareoVO tareoVO = new TareoVO();
         String[] columnNames = cursor.getColumnNames();
@@ -135,12 +134,22 @@ public class TareoDAO {
                    break;
                case TAB_TAREO_IDLOTE:
                    tareoVO.setLoteVO(new LoteDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
+                   if(tareoVO.getLoteVO()!=null){
+                       tareoVO.setFundoVO(new FundoDAO(ctx).selectByIdLote(tareoVO.getLoteVO().getId()));
+                       tareoVO.setEmpresaVO(new EmpresaDAO(ctx).selectByIdLote(tareoVO.getLoteVO().getId()));
+                   }
                    break;
                case TAB_TAREO_IDCCOSTE:
                    tareoVO.setCentroCosteVO(new CentroCosteDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
+                   if(tareoVO.getLoteVO()!=null){
+                       tareoVO.setEmpresaVO(new EmpresaDAO(ctx).selectByIdCCoste(tareoVO.getCentroCosteVO().getId()));
+                   }
                    break;
                case TAB_TAREO_IDFUNDO:
                    tareoVO.setFundoVO(new FundoDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
+                   if(tareoVO.getFundoVO()!=null){
+                       tareoVO.setEmpresaVO(new EmpresaDAO(ctx).selectByIdFundo(tareoVO.getFundoVO().getId()));
+                   }
                    break;
                case TAB_TAREO_DATESTART:
                    tareoVO.setDateTimeStart(cursor.getString(cursor.getColumnIndex(name)));
@@ -159,6 +168,8 @@ public class TareoDAO {
                    break;
            }
         }
+        tareoVO.setTareoDetalleVOList(new TareoDetalleDAO(ctx).listByIdTareo(tareoVO.getId()));
+
         return tareoVO;
     }
 

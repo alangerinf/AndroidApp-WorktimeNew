@@ -31,8 +31,6 @@ public class DataBaseDesign {
                                 TYPE_BOOLEAN    = " BOOLEAN ",
                                 TYPE_FLOAT      = " FLOAT ";
 
-
-
     //TODO: DECLARACION DE TABLAS Y SU CREACION
 
     //TODO: TABLAS MAESTRAS
@@ -319,6 +317,8 @@ public class DataBaseDesign {
                                 TAB_TAREODETALLE_ID_TYPE            = TYPE_INTEGER,
                                 TAB_TAREODETALLE_IDTAREO            = "idTareo",
                                 TAB_TAREODETALLE_IDTAREO_TYPE       = TYPE_INTEGER,
+                                TAB_TAREODETALLE_PRODUCTIVIDAD      = "productividad",
+                                TAB_TAREODETALLE_PRODUCTIVIDAD_TYPE = TYPE_FLOAT,
                                 TAB_TAREODETALLE_DNI                = "DNI",
                                 TAB_TAREODETALLE_DNI_TYPE           = TYPE_VARCHAR,
                                 TAB_TAREODETALLE_DATESTART          = "dateStart",
@@ -336,6 +336,8 @@ public class DataBaseDesign {
                     AND +
                     TAB_TAREODETALLE_DNI        + TAB_TAREODETALLE_DNI_TYPE + N_NULL+
                     AND +
+                    TAB_TAREODETALLE_PRODUCTIVIDAD + TAB_TAREODETALLE_PRODUCTIVIDAD_TYPE+
+                    AND +
                     TAB_TAREODETALLE_DATESTART  + TAB_TAREODETALLE_DATESTART_TYPE + DEF_DATE_NOW+
                     AND +
                     TAB_TAREODETALLE_DATEEND    + TAB_TAREODETALLE_DATEEND_TYPE+
@@ -344,15 +346,15 @@ public class DataBaseDesign {
                     ")";
 
 
-    public static final String  TAB_PRODUCTIVIDAD                       = "Productividad",
+    public static final String  TAB_PRODUCTIVIDAD                       = "ProductividadVO",
                                 TAB_PRODUCTIVIDAD_ID                        = "id",
                                 TAB_PRODUCTIVIDAD_ID_TYPE                   = TYPE_INTEGER,
                                 TAB_PRODUCTIVIDAD_IDTAREODETALLE            = "idTareoDetalle",
                                 TAB_PRODUCTIVIDAD_IDTAREODETALLE_TYPE       = TYPE_INTEGER,
                                 TAB_PRODUCTIVIDAD_VALUE                     = "value",
                                 TAB_PRODUCTIVIDAD_VALUE_TYPE                = TYPE_FLOAT,
-                                TAB_TAREODETALLE_DATETIME                   = "datetime",
-                                TAB_TAREODETALLE_DATETIME_TYPE              = TYPE_DATETIME;
+                                TAB_PRODUCTIVIDAD_DATETIME                  = "datetime",
+                                TAB_PRODUCTIVIDAD_DATETIME_TYPE             = TYPE_DATETIME;
 
 
     public static final String CREATETABLE_PRODUCTIVIDAD =
@@ -363,7 +365,7 @@ public class DataBaseDesign {
                     AND +
                     TAB_PRODUCTIVIDAD_VALUE + TAB_PRODUCTIVIDAD_VALUE_TYPE +
                     AND +
-                    TAB_TAREODETALLE_DATETIME + TAB_TAREODETALLE_DATETIME_TYPE + DEF_DATE_NOW+
+                    TAB_PRODUCTIVIDAD_DATETIME + TAB_PRODUCTIVIDAD_DATETIME_TYPE + DEF_DATE_NOW+
                     ")";
 
     public static final String  TAB_SALIDA          = "tipoSalida",

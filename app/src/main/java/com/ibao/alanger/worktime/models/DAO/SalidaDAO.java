@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.models.VO.external.ActividadVO;
+import com.ibao.alanger.worktime.models.VO.external.SalidaVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,20 +64,20 @@ public class SalidaDAO {
         return temp > 0;
     }
 
-    public ActividadVO selectById(int id){
+    public SalidaVO selectById(int id){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
-        ActividadVO temp = null;
+        SalidaVO temp = null;
         try{
             
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_SALIDA+" as C"+
+                            TAB_SALIDA+" as S"+
                         _WHERE+
-                            "C."+TAB_SALIDA_ID+" = "+ id 
+                            "S."+TAB_SALIDA_ID+" = "+ id
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
@@ -94,11 +94,11 @@ public class SalidaDAO {
         return temp;
     }
 
-    public List<ActividadVO> listAll(){
+    public List<SalidaVO> listAll(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
         SQLiteDatabase db = c.getReadableDatabase();
-        List<ActividadVO> cultivos = new ArrayList<>();
+        List<SalidaVO> cultivos = new ArrayList<>();
         try{
            // String[] campos = {TAB_SALIDA_ID,TAB_SALIDA_COD,TAB_SALIDA_NAME,TAB_SALIDA_STATUS};
             String[] args = {
@@ -106,7 +106,7 @@ public class SalidaDAO {
             };
             Cursor cursor= db.query(TAB_SALIDA,null,TAB_SALIDA_STATUS+"=?",args,TAB_SALIDA_NAME,null,TAB_SALIDA_NAME+_STRASC);
             while(cursor.moveToNext()){
-                ActividadVO temp = getAtributtes(cursor);
+                SalidaVO temp = getAtributtes(cursor);
                 cultivos.add(temp);
             }
             cursor.close();
@@ -120,26 +120,26 @@ public class SalidaDAO {
         return cultivos;
     }
 
-    private ActividadVO getAtributtes(Cursor cursor){
-        ActividadVO ActividadVO = new ActividadVO();
+    private SalidaVO getAtributtes(Cursor cursor){
+        SalidaVO SalidaVO = new SalidaVO();
         String[] columnNames = cursor.getColumnNames();
         for(String name : columnNames){
             switch (name){
                 case TAB_SALIDA_ID:
-                    ActividadVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
+                    SalidaVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
                 case TAB_SALIDA_COD:
-                    ActividadVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
+                    SalidaVO.setCod(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 case TAB_SALIDA_NAME:
-                    ActividadVO.setName(cursor.getString(cursor.getColumnIndex(name)));
+                    SalidaVO.setName(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 case TAB_SALIDA_STATUS:
-                    ActividadVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
+                    SalidaVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                     break;
             }
         }
-        return ActividadVO;
+        return SalidaVO;
     }
 
 

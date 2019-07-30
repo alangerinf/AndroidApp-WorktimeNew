@@ -1,5 +1,6 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
+import com.ibao.alanger.worktime.models.VO.external.EmpresaVO;
 import com.ibao.alanger.worktime.models.VO.external.LaborVO;
 import com.ibao.alanger.worktime.models.VO.external.CentroCosteVO;
 import com.ibao.alanger.worktime.models.VO.external.CultivoVO;
@@ -13,15 +14,17 @@ public class TareoVO {
 
     private int id;
     private LaborVO laborVO;
-    private LoteVO loteVO;
     private CentroCosteVO centroCosteVO;
+
+    private LoteVO loteVO;
     private FundoVO fundoVO;
+    private EmpresaVO empresaVO;
+
     private CultivoVO cultivoVO;
     private float productividad;
     private String dateTimeStart;
     private String dateTimeEnd;
     private float nHorasTareadas;
-    private int nTrabajadores;
     private boolean isActive;
     private List<TareoDetalleVO> tareoDetalleVOList;
 
@@ -29,6 +32,7 @@ public class TareoVO {
         this.id=0;
         this.laborVO = null;
         this.loteVO = null;
+        this.empresaVO = null;
         this.centroCosteVO = null;
         this.fundoVO =null;
         this.cultivoVO =null;
@@ -36,7 +40,6 @@ public class TareoVO {
         this.dateTimeStart="";
         this.dateTimeEnd="";
         this.nHorasTareadas=0f;
-        this.nTrabajadores=0;
         this.isActive=true;
         this.tareoDetalleVOList = new ArrayList<>();
     }
@@ -121,14 +124,6 @@ public class TareoVO {
         this.nHorasTareadas = nHorasTareadas;
     }
 
-    public int getnTrabajadores() {
-        return nTrabajadores;
-    }
-
-    public void setnTrabajadores(int nTrabajadores) {
-        this.nTrabajadores = nTrabajadores;
-    }
-
     public boolean isActive() {
         return isActive;
     }
@@ -143,5 +138,13 @@ public class TareoVO {
 
     public void setTareoDetalleVOList(List<TareoDetalleVO> tareoDetalleVOList) {
         this.tareoDetalleVOList = tareoDetalleVOList;
+    }
+
+    public EmpresaVO getEmpresaVO() {
+        return empresaVO;
+    }
+
+    public void setEmpresaVO(EmpresaVO empresaVO) {
+        this.empresaVO = empresaVO;
     }
 }

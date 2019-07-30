@@ -21,12 +21,16 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_IDEMPRESA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_STATUS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._n;
 
 
 public class FundoDAO {
@@ -76,9 +80,9 @@ public class FundoDAO {
             Cursor cursor = db.rawQuery(
                     _SELECT +
                             "*"+
-                        _FROM+
+                            _FROM+
                             TAB_FUNDO+" as F"+
-                        _WHERE+
+                            _WHERE+
                             "F."+TAB_FUNDO_ID+"="+ id
                     ,null);
 
@@ -89,6 +93,36 @@ public class FundoDAO {
             cursor.close();
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
+        }
+        db.close();
+        c.close();
+        return temp;
+    }
+
+    public FundoVO selectByIdLote(int idlote) {
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = c.getReadableDatabase();
+        FundoVO temp = null;
+        try{
+            Cursor cursor = db.rawQuery(
+                    _SELECT +
+                            "*"+
+                            _FROM+
+                            TAB_FUNDO+" as F"+_n+
+                            TAB_LOTE+" as L"+
+                            _WHERE+
+                            "L."+TAB_LOTE_ID+"="+idlote+
+                            "L."+TAB_LOTE_IDFUNDO+"="+"F."+TAB_FUNDO_ID
+                    ,null);
+
+            if(cursor.getCount()>0){
+                cursor.moveToFirst();
+                temp = getAtributtes(cursor);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" selectByIdLote "+e.toString(), Toast.LENGTH_SHORT).show();
         }
         db.close();
         c.close();
