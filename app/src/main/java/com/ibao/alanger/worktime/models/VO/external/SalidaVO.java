@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class SalidaVO {
+import java.io.Serializable;
+
+public class SalidaVO implements Serializable {
 
     private int id;
     private String cod;

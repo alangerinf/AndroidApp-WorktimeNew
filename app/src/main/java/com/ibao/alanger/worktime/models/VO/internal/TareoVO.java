@@ -7,10 +7,11 @@ import com.ibao.alanger.worktime.models.VO.external.CultivoVO;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 import com.ibao.alanger.worktime.models.VO.external.LoteVO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TareoVO {
+public class TareoVO implements Serializable {
 
     private int id;
     private LaborVO laborVO;
@@ -26,6 +27,9 @@ public class TareoVO {
     private String dateTimeEnd;
     private float nHorasTareadas;
     private boolean isActive;
+    private boolean isAsistencia;
+
+
     private List<TareoDetalleVO> tareoDetalleVOList;
 
     public TareoVO(){
@@ -42,6 +46,7 @@ public class TareoVO {
         this.nHorasTareadas=0f;
         this.isActive=true;
         this.tareoDetalleVOList = new ArrayList<>();
+        this.isAsistencia = false;
     }
 
     public int getId() {
@@ -147,4 +152,14 @@ public class TareoVO {
     public void setEmpresaVO(EmpresaVO empresaVO) {
         this.empresaVO = empresaVO;
     }
+
+    public boolean isAsistencia() {
+        return isAsistencia;
+    }
+
+    public void setAsistencia(boolean asistencia) {
+        isAsistencia = asistencia;
+    }
+
+
 }

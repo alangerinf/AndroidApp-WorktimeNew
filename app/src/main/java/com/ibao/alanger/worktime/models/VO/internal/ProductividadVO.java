@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
-public class ProductividadVO {
+import java.io.Serializable;
+
+public class ProductividadVO implements Serializable {
 
     private int id;
     private float value;

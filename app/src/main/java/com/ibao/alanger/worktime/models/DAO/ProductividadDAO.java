@@ -49,14 +49,27 @@ public class ProductividadDAO {
         return flag;
     }
 
-    public boolean insert(int id, int idTareoDetalle ,String value,String dateTime){
+    public boolean insert(int idTareoDetalle ,String value,String dateTime){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(TAB_PRODUCTIVIDAD_ID,id);
         values.put(TAB_PRODUCTIVIDAD_IDTAREODETALLE,idTareoDetalle);
         values.put(TAB_PRODUCTIVIDAD_VALUE,value);
         values.put(TAB_PRODUCTIVIDAD_DATETIME,dateTime);
+        long temp = db.insert(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID,values);
+        db.close();
+        conn.close();
+        return temp > 0;
+    }
+
+    public boolean insert(ProductividadVO pro){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TAB_PRODUCTIVIDAD_ID,pro.getId());
+        values.put(TAB_PRODUCTIVIDAD_IDTAREODETALLE,pro.getIdTareoDetalle());
+        values.put(TAB_PRODUCTIVIDAD_VALUE,pro.getValue());
+        values.put(TAB_PRODUCTIVIDAD_DATETIME,pro.getDateTime());
         long temp = db.insert(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID,values);
         db.close();
         conn.close();
@@ -101,7 +114,6 @@ public class ProductividadDAO {
         String[] args = {
                 String.valueOf(idTareoDatelle)
         };
-
         try{
             Cursor cursor= db.query(TAB_PRODUCTIVIDAD,null,TAB_PRODUCTIVIDAD_IDTAREODETALLE+"=?",args,null,null,null);
             while(cursor.moveToNext()){
@@ -117,6 +129,32 @@ public class ProductividadDAO {
             c.close();
         }
         return empresaVOS;
+    }
+
+    public int deleteById(int id){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        String[] args = {
+                String.valueOf(id)
+        };
+        int i =    db.delete(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID+"=?",args);
+        db.close();
+        c.close();
+        return i;
+    }
+
+    public int deleteByIdTareoDetalle(int idTareoDetalle){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        String[] args = {
+                String.valueOf(idTareoDetalle)
+        };
+        int i =    db.delete(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_IDTAREODETALLE+"=?",args);
+        db.close();
+        c.close();
+        return i;
     }
 
     private ProductividadVO getAtributtes(Cursor cursor){
@@ -137,7 +175,8 @@ public class ProductividadDAO {
                    empresaVO.setDateTime(cursor.getString(cursor.getColumnIndex(name)));
                    break;
                default:
-                   Toast.makeText(ctx,"getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Log.d(TAG," getAtributes error no se encuentra campo "+name);
                    break;
            }
         }

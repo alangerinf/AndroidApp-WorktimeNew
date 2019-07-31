@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
+import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 
 import java.util.ArrayList;
@@ -66,6 +67,29 @@ public class TareoDetalleDAO {
         values.put(TAB_TAREODETALLE_DNI,DNI);
         values.put(TAB_TAREODETALLE_DATESTART,dateStart);
         long temp = db.insert(TAB_TAREODETALLE,TAB_TAREODETALLE_ID,values);
+        db.close();
+        conn.close();
+        return temp;
+    }
+
+
+    public long insert(TareoDetalleVO tareoDetalleVO){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(TAB_TAREODETALLE_ID,tareoDetalleVO.getId());
+        values.put(TAB_TAREODETALLE_IDTAREO,tareoDetalleVO.getIdTareo());
+        values.put(TAB_TAREODETALLE_DNI,tareoDetalleVO.getTrabajadorVO().getDni());
+        values.put(TAB_TAREODETALLE_DATESTART,tareoDetalleVO.getTimeStart());
+        values.put(TAB_TAREODETALLE_DATEEND,tareoDetalleVO.getTimeEnd());
+        values.put(TAB_TAREODETALLE_PRODUCTIVIDAD,tareoDetalleVO.getProductividad());
+        long temp = db.insert(TAB_TAREODETALLE,TAB_TAREODETALLE_ID,values);
+
+        for(ProductividadVO pro: tareoDetalleVO.getProductividadVOList()){
+            new ProductividadDAO(ctx).insert(pro);
+        }
+
         db.close();
         conn.close();
         return temp;
@@ -138,7 +162,19 @@ public class TareoDetalleDAO {
         return temp;
     }
 
- 
+    public int deleteById(int id){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        String[] args = {
+                String.valueOf(id)
+        };
+        int i = db.delete(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID+"=?",args);
+        new ProductividadDAO(ctx).deleteByIdTareoDetalle(id);
+        db.close();
+        c.close();
+        return i;
+    }
 
     public List<TareoDetalleVO> listByIdTareo(int idTareo){
         ConexionSQLiteHelper c;
@@ -199,11 +235,23 @@ public class TareoDetalleDAO {
                    }
                    break;
                default:
-                   Toast.makeText(ctx,"getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Log.d(TAG," getAtributes error no se encuentra campo "+name);
                    break;
            }
         }
+
+        tareoDetalleVO.setProductividadVOList(new ProductividadDAO(ctx).listByIdTareoDetalle(tareoDetalleVO.getId()));
+
         return tareoDetalleVO;
     }
 
+    public void deleteByIdTareo(int idTareo) {
+        List<TareoDetalleVO> tareoDetalleVOList = listByIdTareo(idTareo);
+
+        for (TareoDetalleVO t : tareoDetalleVOList){
+            deleteById(t.getId());
+        }
+
+    }
 }

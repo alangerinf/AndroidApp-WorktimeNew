@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class CentroCosteVO {
+import java.io.Serializable;
+
+public class CentroCosteVO implements Serializable {
 
     private int id;
     private String cod;

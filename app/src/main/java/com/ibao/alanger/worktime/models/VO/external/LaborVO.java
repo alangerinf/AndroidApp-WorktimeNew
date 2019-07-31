@@ -1,10 +1,11 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LaborVO {
+public class LaborVO implements Serializable {
 
     private int id;
     private String cod;

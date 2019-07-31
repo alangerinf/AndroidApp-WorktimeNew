@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class FundoVO {
+import java.io.Serializable;
+
+public class FundoVO implements Serializable {
     /*
     //TABLE FUNDO
     public static final String  TAB_FUNDO               = "Fundo",

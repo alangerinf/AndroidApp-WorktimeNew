@@ -275,7 +275,8 @@ public class EmpresaDAO {
                    empresaVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                    break;
                default:
-                   Toast.makeText(ctx,"getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Toast.makeText(ctx,TAG+"getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                   Log.d(TAG," getAtributes error no se encuentra campo "+name);
                    break;
            }
         }

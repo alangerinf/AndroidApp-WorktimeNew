@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         fl.loadActividades();
         fl.loadLotes();
         fl.loadLabores();
+        fl.loadCCoste();
 
 
         myFragment = new MainFragment();

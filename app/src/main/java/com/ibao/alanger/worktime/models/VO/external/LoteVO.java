@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class LoteVO {
+import java.io.Serializable;
+
+public class LoteVO implements Serializable {
     private int id;
     private int idFundo;
     private int idCultivo;

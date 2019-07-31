@@ -3,10 +3,11 @@ package com.ibao.alanger.worktime.models.VO.internal;
 import com.ibao.alanger.worktime.models.VO.external.SalidaVO;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TareoDetalleVO {
+public class TareoDetalleVO implements Serializable {
 
     private int id;
     private int idTareo;

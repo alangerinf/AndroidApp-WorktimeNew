@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class CultivoVO {
+import java.io.Serializable;
+
+public class CultivoVO implements Serializable {
 
     private int id;
     private String cod;

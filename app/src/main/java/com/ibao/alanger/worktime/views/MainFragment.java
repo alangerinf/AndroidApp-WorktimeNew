@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -13,14 +15,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.adapters.RViewAdapterMainListTareo;
+import com.ibao.alanger.worktime.models.DAO.TareoDAO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.ibao.alanger.worktime.views.CreateTareoActivity.CREATE_MODE_MAIN;
 import static com.ibao.alanger.worktime.views.CreateTareoActivity.EXTRA_CREATE_MODE;
+import static com.ibao.alanger.worktime.views.TareoActivity.EXTRA_TAREO;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,11 +49,14 @@ public class MainFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
 
-    private RecyclerView rView;
-    private RViewAdapterMainListTareo adapter;
-    private FloatingActionButton fab;
+    private static RecyclerView rView;
+    private static RViewAdapterMainListTareo adapter;
+    private static FloatingActionButton fab;
 
+    private static Context ctx;
+    private static View root;
 
+    private static List<TareoVO> tareoVOList;
 
     public MainFragment() {
         // Required empty public constructor
@@ -80,7 +89,12 @@ public class MainFragment extends Fragment {
         }
     }
 
+
+
     void declaration(){
+        ctx = getContext();
+
+        tareoVOList = new TareoDAO(ctx).listAll();
 
         fab = getView().findViewById(R.id.fmain_fab);
         fab.setOnClickListener(v->{
@@ -92,12 +106,21 @@ public class MainFragment extends Fragment {
         });
 
         rView= getView().findViewById(R.id.fmain_rView);
-        List<String> list = new ArrayList<>();
-        for(int i =0;i<10;i++){
-            list.add("ad");
-        }
-        adapter = new RViewAdapterMainListTareo(list);
+
+        adapter = new RViewAdapterMainListTareo(tareoVOList);
+        adapter.setOnClicListener(v -> {
+            int pos = rView.getChildAdapterPosition(v);
+            TareoVO tareoVO = tareoVOList.get(pos);
+            goToTareoActivity(tareoVO);
+        });
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
         rView.setAdapter(adapter);
+    }
+
+    void goToTareoActivity(TareoVO t){
+        Intent intent = new Intent(ctx, TareoActivity.class);
+        intent.putExtra(EXTRA_TAREO,t);
+        startActivity(intent);
     }
 
 
@@ -107,11 +130,14 @@ public class MainFragment extends Fragment {
         declaration();
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        root = inflater.inflate(R.layout.fragment_main, container, false);
+        return  root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -132,24 +158,46 @@ public class MainFragment extends Fragment {
         }
     }
 
+
+
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            final TareoVO item = tareoVOList.remove(viewHolder.getAdapterPosition());
+            new TareoDAO(ctx).deleteById(item.getId());
+            final int index = viewHolder.getAdapterPosition();
+            adapter.notifyDataSetChanged();
+            //enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),productList);
+
+            Snackbar snackbar = Snackbar.make(root,"Se Borró una Labor",Snackbar.LENGTH_LONG);
+            snackbar.setAction("Deshacer", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tareoVOList.add(index,item);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            snackbar.show();
+        }
+    };
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }

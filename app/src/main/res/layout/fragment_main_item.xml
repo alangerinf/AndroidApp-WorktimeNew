@@ -41,7 +41,7 @@
                 android:orientation="horizontal"
                 >
                 <TextView
-                    android:id="@+id/cmain_item_Fundo"
+                    android:id="@+id/fmain_item_Fundo"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -54,6 +54,7 @@
                     android:layout_marginEnd="@dimen/margin_min"
                     android:text="@string/separador" />
                 <TextView
+                    android:id="@+id/fmain_item_Cultivo"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,7 +62,7 @@
 
             </LinearLayout>
             <TextView
-                android:id="@+id/cmain_item_Name"
+                android:id="@+id/fmain_item_Labor"
                 android:textColor="@color/colorPrimaryDark"
                 android:layout_marginEnd="@dimen/space_floating_button"
                 style="@style/tView_Tittle"
@@ -82,7 +83,7 @@
                     android:src="@drawable/ic__time_black_24dp"
                     />
                 <TextView
-                    android:id="@+id/cmain_item_dateTime"
+                    android:id="@+id/fmain_item_dateTime"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +101,7 @@
                     android:src="@drawable/ic_monetization_on_black_24dp"
                     />
                 <TextView
-                    android:id="@+id/cmain_item_costCenter"
+                    android:id="@+id/fmain_item_costCenter"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,6 +125,7 @@
                         android:src="@drawable/ic_timer_black_24dp"
                         />
                     <TextView
+                        android:id="@+id/fmain_item_nHoras"
                         style="@style/tView_secondaryText"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"
@@ -147,6 +149,7 @@
                         android:src="@drawable/ic_person_black_24dp"
                         />
                     <TextView
+                        android:id="@+id/fmain_item_nTrabajadores"
                         style="@style/tView_secondaryText"
                         android:textStyle="bold"
                         android:layout_width="wrap_content"

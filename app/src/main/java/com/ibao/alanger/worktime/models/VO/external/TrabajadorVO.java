@@ -1,6 +1,8 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class TrabajadorVO {
+import java.io.Serializable;
+
+public class TrabajadorVO implements Serializable {
 
     private String dni;
     private String cod;

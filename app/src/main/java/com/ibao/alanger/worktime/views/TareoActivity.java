@@ -22,6 +22,7 @@ public class TareoActivity extends AppCompatActivity {
     private static FloatingActionButton fabAddTrabajador;
     private static FloatingActionButton fabOptions;
 
+    public static final String EXTRA_TAREO = "tareo";
 
 
     @Override

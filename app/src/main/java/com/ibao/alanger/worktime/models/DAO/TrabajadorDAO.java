@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
@@ -139,6 +140,10 @@ public class TrabajadorDAO {
                     break;
                 case TAB_TRABAJADOR_STATUS:
                     trabajadorVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
+                    break;
+                default:
+                    Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                    Log.d(TAG," getAtributes error no se encuentra campo "+name);
                     break;
             }
         }

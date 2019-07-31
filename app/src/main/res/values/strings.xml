@@ -66,4 +66,5 @@
     <string name="sin_empresas">Sin Empresas</string>
     <string name="sin_centro_contes">Sin Centro de Costes</string>
     <string name="error_complete_configuraciones">Complete todas las configuraciones</string>
+    <string name="asistencia">ASISTENCIA</string>
 </resources>

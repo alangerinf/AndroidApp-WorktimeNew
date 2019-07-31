@@ -289,7 +289,10 @@ public class DataBaseDesign {
                                 TAB_TAREO_PRODUCTIVIDAD         = "producitividad",
                                 TAB_TAREO_PRODUCTIVIDAD_TYPE    = TYPE_FLOAT,
                                 TAB_TAREO_ISACTIVE              = "isActive",
-                                TAB_TAREO_ISACTIVE_TYPE         = TYPE_BOOLEAN;
+                                TAB_TAREO_ISACTIVE_TYPE         = TYPE_BOOLEAN,
+                                TAB_TAREO_ISASISTENCIA          = "isAsistencia",
+                                TAB_TAREO_ISASISTENCIA_TYPE     = TYPE_BOOLEAN;
+
 
     public static final String CREATETABLE_TAREO =
             TABLE_CREATE+TAB_TAREO+"("+
@@ -308,6 +311,8 @@ public class DataBaseDesign {
                     TAB_TAREO_DATEEND + TAB_TAREO_DATEEND_TYPE+
                     AND +
                     TAB_TAREO_PRODUCTIVIDAD + TAB_TAREO_PRODUCTIVIDAD_TYPE +
+                    AND +
+                    TAB_TAREO_ISASISTENCIA + TAB_TAREO_ISASISTENCIA_TYPE +" DEFAULT 0 "+
                     AND +
                     TAB_TAREO_ISACTIVE + TAB_TAREO_ISACTIVE_TYPE+ " DEFAULT 1 "+
                     ")";

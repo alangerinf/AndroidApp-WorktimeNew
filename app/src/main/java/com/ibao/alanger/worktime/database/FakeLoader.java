@@ -3,6 +3,7 @@ package com.ibao.alanger.worktime.database;
 import android.content.Context;
 
 import com.ibao.alanger.worktime.models.DAO.ActividadDAO;
+import com.ibao.alanger.worktime.models.DAO.CentroCosteDAO;
 import com.ibao.alanger.worktime.models.DAO.CultivoDAO;
 import com.ibao.alanger.worktime.models.DAO.EmpresaDAO;
 import com.ibao.alanger.worktime.models.DAO.FundoDAO;
@@ -61,7 +62,14 @@ public class FakeLoader {
     public void loadLabores(){
         new LaborDAO(ctx).dropTable();
         new LaborDAO(ctx).insert(1,"lab1","labor1",true,0,0,false,"",1,"1,2,3",true);
-        new LaborDAO(ctx).insert(2,"lab2","labor2",true,0,0,false,"",1,"1,2,3",true);
+        new LaborDAO(ctx).insert(2,"lab2","labor2",false,0,0,false,"",1,"1,2,3",true);
+    }
+
+    public void loadCCoste(){
+        new CentroCosteDAO(ctx).dropTable();
+        new CentroCosteDAO(ctx).insert(1,"cc11","ccoste11",1,true);
+        new CentroCosteDAO(ctx).insert(2,"cc21","ccoste21",1,true);
+        new FundoDAO(ctx).insert(3,"cc32","ccoste32",2,true);
     }
 
 }

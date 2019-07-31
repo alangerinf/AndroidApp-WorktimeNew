@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.ibao.alanger.worktime.views.TareoActivity.EXTRA_TAREO;
+
 public class CreateTareoActivity extends AppCompatActivity {
 
 
@@ -96,7 +98,10 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     private static Context ctx;
 
-    private static boolean ISDIRECT;
+    private static int CREATE_TYPE;
+    private static final int TYPE_DIRECTA = 1 ;
+    private static final int TYPE_INDIRECTA = 2 ;
+    private static final int TYPE_ASISTENCIA = 3 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +132,8 @@ public class CreateTareoActivity extends AppCompatActivity {
                     int posCCoste = spnCentroCoste.getSelectedItemPosition();
                     int posFundo = spnFundo.getSelectedItemPosition();
                     try {
-                        int idLabor =  listLabores.get(posLabor).getId();
+
+                        int idLabor =  posLabor==-1?0:listLabores.get(posLabor).getId();
                         Log.d(TAG,"idLabor:"+idLabor);
                         int idLote = posLote==-1?0:listLotes.get(posLote).getId();
                         Log.d(TAG,"idLote:"+idLote);
@@ -135,19 +141,20 @@ public class CreateTareoActivity extends AppCompatActivity {
                         Log.d(TAG,"idCCoste:"+posCCoste+"    "+idCCoste);
                         int idFundo = listFundos.get(posFundo).getId();
                         Log.d(TAG," idFundo:"+idFundo);
-                        new TareoDAO(ctx)
-                                .insert(
-                                       idLabor,
-                                        idLote,
-                                        idCCoste,
-                                        idFundo
-                                );
-                        goToTareo();
+
+                        long id =   new TareoDAO(ctx)
+                                        .insert(
+                                               idLabor,
+                                                idLote,
+                                                idCCoste,
+                                                idFundo,
+                                                CREATE_TYPE==TYPE_ASISTENCIA
+                                        );
+                        goToTareo(id);
                     }catch (Exception e){
                         Toast.makeText(ctx,TAG+" events"+e.toString(),Toast.LENGTH_LONG).show();
                         Log.d(TAG,"events "+e.toString());
                     }
-
 
                 }else {
                     Toast.makeText(ctx,"Modo sin Eventos",Toast.LENGTH_SHORT).show();
@@ -170,7 +177,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         int posLote = spnLote.getSelectedItemPosition();
         int posCCoste = spnCentroCoste.getSelectedItemPosition();
 
-        if(ISDIRECT){
+        if(CREATE_TYPE==TYPE_DIRECTA){
             try{
                 listEmpresas.get(posEmpresa).getId();
                 listFundos.get(posFundo).getId();
@@ -182,7 +189,9 @@ public class CreateTareoActivity extends AppCompatActivity {
                 Log.d(TAG,"verify "+e.toString());
                 flag=false;
             }
-        }else {
+
+        }
+        if(CREATE_TYPE==TYPE_INDIRECTA){
             try{
                 listEmpresas.get(posEmpresa).getId();
                 listFundos.get(posFundo).getId();
@@ -190,6 +199,16 @@ public class CreateTareoActivity extends AppCompatActivity {
                 listActividades.get(posActividad).getId();
                 listLabores.get(posLabor).getId();
                 listCentroCoste.get(posCCoste).getId();
+            }catch (Exception e){
+                Log.d(TAG,"verify "+e.toString());
+                flag=false;
+            }
+        }
+
+        if(CREATE_TYPE==TYPE_ASISTENCIA){
+            try{
+                listEmpresas.get(posEmpresa).getId();
+                listFundos.get(posFundo).getId();
             }catch (Exception e){
                 Log.d(TAG,"verify "+e.toString());
                 flag=false;
@@ -277,9 +296,10 @@ public class CreateTareoActivity extends AppCompatActivity {
     private int selectOnDialog =0; // used in openDialogSelectActivitdadType()
     protected void openDialogSelectActivitdadType(){
 
-        String[] items = new String[2];
+        String[] items = new String[3];
         items[0] = getString(R.string.directo);
         items[1] = getString(R.string.indirecto);
+        items[2] = getString(R.string.asistencia);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(R.string.seleccione_tipo_Actividad);
@@ -293,13 +313,23 @@ public class CreateTareoActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.seleccionar, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(selectOnDialog ==0){//direccto
-                    ISDIRECT=true;
-                    cargarDirecto();
-                }else {//indirecto
-                    ISDIRECT=false;
-                    cargarIndirecto();
+
+                switch (selectOnDialog){
+
+                    case 0:
+                        CREATE_TYPE=TYPE_DIRECTA;//DIRECTA
+                        cargarDirecto();
+                        break;
+                    case 1:
+                        CREATE_TYPE=TYPE_INDIRECTA;
+                        cargarIndirecto();
+                        break;
+                    case 2:
+                        CREATE_TYPE=TYPE_ASISTENCIA;
+                        cargarAsistencia();
+                        break;
                 }
+
             }
         });
         builder.setNegativeButton(R.string.cancelar,  new DialogInterface.OnClickListener() {
@@ -434,6 +464,31 @@ public class CreateTareoActivity extends AppCompatActivity {
     }
 
 
+    private void cargarAsistencia(){
+        selectorEmpresa.setVisibility(View.VISIBLE);
+        selectorFundo.setVisibility(View.VISIBLE);
+        selectorCultivo.setVisibility(View.GONE);
+        selectorActividad.setVisibility(View.GONE);
+        selectorLabor.setVisibility(View.GONE);
+        selectorLote.setVisibility(View.GONE);
+        selectorCentroCoste.setVisibility(View.GONE);
+
+        loadSpnEmpresas();
+
+        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                spnFundo.setAdapter(null);
+                loadSpnFundos();
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
@@ -446,8 +501,9 @@ public class CreateTareoActivity extends AppCompatActivity {
         finish();
     }
 
-    void goToTareo(){
+    void goToTareo(long id){
         Intent i = new Intent(ctx, TareoActivity.class);
+        i.putExtra(EXTRA_TAREO,new TareoDAO(ctx).selectById((int) id));
         startActivity(i);
         finish();
     }
@@ -632,7 +688,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
                 listCultivos.get(posCultivo).getId(),
                 listActividades.get(posActividad).getId(),
-                ISDIRECT
+                CREATE_TYPE==TYPE_DIRECTA
         );
         loadNombreLabores();
     }

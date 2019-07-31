@@ -137,6 +137,10 @@ public class SalidaDAO {
                 case TAB_SALIDA_STATUS:
                     SalidaVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
                     break;
+                default:
+                    Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
+                    Log.d(TAG," getAtributes error no se encuentra campo "+name);
+                    break;
             }
         }
         return SalidaVO;

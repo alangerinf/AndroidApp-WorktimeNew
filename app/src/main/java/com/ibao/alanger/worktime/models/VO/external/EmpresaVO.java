@@ -1,22 +1,9 @@
 package com.ibao.alanger.worktime.models.VO.external;
 
-public class EmpresaVO {
-    /*
-    TAB_EMPRESA         = "Empresa",
-                                TAB_EMPRESA_ID          = "id",
-                                TAB_EMPRESA_ID_TYPE     = TYPE_INTEGER,
-                                TAB_EMPRESA_COD         = "code",
-                                TAB_EMPRESA_COD_TYPE    = TYPE_VARCHAR,
-                                TAB_EMPRESA_RAZON       = "razonSocial",
-                                TAB_EMPRESA_RAZON_TYPE  = TYPE_VARCHAR,
-                                TAB_EMPRESA_RUC         = "RUC",
-                                TAB_EMPRESA_RUC_TYPE    = TYPE_VARCHAR,
-                                TAB_EMPRESA_NAME        = "name",
-                                TAB_EMPRESA_NAME_TYPE   = TYPE_VARCHAR,
-                                TAB_EMPRESA_STATUS      = "status",
-                                TAB_EMPRESA_STATUS_TYPE = TYPE_BOOLEAN;
+import java.io.Serializable;
 
-    */
+public class EmpresaVO implements Serializable {
+
     private int id;
     private String cod;
     private String razon;
