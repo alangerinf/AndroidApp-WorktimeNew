@@ -69,7 +69,6 @@ public class FakeLoader {
         new CentroCosteDAO(ctx).dropTable();
         new CentroCosteDAO(ctx).insert(1,"cc11","ccoste11",1,true);
         new CentroCosteDAO(ctx).insert(2,"cc21","ccoste21",1,true);
-        new FundoDAO(ctx).insert(3,"cc32","ccoste32",2,true);
     }
 
 }

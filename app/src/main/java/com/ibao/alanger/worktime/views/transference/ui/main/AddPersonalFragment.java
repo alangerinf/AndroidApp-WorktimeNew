@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -20,16 +21,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.views.transference.CustomScannerActivity;
+import com.ibao.alanger.worktime.views.transference.PageViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
-import static androidx.core.content.ContextCompat.getSystemService;
+import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.EXTRA_HOUR;
+import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.REQUEST_QR;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,14 +70,7 @@ public class AddPersonalFragment extends Fragment {
     private static FloatingActionButton ftp_fabSetCancel;
     private static FloatingActionButton ftp_fabQR;
     private static FloatingActionButton ftp_fabRestart;
-
-
-
-
-
-
-
-
+    private static MaterialButton ftp_btnAdd;
 
     public AddPersonalFragment() {
         // Required empty public constructor
@@ -100,11 +103,13 @@ public class AddPersonalFragment extends Fragment {
         }
     }
 
+    View root;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_personal, container, false);
+        root = inflater.inflate(R.layout.fragment_add_personal, container, false);
+        return root;
     }
 
 
@@ -125,15 +130,14 @@ public class AddPersonalFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
 
         declare();
         events();
-    }
 
+    }
 
     private Handler handlerHourUpdater = new Handler();
     private Runnable runHourUpdater = new Runnable() {
@@ -177,14 +181,77 @@ public class AddPersonalFragment extends Fragment {
             intentIntegrator
                     .setOrientationLocked(false)
                     .setCaptureActivity(CustomScannerActivity.class)
-                   // .setRequestCode(REQUEST_QR_NPALLET)
+                    .setRequestCode(REQUEST_QR)
+                    .addExtra(EXTRA_HOUR,isCounterRun?"":""+ftp_tieTextHour.getText().toString())
                     .initiateScan();
+        });
+
+        ftp_btnAdd.setOnClickListener(v->{
+            String dni = ftp_tieTextDNI.getText().toString();
+            String time[] = ftp_tieTextHour.getText().toString().split(":");
+            int hour = Integer.valueOf(time[0]);
+            int minutes = Integer.valueOf(time[1]);
+
+            if(dni.length()==8){
+
+                if(verificarDNI(dni)){
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = new Date();
+                    date.setHours(hour);
+                    date.setMinutes(minutes);
+                    date = removeSeconds(date);
+                    Snackbar snackbar= Snackbar.make(root,"Agregado Trabajador "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    snackbar.show();
+                    //buscar si existe
+                    TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
+                    tareoDetalleVO.setTimeStart(formatter.format(date));
+                    TrabajadorVO trabajadorVO = new TrabajadorVO();
+                    trabajadorVO.setDni(dni);
+                    tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+
+                    PageViewModel.addTrabajador(tareoDetalleVO);
+                }
+            }else {
+                Snackbar snackbar= Snackbar.make(root,"DNI invalido",Snackbar.LENGTH_SHORT);
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
+                snackbar.show();
+            }
         });
 
     }
 
+    boolean verificarDNI(String dni){
+
+        boolean flag = true;//valido
+        List<TareoDetalleVO> tareoDetalleVOList = PageViewModel.getMutable();
+        for(TareoDetalleVO t :  tareoDetalleVOList){
+            if(t.getTrabajadorVO().getDni().equals(dni)){
+                flag=false;
+                Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Lista",Snackbar.LENGTH_SHORT);
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
+                snackbar.show();
+                break;
+            }
+        }
+        if(flag){//buscar en bd
+
+
+        }
+
+        return flag;
+    }
+    public static Date removeSeconds(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.SECOND, 0);
+        return cal.getTime();
+    }
+
+    boolean isCounterRun;
 
     void startHourCounter(){
+        isCounterRun=true;
         ftp_fabSetTime.setAlpha(1f);
         ftp_fabSetTime.setClickable(true);
         ftp_fabSetTime.setFocusable(true);
@@ -194,12 +261,12 @@ public class AddPersonalFragment extends Fragment {
         ftp_fabSetCancel.setAlpha(0f);
         ftp_fabSetCancel.setClickable(false);
         ftp_fabSetCancel.setFocusable(false);
-
     }
 
 
     void stopHourCounter(){//
         //Activar el bonn de  cancelar
+        isCounterRun=false;
         ftp_fabSetCancel.setAlpha(1f);
         ftp_fabSetCancel.setClickable(true);
         ftp_fabSetCancel.setFocusable(true);
@@ -207,7 +274,6 @@ public class AddPersonalFragment extends Fragment {
         ftp_fabSetTime.setClickable(false);
         ftp_fabSetTime.setFocusable(false);
         handlerHourUpdater.removeCallbacks(runHourUpdater);
-
     }
 
 
@@ -215,7 +281,6 @@ public class AddPersonalFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         handlerHourUpdater.removeCallbacks(runHourUpdater);
-
     }
 
     private void declare() {
@@ -226,22 +291,14 @@ public class AddPersonalFragment extends Fragment {
         ftp_fabSetCancel = getView().findViewById(R.id.ftp_fabSetCancel);
         ftp_fabQR = getView().findViewById(R.id.ftp_fabQR);
         ftp_fabRestart = getView().findViewById(R.id.ftp_fabRestart);
-
+        ftp_btnAdd = getView().findViewById(R.id.ftp_btnAdd);
     }
 
-
-
-
-
-
-
     String getHour(){
-
         Calendar calendar = new GregorianCalendar();
 
         int hour  = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
-
 
         String strHour = "";
         String strMinute = "";
@@ -258,11 +315,7 @@ public class AddPersonalFragment extends Fragment {
             strMinute = ""+minute;
         }
 
-
-
-
         return strHour+":"+strMinute;
-
     }
 
 

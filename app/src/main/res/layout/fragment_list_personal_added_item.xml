@@ -51,7 +51,7 @@
                         android:src="@drawable/ic_person_outline_black_24dp" />
 
                     <TextView
-                        android:id="@+id/cmain_item_DNI"
+                        android:id="@+id/flpa_item_DNI"
                         style="@style/tView_secondaryText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                         android:src="@drawable/ic__time_black_24dp" />
 
                     <TextView
-                        android:id="@+id/cmain_item_Hour"
+                        android:id="@+id/flpa_item_Hour"
                         style="@style/tView_secondaryText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 </LinearLayout>
             </LinearLayout>
             <TextView
-                android:id="@+id/cmain_item_Name"
+                android:id="@+id/flpa_item_Name"
                 style="@style/tView_Tittle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

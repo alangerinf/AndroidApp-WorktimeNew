@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,19 +13,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.views.transference.ui.main.AddPersonalFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.ListPersonalAddedFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.SectionsPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class TabbetActivity extends AppCompatActivity
+public class  TabbetActivity extends AppCompatActivity
         implements
         AddPersonalFragment.OnFragmentInteractionListener,
         ListPersonalAddedFragment.OnFragmentInteractionListener {
@@ -73,16 +73,15 @@ public class TabbetActivity extends AppCompatActivity
 
         });
 
-
-
     }
 
     private void declare() {
         tittles = new ArrayList<>();
         tittles.add(getString(R.string.tab_text_1));
         tittles.add(getString(R.string.tab_text_2));
-
-
+        PageViewModel.init();
+        List <TareoDetalleVO> tareoDetalleVOList = new ArrayList<>();
+        PageViewModel.set(tareoDetalleVOList);
         sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager(),tittles);
 
 

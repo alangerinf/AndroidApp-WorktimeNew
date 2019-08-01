@@ -231,6 +231,8 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/productividad_fab_options"
         style="@style/Widget.MaterialComponents.FloatingActionButton"

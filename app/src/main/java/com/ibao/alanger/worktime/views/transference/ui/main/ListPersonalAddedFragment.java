@@ -4,13 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.adapters.RViewAdapterTransferListTrabajadores;
+import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
+import com.ibao.alanger.worktime.views.transference.PageViewModel;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +66,11 @@ public class ListPersonalAddedFragment extends Fragment {
         return fragment;
     }
 
+    static View root;
+    static RecyclerView flpa_rView;
+    static RViewAdapterTransferListTrabajadores adapter;
+
+    private PageViewModel pageViewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +80,33 @@ public class ListPersonalAddedFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_personal_added, container, false);
+        root =  inflater.inflate(R.layout.fragment_list_personal_added, container, false);
+
+        return root;
+    }
+
+    static String TAG = ListPersonalAddedFragment.class.getSimpleName();
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart");
+        flpa_rView = getView().findViewById(R.id.flpa_rView);
+        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
+        pageViewModel.get().observe(this, new Observer<List<TareoDetalleVO>>() {
+            @Override
+            public void onChanged(List<TareoDetalleVO> tareoDetalleVOList) {
+                Log.d(TAG,"tamaaño "+tareoDetalleVOList.size());
+                adapter = new RViewAdapterTransferListTrabajadores(getContext(),tareoDetalleVOList);
+                new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(flpa_rView);
+                flpa_rView.setAdapter(adapter);
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -109,4 +148,25 @@ public class ListPersonalAddedFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
 
     }
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final int index = viewHolder.getAdapterPosition();//esto tiene q ir arriba porq la programacion reaccitva elimina de inmediato en el recycler view sin actualizar
+            final TareoDetalleVO item = PageViewModel.removeTrabajador(viewHolder.getAdapterPosition());
+            Snackbar snackbar = Snackbar.make(root,"Se Borró una Labor"+index,Snackbar.LENGTH_LONG);
+            snackbar.setAction("Deshacer", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PageViewModel.addTrabajador(index,item);
+                }
+            });
+            snackbar.show();
+        }
+    };
 }

@@ -503,7 +503,7 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     void goToTareo(long id){
         Intent i = new Intent(ctx, TareoActivity.class);
-        i.putExtra(EXTRA_TAREO,new TareoDAO(ctx).selectById((int) id));
+        i.putExtra(EXTRA_TAREO,new TareoDAO(ctx).selectById((int)id));
         startActivity(i);
         finish();
     }

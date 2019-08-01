@@ -89,8 +89,6 @@ public class MainFragment extends Fragment {
         }
     }
 
-
-
     void declaration(){
         ctx = getContext();
 
@@ -107,7 +105,7 @@ public class MainFragment extends Fragment {
 
         rView= getView().findViewById(R.id.fmain_rView);
 
-        adapter = new RViewAdapterMainListTareo(tareoVOList);
+        adapter = new RViewAdapterMainListTareo(ctx,tareoVOList);
         adapter.setOnClicListener(v -> {
             int pos = rView.getChildAdapterPosition(v);
             TareoVO tareoVO = tareoVOList.get(pos);
@@ -180,6 +178,7 @@ public class MainFragment extends Fragment {
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    new TareoDAO(ctx).insert(item);
                     tareoVOList.add(index,item);
                     adapter.notifyDataSetChanged();
                 }
@@ -193,7 +192,6 @@ public class MainFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

@@ -1,5 +1,7 @@
 package com.ibao.alanger.worktime.adapters;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +21,13 @@ public class RViewAdapterMainListTareo
         implements View.OnClickListener{
 
     List<TareoVO> tareoVOList;
+    Context ctx;
 
     private View.OnClickListener onClickListener;
 
-    public RViewAdapterMainListTareo(List<TareoVO> tareoVOList) {
+    public RViewAdapterMainListTareo(Context ctx,List<TareoVO> tareoVOList) {
         this.tareoVOList = tareoVOList;
+        this.ctx = ctx;
     }
 
     @NonNull
@@ -49,9 +53,9 @@ public class RViewAdapterMainListTareo
         holder.fmain_item_dateTime.setText(item.getDateTimeStart());
         holder.fmain_item_Fundo.setText(item.getFundoVO().getName());
         if(item.isAsistencia()){
-            holder.fmain_item_Labor.setText("Control de Asistencia");
+            holder.fmain_item_Labor.setText(ctx.getString(R.string.control_de_asistencia));
             holder.fmain_item_Cultivo.setText(item.getEmpresaVO().getName());
-            holder.fmain_item_costCenter.setText("Asistencia");
+            holder.fmain_item_costCenter.setText(ctx.getString(R.string.asistencia));
         }else {
             holder.fmain_item_Labor.setText(item.getLaborVO().getName());
             holder.fmain_item_Fundo.setText(item.getFundoVO().getName());
@@ -61,18 +65,19 @@ public class RViewAdapterMainListTareo
             }else {
                 holder.fmain_item_costCenter.setText(item.getCentroCosteVO().getName());
             }
-
         }
+
     }
+
 
     public void setOnClicListener(View.OnClickListener listener){
         this.onClickListener=listener;
-
     }
 
     @Override
     public void onClick(View v) {
         if(onClickListener!=null){
+            Log.d("hola",""+v);
             onClickListener.onClick(v);
         }
     }

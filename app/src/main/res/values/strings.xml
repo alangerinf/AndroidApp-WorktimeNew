@@ -67,4 +67,5 @@
     <string name="sin_centro_contes">Sin Centro de Costes</string>
     <string name="error_complete_configuraciones">Complete todas las configuraciones</string>
     <string name="asistencia">ASISTENCIA</string>
+    <string name="control_de_asistencia">Control de Asistencia</string>
 </resources>
