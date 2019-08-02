@@ -89,7 +89,7 @@ public class CentroCosteDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,TAG+" selectByDNI "+e.toString(), Toast.LENGTH_SHORT).show();
         }
         db.close();
         c.close();

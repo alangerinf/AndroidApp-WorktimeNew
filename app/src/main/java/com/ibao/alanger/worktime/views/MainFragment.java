@@ -110,6 +110,8 @@ public class MainFragment extends Fragment {
             int pos = rView.getChildAdapterPosition(v);
             TareoVO tareoVO = tareoVOList.get(pos);
             goToTareoActivity(tareoVO);
+            v.setClickable(false);
+            v.setFocusable(false);
         });
         new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
         rView.setAdapter(adapter);
@@ -172,7 +174,6 @@ public class MainFragment extends Fragment {
             new TareoDAO(ctx).deleteById(item.getId());
             final int index = viewHolder.getAdapterPosition();
             adapter.notifyDataSetChanged();
-            //enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),productList);
 
             Snackbar snackbar = Snackbar.make(root,"Se Borró una Labor",Snackbar.LENGTH_LONG);
             snackbar.setAction("Deshacer", new View.OnClickListener() {

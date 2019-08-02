@@ -128,8 +128,8 @@ public class TareoDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," selectById "+e.toString());
+            Toast.makeText(ctx,TAG+" selectByDNI "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByDNI "+e.toString());
         }finally {
             db.close();
             c.close();

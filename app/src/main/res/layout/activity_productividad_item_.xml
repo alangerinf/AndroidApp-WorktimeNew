@@ -11,7 +11,7 @@
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false"
-    android:layout_margin="@dimen/margin_starndar"
+    android:layout_marginHorizontal="@dimen/margin_starndar"
     android:layout_gravity="center"
     android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,8 +29,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="@dimen/margin_starndar"
             android:layout_marginEnd="@dimen/margin_starndar"
-            android:layout_marginTop="@dimen/margin_starndar"
-            android:layout_marginBottom="@dimen/margin_starndar"
             tools:ignore="MissingConstraints">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -42,7 +40,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ic__time_black_24dp" />
                 <TextView
-                    android:id="@+id/cmain_item_DNI"
+                    android:id="@+id/productividad_item_DNI"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,7 +63,6 @@
                     android:layout_height="wrap_content"
                     android:text="23L-56DF" />
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -77,7 +74,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ic_insert_chart_black_24dp" />
                 <TextView
-                    android:id="@+id/cmain_item_dateTime"
+                    android:id="@+id/productividad_item_productividad"
                     style="@style/tView_secondaryText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +82,7 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+<!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fmaini_fab"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
@@ -97,5 +94,5 @@
         app:rippleColor="@color/colorPrimary"
         app:srcCompat="@drawable/ic_edit_white_24dp"
         />
-
+-->
 </androidx.cardview.widget.CardView>

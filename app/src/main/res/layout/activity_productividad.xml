@@ -31,7 +31,7 @@
                 android:src="@drawable/ic_person_outline_black_24dp" />
 
             <TextView
-                android:id="@+id/cmain_item_DNI"
+                android:id="@+id/productividad_DNI"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/cmain_item_Name"
+            android:id="@+id/productividad_Name"
             style="@style/tView_Tittle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                 android:src="@drawable/ic_insert_chart_black_24dp" />
 
             <TextView
-                android:id="@+id/cmain_item_dateTime"
+                android:id="@+id/productividad_productividad"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
                 <TextView
-                    android:id="@+id/item_inicio"
+                    android:id="@+id/productividad_hIni"
                     style="@style/tView_Tittle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -155,7 +155,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
                 <TextView
-                    android:id="@+id/item_hFin"
+                    android:id="@+id/productividad_hFin"
                     style="@style/tView_Tittle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -220,6 +220,9 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/productividad_rView"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -231,7 +234,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/productividad_fab_options"
@@ -250,7 +252,7 @@
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/productividad_fab"
+        android:id="@+id/productividad_fabAdd"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

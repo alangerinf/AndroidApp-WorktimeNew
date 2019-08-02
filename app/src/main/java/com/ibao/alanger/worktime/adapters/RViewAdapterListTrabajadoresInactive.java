@@ -1,6 +1,7 @@
 package com.ibao.alanger.worktime.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,41 +13,67 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
-import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-public class RViewAdapterListTrabajadores
-        extends RecyclerView.Adapter<RViewAdapterListTrabajadores.ViewHolder>
+public class RViewAdapterListTrabajadoresInactive
+        extends RecyclerView.Adapter<RViewAdapterListTrabajadoresInactive.ViewHolder>
         implements View.OnClickListener{
 
-    List<TareoDetalleVO> tareoDetalleVOList;
+    private List<TareoDetalleVO> tareoDetalleVOList;
 
-
-
-    Context ctx;
-    boolean isActive;
+    private Context ctx;
+    private boolean isActive;
 
     private View.OnClickListener onClickListener;
 
-    public RViewAdapterListTrabajadores(Context ctx, List<TareoDetalleVO> tareoDetalleVOList,boolean isActive) {
+    private String TAG = RViewAdapterListTrabajadoresInactive.class.getSimpleName();
 
-        this.tareoDetalleVOList = tareoDetalleVOList;
+    public RViewAdapterListTrabajadoresInactive(Context ctx, List<TareoDetalleVO> tareoDetalleVOList,boolean isActive) {
+
+        this.tareoDetalleVOList = new ArrayList<>();
+                this.tareoDetalleVOList.addAll(tareoDetalleVOList);
         this.ctx = ctx;
         this.isActive=isActive;
+
         for(int i =0;i< this.tareoDetalleVOList.size();i++){
 
+            /*
             if(this.tareoDetalleVOList.get(i).getTimeEnd().equals("")){
-                if(!isActive){
+                if(!this.isActive){
                     this.tareoDetalleVOList.remove(i);
+                    Log.d(TAG,"removiendo "+i);
+                    i--;
                 }
             }else {
-                if (isActive){
+                if(this.isActive){
                     this.tareoDetalleVOList.remove(i);
+                    Log.d(TAG,"removiendo "+i);
+                    i--;
                 }
             }
+            */
+
+            if(this.isActive && !this.tareoDetalleVOList.get(i).getTimeEnd().equals("")){
+                this.tareoDetalleVOList.remove(i);
+
+                Log.d(TAG,"removiendo "+i);
+                i--;
+            }
+            if(!this.isActive && this.tareoDetalleVOList.get(i).getTimeEnd().equals("")){
+                this.tareoDetalleVOList.remove(i);
+                Log.d(TAG,"removiendo "+i);
+                i--;
+            }
+
+
         }
+
     }
 
     @NonNull
@@ -68,11 +95,16 @@ public class RViewAdapterListTrabajadores
 
         TareoDetalleVO item = tareoDetalleVOList.get(position);
         holder.tareo_item_DNI.setText(item.getTrabajadorVO().getDni());
-        holder.tareo_item_Name.setText(item.getTrabajadorVO().getName());
+        holder.tareo_item_Name.setText(item.getTrabajadorVO().getName().equals("")?"Sin Nombre":item.getTrabajadorVO().getName());
         holder.tareo_item_productividad.setText(""+item.getProductividad());
-        holder.tareo_item_inicio.setText(item.getTimeStart());
+
+        Date dateIni = getHourFromDate(item.getTimeStart());
+
+        holder.tareo_item_inicio.setText(""+(dateIni.getHours()<10?"0"+dateIni.getHours():dateIni.getHours())+":"+(dateIni.getMinutes()<10?"0"+dateIni.getMinutes():dateIni.getMinutes())+":"+(dateIni.getSeconds()<10?"0"+dateIni.getSeconds():dateIni.getSeconds()));
         if(!item.getTimeEnd().equals("")){
-            holder.tareo_item_hFin.setText(item.getTimeEnd());
+            Date dateFin = getHourFromDate(item.getTimeEnd());
+            holder.tareo_item_hFin.setText(""+(dateFin.getHours()<10?"0"+dateFin.getHours():dateFin.getHours())+":"+(dateFin.getMinutes()<10?"0"+dateFin.getMinutes():dateFin.getMinutes())+":"+(dateFin.getSeconds()<10?"0"+dateFin.getSeconds():dateFin.getSeconds()));
+
         }
     }
 
@@ -93,6 +125,18 @@ public class RViewAdapterListTrabajadores
         return tareoDetalleVOList.size();
     }
 
+    private Date getHourFromDate(String dateString){
+
+        Date date = null;
+        try {
+            date=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tareo_item_DNI;
@@ -105,7 +149,6 @@ public class RViewAdapterListTrabajadores
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             tareo_item_DNI = itemView.findViewById(R.id.tareo_item_DNI);
             tareo_item_Name = itemView.findViewById(R.id.tareo_item_Name);
             tareo_item_productividad = itemView.findViewById(R.id.tareo_item_productividad);

@@ -1,9 +1,11 @@
 package com.ibao.alanger.worktime.views.transference;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.transference.ui.main.AddPersonalFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.ListPersonalAddedFragment;
 import com.ibao.alanger.worktime.views.transference.ui.main.SectionsPagerAdapter;
@@ -37,6 +41,16 @@ public class  TabbetActivity extends AppCompatActivity
     private static SectionsPagerAdapter sectionsPagerAdapter;
     ArrayList<String> tittles = new ArrayList<>();
 
+    public static final String EXTRA_MODE= "extra_mode";
+
+    public static final String EXTRA_MODE_ADD_TRABAJADOR="ADD TRABAJADOR";
+    public static final String EXTRA_TAREOVO="TAREOVO";
+
+    public static String MY_EXTRA_MODE;
+    public static TareoVO TAREO_RETURN;
+
+    private static String TAG = TabbetActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,16 +62,14 @@ public class  TabbetActivity extends AppCompatActivity
 
 
 
-       // viewPager.setPagingEnabled(false);
-        /*FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
+        Bundle b = getIntent().getExtras();
+
+        MY_EXTRA_MODE = b.getString(EXTRA_MODE);
+
+        if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADOR)){
+            TAREO_RETURN = (TareoVO) b.getSerializable(EXTRA_TAREOVO);
+            Log.d(TAG,""+ TAREO_RETURN);
+        }
 
         declare();
         events();
@@ -68,11 +80,19 @@ public class  TabbetActivity extends AppCompatActivity
             if(viewPager.getCurrentItem()!=1){//si esta en el segundo fragment
                 viewPager.setCurrentItem(1);
             }else {
+                Intent returnIntent = new Intent();
+                for(TareoDetalleVO tad :PageViewModel.getMutable()){
+                    int i =(int) new TareoDetalleDAO(getBaseContext()).insert(TAREO_RETURN.getId(),tad.getTrabajadorVO().getDni(),tad.getTimeStart());
+                            tad.setId(i);
+                            tad.setIdTareo(TAREO_RETURN.getId());
+                }
+                TAREO_RETURN.getTareoDetalleVOList().addAll(PageViewModel.getMutable());
+                if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADOR))
+                returnIntent.putExtra("TAREOVO", TAREO_RETURN);
+                setResult(RESULT_OK,returnIntent);
                 finish();
             }
-
         });
-
     }
 
     private void declare() {
@@ -82,8 +102,7 @@ public class  TabbetActivity extends AppCompatActivity
         PageViewModel.init();
         List <TareoDetalleVO> tareoDetalleVOList = new ArrayList<>();
         PageViewModel.set(tareoDetalleVOList);
-        sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager(),tittles);
-
+        sectionsPagerAdapter = new SectionsPagerAdapter( getSupportFragmentManager(),tittles,MY_EXTRA_MODE, TAREO_RETURN);
 
         fab = findViewById(R.id.fab);
         viewPager = findViewById(R.id.view_pager);
@@ -91,8 +110,6 @@ public class  TabbetActivity extends AppCompatActivity
 
         tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
-     //   viewPager.setPagingEnabled(false);  //cancelar el movimiento de swipe
 
     }
 
@@ -115,13 +132,11 @@ public class  TabbetActivity extends AppCompatActivity
         return super.dispatchTouchEvent( event );
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
-
 
     @Override
     public void onFragmentInteraction_upd_eTextDNI(String mensaje) {
@@ -132,4 +147,6 @@ public class  TabbetActivity extends AppCompatActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }

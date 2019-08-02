@@ -77,8 +77,7 @@ public class TareoDetalleDAO {
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
-
-        values.put(TAB_TAREODETALLE_ID,tareoDetalleVO.getId());
+        values.put(TAB_TAREODETALLE_ID,tareoDetalleVO.getId()==0?null:tareoDetalleVO.getId());
         values.put(TAB_TAREODETALLE_IDTAREO,tareoDetalleVO.getIdTareo());
         values.put(TAB_TAREODETALLE_DNI,tareoDetalleVO.getTrabajadorVO().getDni());
         values.put(TAB_TAREODETALLE_DATESTART,tareoDetalleVO.getTimeStart());
@@ -115,8 +114,8 @@ public class TareoDetalleDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," selectById "+e.toString());
+            Toast.makeText(ctx,TAG+" selectByDNI "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByDNI "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -218,16 +217,20 @@ public class TareoDetalleDAO {
                    tareoDetalleVO.setProductividad(cursor.getFloat(cursor.getColumnIndex(name)));
                    break;
                case TAB_TAREODETALLE_DNI:
-                   TrabajadorVO trabajadorVO = new TrabajadorVO();
-                   trabajadorVO.setDni(cursor.getString(cursor.getColumnIndex(name)));
-                   trabajadorVO.setName("S/N");
-                   tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+
+                   TrabajadorVO trabajadorVO = new TrabajadorDAO(ctx).selectByDNI(cursor.getColumnIndex(name));
+                   if(trabajadorVO==null){
+                       trabajadorVO = new TrabajadorVO();
+                       trabajadorVO.setDni(cursor.getString(cursor.getColumnIndex(name)));
+                       trabajadorVO.setName("Sin Nombre");
+                       tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+                   }
                    break;
                case TAB_TAREODETALLE_DATESTART:
                    tareoDetalleVO.setTimeStart(cursor.getString(cursor.getColumnIndex(name)));
                    break;
                case TAB_TAREODETALLE_DATEEND:
-                   tareoDetalleVO.setTimeEnd(cursor.getString(cursor.getColumnIndex(name)));
+                   tareoDetalleVO.setTimeEnd(cursor.getString(cursor.getColumnIndex(name))==(null)?"":cursor.getString(cursor.getColumnIndex(name)));
                    break;
                case TAB_TAREODETALLE_IDSALIDA:
                    if(cursor.getInt(cursor.getColumnIndex(name))>0){

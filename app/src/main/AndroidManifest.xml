@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        android:screenOrientation="portrait"
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
@@ -31,7 +32,7 @@
         <activity
             android:name=".views.SelectTareoActivity"
             android:label="@string/select_tareo_activity_name" />
-        <activity android:name=".views.TrabajadorActivity" />
+        <activity android:name=".views.ProductividadActivity" />
         <activity android:name=".views.testActivity" />
         <activity
             android:name=".views.TareoActivity"

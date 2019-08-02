@@ -24,6 +24,8 @@ import com.google.zxing.client.android.BeepManager;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.transference.ui.main.AddPersonalFragment;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CaptureManager;
@@ -60,6 +62,16 @@ public class CustomScannerActivity extends AppCompatActivity implements
 
     public static final int REQUEST_QR = 22;
 
+    public static final String EXTRA_MODE="extra mode";
+
+    private static String MY_EXTRA_MODE;
+
+    public static final String EXTRA_MODE_ADD_TRABAJADORES= "add trabajadores";
+    public static final String EXTRA_TAREO= "TAREO";
+
+    private static TareoVO TAREOVO;
+
+
     public static String HOUR;
 
     @Override
@@ -71,7 +83,13 @@ public class CustomScannerActivity extends AppCompatActivity implements
         fAButtonLinterna = findViewById(R.id.fAButtonLinterna);
 
         Bundle b = getIntent().getExtras();
-        HOUR = b.getString(EXTRA_HOUR,"");
+        HOUR = b.getString(EXTRA_HOUR);
+
+        MY_EXTRA_MODE = b.getString(EXTRA_MODE_ADD_TRABAJADORES);
+
+        if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADORES)){
+            TAREOVO = (TareoVO) b.getSerializable(EXTRA_TAREO);
+        }
 
         setTitle(HOUR.equals("")?"Agregar Trabajadores":"Agregar Trabajadores "+HOUR);
 
@@ -239,11 +257,20 @@ public class CustomScannerActivity extends AppCompatActivity implements
                 return true;
             }
         }
+
         for(TareoDetalleVO td : PageViewModel.getMutable()){
             if( td.getTrabajadorVO().getDni().equals(newDNI)){
                 return true;
             }
         }
+        for(TareoDetalleVO t :  TAREOVO.getTareoDetalleVOList()){
+                if(t.getTrabajadorVO().getDni().equals(newDNI)){
+                    return true;
+                }
+        }
+        //falta un for para buscar en la bd
+
+
 
         return false;
     }

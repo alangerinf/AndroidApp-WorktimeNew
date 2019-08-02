@@ -29,6 +29,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.transference.CustomScannerActivity;
 import com.ibao.alanger.worktime.views.transference.PageViewModel;
 
@@ -58,8 +59,8 @@ public class AddPersonalFragment extends Fragment {
     private String TAG = AddPersonalFragment.class.getSimpleName();
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static String mParam1;
+    private static TareoVO mParamTAREOVOB;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,15 +82,15 @@ public class AddPersonalFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param paramTareoVOB Parameter 2.
      * @return A new instance of fragment AddPersonalFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddPersonalFragment newInstance(String param1, String param2) {
+    public static AddPersonalFragment newInstance(String param1, TareoVO paramTareoVOB) {
         AddPersonalFragment fragment = new AddPersonalFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(ARG_PARAM2, paramTareoVOB);
         fragment.setArguments(args);
         return fragment;
     }
@@ -99,11 +100,11 @@ public class AddPersonalFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParamTAREOVOB = (TareoVO) getArguments().getSerializable(ARG_PARAM2);
         }
     }
 
-    View root;
+    static View root;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -158,7 +159,6 @@ public class AddPersonalFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 openTimePicker(ftp_tieTextHour);
-
             }
         });
 
@@ -173,7 +173,6 @@ public class AddPersonalFragment extends Fragment {
             ftp_tieTextDNI.requestFocus();
             ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                     .showSoftInput(ftp_tieTextDNI, InputMethodManager.SHOW_FORCED);
-
         });
 
         ftp_fabQR.setOnClickListener(v->{
@@ -183,6 +182,8 @@ public class AddPersonalFragment extends Fragment {
                     .setCaptureActivity(CustomScannerActivity.class)
                     .setRequestCode(REQUEST_QR)
                     .addExtra(EXTRA_HOUR,isCounterRun?"":""+ftp_tieTextHour.getText().toString())
+                    .addExtra(CustomScannerActivity.EXTRA_MODE,CustomScannerActivity.EXTRA_MODE_ADD_TRABAJADORES)
+                    .addExtra(CustomScannerActivity.EXTRA_TAREO,mParamTAREOVOB)
                     .initiateScan();
         });
 
@@ -218,10 +219,9 @@ public class AddPersonalFragment extends Fragment {
                 snackbar.show();
             }
         });
-
     }
 
-    boolean verificarDNI(String dni){
+    public boolean  verificarDNI(String dni){
 
         boolean flag = true;//valido
         List<TareoDetalleVO> tareoDetalleVOList = PageViewModel.getMutable();
@@ -234,8 +234,18 @@ public class AddPersonalFragment extends Fragment {
                 break;
             }
         }
-        if(flag){//buscar en bd
-
+        if(flag){//el tareo acutal
+            for(TareoDetalleVO t :  mParamTAREOVOB.getTareoDetalleVOList()){
+                if(t.getTrabajadorVO().getDni().equals(dni)){
+                    flag=false;
+                    Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Labor",Snackbar.LENGTH_SHORT);
+                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
+                    snackbar.show();
+                    break;
+                }
+            }
+        }
+        if(flag){//buscar en la bd
 
         }
 

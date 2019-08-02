@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -24,14 +26,20 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final SparseArray<WeakReference<Fragment>> instantiatedFragments = new SparseArray<>();
 
-
     private List<String> TAB_TITLES;
 
+    public static final String EXTRA_MODE_ADD_TRABAJADOR= TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
+    public static final String EXTRA_TAREOVO=TabbetActivity.EXTRA_TAREOVO;
 
+    public static String MY_EXTRA_MODE;
 
-    public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> tabHeader) {
+    TareoVO TAREOVO;
+
+    public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> tabHeader, String MODE, TareoVO tareo) {
         super(fm);
         this.TAB_TITLES = tabHeader;
+        this.MY_EXTRA_MODE=MODE;
+        this.TAREOVO = tareo;
     }
 
     @Override
@@ -42,7 +50,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment= null;
 
         if(position==0){
-           fragment= AddPersonalFragment.newInstance("","");
+           fragment= AddPersonalFragment.newInstance(MY_EXTRA_MODE,TAREOVO);
         }else {
             fragment= ListPersonalAddedFragment.newInstance("","");
         }

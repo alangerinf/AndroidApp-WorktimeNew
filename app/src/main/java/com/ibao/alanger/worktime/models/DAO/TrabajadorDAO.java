@@ -65,7 +65,7 @@ public class TrabajadorDAO {
         return temp > 0;
     }
 
-    public TrabajadorVO selectById(int id) {
+    public TrabajadorVO selectByDNI(int dni) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
@@ -77,7 +77,7 @@ public class TrabajadorDAO {
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
                         _WHERE+
-                            "T."+TAB_TRABAJADOR_DNI+"="+ id+
+                            "T."+TAB_TRABAJADOR_DNI+"="+ dni+
                             _AND+
                             "T."+TAB_TRABAJADOR_STATUS+"=1"
                     ,null);
@@ -87,7 +87,7 @@ public class TrabajadorDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,TAG+" selectByDNI "+e.toString(), Toast.LENGTH_SHORT).show();
         }
         db.close();
         c.close();

@@ -93,8 +93,8 @@ public class FundoDAO {
             }
             cursor.close();
         }catch (Exception e){
-            Toast.makeText(ctx,TAG+" selectById "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," selectById "+e.toString());
+            Toast.makeText(ctx,TAG+" selectByDNI "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," selectByDNI "+e.toString());
         }
         db.close();
         c.close();
