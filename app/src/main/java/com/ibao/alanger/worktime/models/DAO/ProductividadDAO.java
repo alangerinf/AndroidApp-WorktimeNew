@@ -49,7 +49,7 @@ public class ProductividadDAO {
         return flag;
     }
 
-    public boolean insert(int idTareoDetalle ,String value,String dateTime){
+    public long insert(int idTareoDetalle ,String value,String dateTime){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -59,7 +59,7 @@ public class ProductividadDAO {
         long temp = db.insert(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID,values);
         db.close();
         conn.close();
-        return temp > 0;
+        return temp;
     }
 
     public boolean insert(ProductividadVO pro){

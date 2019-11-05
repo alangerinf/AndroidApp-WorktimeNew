@@ -1,11 +1,14 @@
-package com.ibao.alanger.worktime.views;
+package com.ibao.alanger.worktime.views.productividad;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,7 +16,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.adapters.RViewAdapterProductividad;
+import com.ibao.alanger.worktime.models.DAO.ProductividadDAO;
 import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 
@@ -34,8 +37,11 @@ import java.util.GregorianCalendar;
 
 public class ProductividadActivity extends AppCompatActivity {
 
+    private ProductividadLiveData model;
 
     public static final String EXTRA_TAREODETALLE = "productividad";
+
+
 
     RecyclerView productividad_rView;
     TextView productividad_hIni;
@@ -61,6 +67,8 @@ public class ProductividadActivity extends AppCompatActivity {
         b = getIntent().getExtras();
         assert b != null;
         TAREODETALLEVO = (TareoDetalleVO) b.getSerializable(EXTRA_TAREODETALLE);
+
+
 
         declare();
     }
@@ -90,15 +98,48 @@ public class ProductividadActivity extends AppCompatActivity {
 
         }
 
-        adapter = new RViewAdapterProductividad(ctx,TAREODETALLEVO.getProductividadVOList());
 
-        productividad_rView.setAdapter(adapter);
 
 
 
         productividad_fabAdd.setOnClickListener(v->{
             showPopup(new ProductividadVO(),true);
         });
+
+        model = ViewModelProviders.of(this).get(ProductividadLiveData.class);
+        // Create the observer which updates the UI.
+        final Observer<TareoDetalleVO> nameObserver = new Observer<TareoDetalleVO>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(@Nullable final TareoDetalleVO temp){
+
+
+                temp.setProductividad(0);
+                //contando productividad
+                for(ProductividadVO p: temp.getProductividadVOList()){
+                    temp.setProductividad(temp.getProductividad()+p.getValue());
+                }
+
+                productividad_productividad.setText(""+temp.getProductividad());
+
+                adapter.notifyDataSetChanged();
+
+
+
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        model.getTareoDetalleVO().observe(this, nameObserver);
+
+        model.setTareoDetalleVO(TAREODETALLEVO);
+        adapter = new RViewAdapterProductividad(ctx, ProductividadLiveData.getTareoDetalleVO().getValue().getProductividadVOList());
+        adapter.setOnClicListener(v->{
+            int index = productividad_rView.getChildAdapterPosition(v);
+            ProductividadVO temp = ProductividadLiveData.getTareoDetalleVO().getValue().getProductividadVOList().get(index);
+            showPopup(temp,false);
+        });
+        productividad_rView.setAdapter(adapter);
 
     }
     private Date getHourFromDate(String dateString){
@@ -123,6 +164,11 @@ public class ProductividadActivity extends AppCompatActivity {
         TextView prodadd_tViewDateTime = dialogClose.findViewById(R.id.prodadd_tViewDateTime);
         prodadd_tViewDateTime.setText(""+pro.getDateTime());
         EditText eTextCantidad= dialogClose.findViewById(R.id.prodadd_eTextCantidad);
+
+        if(!isNew){
+            eTextCantidad.setText(String.valueOf(pro.getValue()));
+        }
+
         eTextCantidad.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -158,7 +204,6 @@ public class ProductividadActivity extends AppCompatActivity {
                     }
                 }
 
-
             }
             @Override
             public void afterTextChanged(Editable editable) {
@@ -176,8 +221,21 @@ public class ProductividadActivity extends AppCompatActivity {
                 if(numero.charAt(numero.length()-1)=='.'){
                     eTextCantidad.setError("valor invalido");
                 }else {
-                    //insertar
-                    Toast.makeText(ctx,"Se agregaron "+eTextCantidad.getText().toString()+"",Toast.LENGTH_LONG).show();
+                    pro.setValue(Float.valueOf(numero));
+                    if(isNew){
+                        long id = new ProductividadDAO(ctx).insert(TAREODETALLEVO.getId(),numero,getHour());
+                        if(id>0){
+                            pro.setId((int)id);
+                            pro.setDateTime(getHour());
+                            pro.setIdTareoDetalle( TAREODETALLEVO.getId());
+                            model.addProductividad(pro);
+                            Toast.makeText(ctx,"Se agregaron "+eTextCantidad.getText().toString()+"",Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(ctx,"error al insertar",Toast.LENGTH_LONG).show();
+                        }
+                    }else {
+                        model.modifyProductividad(pro);
+                    }
                     dialogClose.dismiss();
                 }
             }
@@ -226,6 +284,7 @@ public class ProductividadActivity extends AppCompatActivity {
 
         return strHour+":"+strMinute;
     }
+
     String TAG = ProductividadActivity.class.getSimpleName();
 
 }

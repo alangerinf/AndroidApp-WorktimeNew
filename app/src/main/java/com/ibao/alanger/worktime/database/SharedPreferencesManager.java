@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class SharedPreferencesManager {
 
-
     private static String TAG = SharedPreferencesManager.class.getSimpleName();
     private static String namePreferences_userdata = "data";
 
@@ -21,7 +20,6 @@ public class SharedPreferencesManager {
     private static String user_name = "name";
     private static String user_password = "password";
     private static String user_token = "token";
-
 
     public static boolean saveUser(Context ctx, User user){
         boolean flag = false;

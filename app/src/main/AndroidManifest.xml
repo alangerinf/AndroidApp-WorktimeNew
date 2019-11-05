@@ -32,7 +32,7 @@
         <activity
             android:name=".views.SelectTareoActivity"
             android:label="@string/select_tareo_activity_name" />
-        <activity android:name=".views.ProductividadActivity" />
+        <activity android:name=".views.productividad.ProductividadActivity" />
         <activity android:name=".views.testActivity" />
         <activity
             android:name=".views.TareoActivity"

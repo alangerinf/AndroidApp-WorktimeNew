@@ -22,11 +22,12 @@ import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.productividad.ProductividadActivity;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.util.Objects;
 
-import static com.ibao.alanger.worktime.views.ProductividadActivity.EXTRA_TAREODETALLE;
+import static com.ibao.alanger.worktime.views.productividad.ProductividadActivity.EXTRA_TAREODETALLE;
 import static com.ibao.alanger.worktime.views.transference.TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
 
 public class TareoActivity extends AppCompatActivity {
