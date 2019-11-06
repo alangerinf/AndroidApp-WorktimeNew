@@ -20,13 +20,13 @@ import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.adapters.RViewAdapterMainListTareo;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.tareo.TareoActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.ibao.alanger.worktime.views.CreateTareoActivity.CREATE_MODE_MAIN;
 import static com.ibao.alanger.worktime.views.CreateTareoActivity.EXTRA_CREATE_MODE;
-import static com.ibao.alanger.worktime.views.TareoActivity.EXTRA_TAREO;
+import static com.ibao.alanger.worktime.views.tareo.TareoActivity.EXTRA_TAREO;
 
 /**
  * A simple {@link Fragment} subclass.

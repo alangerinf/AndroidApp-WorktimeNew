@@ -32,12 +32,13 @@ import com.ibao.alanger.worktime.models.VO.external.EmpresaVO;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 import com.ibao.alanger.worktime.models.VO.external.LaborVO;
 import com.ibao.alanger.worktime.models.VO.external.LoteVO;
+import com.ibao.alanger.worktime.views.tareo.TareoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ibao.alanger.worktime.views.TareoActivity.EXTRA_TAREO;
+import static com.ibao.alanger.worktime.views.tareo.TareoActivity.EXTRA_TAREO;
 
 public class CreateTareoActivity extends AppCompatActivity {
 

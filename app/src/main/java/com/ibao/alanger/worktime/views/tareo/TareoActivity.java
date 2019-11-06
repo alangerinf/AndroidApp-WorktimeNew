@@ -1,11 +1,15 @@
-package com.ibao.alanger.worktime.views;
+package com.ibao.alanger.worktime.views.tareo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,16 +17,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.adapters.RViewAdapterListTrabajadoresInactive;
+import com.ibao.alanger.worktime.adapters.RViewAdapterProductividad;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
+import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.productividad.ProductividadActivity;
+import com.ibao.alanger.worktime.views.productividad.ProductividadLiveData;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.util.Objects;
@@ -54,8 +62,8 @@ public class TareoActivity extends AppCompatActivity {
 
     public static final String EXTRA_TAREO = "tareo";
 
-    private static TareoVO TAREOVO;
 
+    private TareoLiveData model;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,16 +75,16 @@ public class TareoActivity extends AppCompatActivity {
 
         declaration();
         events();
-        cargarListas();
+
     }
 
     private void cargarListas() {
-        adapterActivo = new RViewAdapterListTrabajadoresInactive(ctx,TAREOVO.getTareoDetalleVOList(),true);
+        adapterActivo = new RViewAdapterListTrabajadoresInactive(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),true);
         adapterActivo.setOnClicListener(v->{
 
             int pos = tareo_rViewTActivos.getChildAdapterPosition(v);
             int i=0;
-            for(TareoDetalleVO ta : TAREOVO.getTareoDetalleVOList()){
+            for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
                 if(ta.getTimeEnd().equals("")){ //si esta activo
                     if(i==pos){
                         goToProductividad(ta);
@@ -87,11 +95,11 @@ public class TareoActivity extends AppCompatActivity {
             }
         });
         tareo_rViewTActivos.setAdapter(adapterActivo);
-        adapterInactivo = new RViewAdapterListTrabajadoresInactive(ctx,TAREOVO.getTareoDetalleVOList(),false);
+        adapterInactivo = new RViewAdapterListTrabajadoresInactive(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),false);
         adapterInactivo.setOnClicListener(v->{
             int pos = tareo_rViewTInactivos.getChildAdapterPosition(v);
             int i=0;
-            for(TareoDetalleVO ta : TAREOVO.getTareoDetalleVOList()){
+            for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
                 if(!ta.getTimeEnd().equals("")){ //si esta activo
                     if(i==pos){
                         goToProductividad(ta);
@@ -111,7 +119,6 @@ public class TareoActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
 
     int selectOnDialog=0;
     private void showOptions(){
@@ -174,7 +181,7 @@ public class TareoActivity extends AppCompatActivity {
 
     private void events() {
         fabAddTrabajador.setOnClickListener(v->{
-            goToTransference(EXTRA_MODE_ADD_TRABAJADOR,TAREOVO);
+            goToTransference(EXTRA_MODE_ADD_TRABAJADOR,model.getTareoVO().getValue());
             disableInputs();
         });
         fabOptions.setOnClickListener(v->{
@@ -210,7 +217,6 @@ public class TareoActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
 
         assert b != null;
-        TAREOVO = (TareoVO) b.getSerializable(EXTRA_TAREO);
 
         tareo_Fundo = findViewById(R.id.tareo_Fundo);
         tareo_Cultivo = findViewById(R.id.tareo_Cultivo);
@@ -222,23 +228,60 @@ public class TareoActivity extends AppCompatActivity {
         tareo_rViewTActivos = findViewById(R.id.tareo_rViewTActivos);
         tareo_rViewTInactivos = findViewById(R.id.tareo_rViewTInactivos);
 
-        tareo_nTrabajadores.setText(""+TAREOVO.getTareoDetalleVOList().size());
-        tareo_dateTime.setText(TAREOVO.getDateTimeStart());
-        tareo_Fundo.setText(TAREOVO.getFundoVO().getName());
-        if(TAREOVO.isAsistencia()){
-            tareo_Labor.setText(getString(R.string.control_de_asistencia));
-            tareo_Cultivo.setText(TAREOVO.getEmpresaVO().getName());
-            tareo_costCenter.setText(getString(R.string.asistencia));
-        }else {
-            tareo_Labor.setText(TAREOVO.getLaborVO().getName());
-            tareo_Fundo.setText(TAREOVO.getFundoVO().getName());
-            tareo_Cultivo.setText(TAREOVO.getCultivoVO().getName());
-            if(TAREOVO.getLaborVO().isDirecto()){
-                tareo_costCenter.setText(TAREOVO.getLoteVO().getCod());
-            }else {
-                tareo_costCenter.setText(TAREOVO.getCentroCosteVO().getName());
+
+
+
+        model = ViewModelProviders.of(this).get(TareoLiveData.class);
+        // Create the observer which updates the UI.
+        final Observer<TareoVO> nameObserver = new Observer<TareoVO>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onChanged(@Nullable final TareoVO temp){
+                Log.d(TAG,"actualizando");
+                cargarListas();
+
+                tareo_nTrabajadores.setText(""+temp.getTareoDetalleVOList().size());
+                tareo_dateTime.setText(temp.getDateTimeStart());
+                tareo_Fundo.setText(temp.getFundoVO().getName());
+                if(temp.isAsistencia()){
+                    tareo_Labor.setText(getString(R.string.control_de_asistencia));
+                    tareo_Cultivo.setText(temp.getEmpresaVO().getName());
+                    tareo_costCenter.setText(getString(R.string.asistencia));
+                }else {
+                    tareo_Labor.setText(temp.getLaborVO().getName());
+                    tareo_Fundo.setText(temp.getFundoVO().getName());
+                    tareo_Cultivo.setText(temp.getCultivoVO().getName());
+                    if(temp.getLaborVO().isDirecto()){
+                        tareo_costCenter.setText(temp.getLoteVO().getCod());
+                    }else {
+                        tareo_costCenter.setText(temp.getCentroCosteVO().getName());
+                    }
+                }
+
+
+
+/*
+
+                temp.setProductividad(0);
+                //contando productividad
+                for(ProductividadVO p: temp.getProductividadVOList()){
+                    temp.setProductividad(temp.getProductividad()+p.getValue());
+                }
+
+                productividad_productividad.setText(""+temp.getProductividad());
+
+                adapter.notifyDataSetChanged();
+*/
+
+
             }
-        }
+        };
+        model.getTareoVO().observe(this, nameObserver);
+
+        model.setTareoVO( (TareoVO) b.getSerializable(EXTRA_TAREO));
+
+
+        cargarListas();
     }
 
     @Override
@@ -247,7 +290,7 @@ public class TareoActivity extends AppCompatActivity {
         return true;
     }
 
-    String TAG = TareoActivity.class.getSimpleName();
+    String TAG = "TAG"+TareoActivity.class.getSimpleName();
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -256,44 +299,12 @@ public class TareoActivity extends AppCompatActivity {
             try {
                 Bundle recibidos = (data.getExtras());
                 if (recibidos != null) {
-                    TAREOVO = (TareoVO) recibidos.getSerializable("TAREOVO");
-                    adapterActivo.notifyDataSetChanged();
-                    adapterInactivo.notifyDataSetChanged();
+                    model.setTareoVO( (TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
 
-                    Log.d(  TAG,"tamaño "+TAREOVO.getTareoDetalleVOList().size());
-                    adapterActivo = new RViewAdapterListTrabajadoresInactive(ctx,TAREOVO.getTareoDetalleVOList(),true);
-                    adapterActivo.setOnClicListener(v->{
-                        int pos = tareo_rViewTActivos.getChildAdapterPosition(v);
-                        int i=0;
-                        for(TareoDetalleVO ta : TAREOVO.getTareoDetalleVOList()){
-                            if(ta.getTimeEnd().equals("")){ //si esta activo
-                                if(i==pos){
-                                    goToProductividad(ta);
-                                    break;
-                                }
-                                i++;
-                            }
-                        }
+                    Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
 
-                    });
-                    tareo_rViewTActivos.setAdapter(adapterActivo);
-
-                    adapterInactivo = new RViewAdapterListTrabajadoresInactive(ctx,TAREOVO.getTareoDetalleVOList(),false);
-                    adapterInactivo.setOnClicListener(v->{
-                        int pos = tareo_rViewTInactivos.getChildAdapterPosition(v);
-                        int i=0;
-                        for(TareoDetalleVO ta : TAREOVO.getTareoDetalleVOList()){
-                            if(!ta.getTimeEnd().equals("")){ //si esta activo
-                                if(i==pos){
-                                    goToProductividad(ta);
-                                    break;
-                                }
-                                i++;
-                            }
-                        }
-                    });
-                    tareo_rViewTInactivos.setAdapter(adapterInactivo);
-
+                }else {
+                    Toast.makeText(ctx,"nos e recibio nada",Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Log.d(TAG, "onActivityResult " +e.toString());
@@ -310,14 +321,15 @@ public class TareoActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-            final TareoDetalleVO item = TAREOVO.getTareoDetalleVOList().remove(viewHolder.getAdapterPosition());
+            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().remove(viewHolder.getAdapterPosition());
             new TareoDAO(ctx).deleteById(item.getId());
             final int index = viewHolder.getAdapterPosition();
             adapterActivo.notifyDataSetChanged();
-            adapterActivo.notifyDataSetChanged();
+            adapterInactivo.notifyDataSetChanged();
             //enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),productList);
 
             Snackbar snackbar = Snackbar.make((View) findViewById((int)viewHolder.getItemId()),"Se Borró una Labor",Snackbar.LENGTH_LONG);
+/*
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -325,9 +337,11 @@ public class TareoActivity extends AppCompatActivity {
                     TAREOVO.getTareoDetalleVOList().add(index,item);
 
                     adapterActivo.notifyDataSetChanged();
-                    adapterActivo.notifyDataSetChanged();
+                    adapterInactivo.notifyDataSetChanged();
                 }
             });
+
+ */
             snackbar.show();
         }
     };

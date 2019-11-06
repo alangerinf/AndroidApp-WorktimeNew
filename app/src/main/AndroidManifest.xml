@@ -35,7 +35,7 @@
         <activity android:name=".views.productividad.ProductividadActivity" />
         <activity android:name=".views.testActivity" />
         <activity
-            android:name=".views.TareoActivity"
+            android:name=".views.tareo.TareoActivity"
             android:label="@string/tareo_labor_name">
 
         </activity>

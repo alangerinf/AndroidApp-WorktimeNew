@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
+import com.ibao.alanger.worktime.views.tareo.TareoLiveData;
 
 public class ProductividadLiveData extends ViewModel {
 
@@ -23,22 +24,30 @@ public class ProductividadLiveData extends ViewModel {
 
     public static void setTareoDetalleVO(TareoDetalleVO tareoDetalle){
         tareoDetalleVO = tareoDetalle;
-        _tareoDetalleVO.setValue(tareoDetalleVO);
+        change();
     }
 
     public void addProductividad(ProductividadVO productividadVO){
         tareoDetalleVO.getProductividadVOList().add(productividadVO);
-        _tareoDetalleVO.setValue(tareoDetalleVO);
+        change();
     }
 
     public void deleteProductividad(ProductividadVO productividadVO){
         tareoDetalleVO.getProductividadVOList().remove(productividadVO);
-        _tareoDetalleVO.setValue(tareoDetalleVO);
+        change();
     }
 
     public static void init(){
         tareoDetalleVO = new TareoDetalleVO();
         _tareoDetalleVO = new MutableLiveData<TareoDetalleVO>();
+        change();
+    }
+
+
+    private static void change(){
+        TareoLiveData model = new TareoLiveData();
+        model.modifyTareoDetalle(tareoDetalleVO);
+        _tareoDetalleVO.setValue(tareoDetalleVO);
     }
 
     public void modifyProductividad(ProductividadVO pro) {
@@ -51,7 +60,7 @@ public class ProductividadLiveData extends ViewModel {
                 break;
             }
         }
-        _tareoDetalleVO.setValue(tareoDetalleVO);
+        change();
 
     }
 }

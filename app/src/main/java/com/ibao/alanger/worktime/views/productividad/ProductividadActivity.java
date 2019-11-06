@@ -177,7 +177,6 @@ public class ProductividadActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
 
-
                 if(eTextCantidad.getText().toString().equals("0.")){
 
                 }else {
