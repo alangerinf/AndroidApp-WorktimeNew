@@ -32,6 +32,11 @@ public class TareoLiveData extends ViewModel {
         _tareoVO.setValue(tareoVO);
     }
 
+    public void addTareoDetalle(int index,TareoDetalleVO tareoDetalleVO){
+        tareoVO.getTareoDetalleVOList().add(index,tareoDetalleVO);
+        _tareoVO.setValue(tareoVO);
+    }
+
     public void deleteTareoDetalle(TareoDetalleVO tareoDetalleVO){
         tareoVO.getTareoDetalleVOList().remove(tareoDetalleVO);
         _tareoVO.setValue(tareoVO);
@@ -43,19 +48,22 @@ public class TareoLiveData extends ViewModel {
     }
 
     public void modifyTareoDetalle(TareoDetalleVO tar) {
+
+        float pro = 0.0f;
         for(TareoDetalleVO t : tareoVO.getTareoDetalleVOList()){
             if(t.getId()==tar.getId()){
                 t.setId(tar.getId());
-                t.setProductividad(tareoVO.getProductividad());
+                t.setProductividad(tar.getProductividad());
                 t.setProductividadVOList(tar.getProductividadVOList());
                 t.setIdTareo(tar.getIdTareo());
                 t.setTrabajadorVO(tar.getTrabajadorVO());
                 t.setSalidaVO(tar.getSalidaVO());
                 t.setTimeStart(tar.getTimeStart());
                 t.setTimeEnd(tar.getTimeEnd());
-                break;
             }
+            pro = pro + t.getProductividad();
         }
+        tareoVO.setProductividad(pro);
         _tareoVO.setValue(tareoVO);
 
     }

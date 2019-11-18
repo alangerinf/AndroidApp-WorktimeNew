@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/AppThemeMaterial"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -86,7 +87,7 @@
             app:layout_constraintTop_toBottomOf="@+id/prodadd_eTextCantidad" />
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/prodadd_btnSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -98,6 +99,7 @@
             android:textAllCaps="false"
             android:textColor="#fff"
             android:textSize="20sp"
+            android:backgroundTint="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

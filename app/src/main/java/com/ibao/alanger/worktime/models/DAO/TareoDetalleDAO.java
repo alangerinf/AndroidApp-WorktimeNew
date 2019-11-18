@@ -246,6 +246,16 @@ public class TareoDetalleDAO {
 
         tareoDetalleVO.setProductividadVOList(new ProductividadDAO(ctx).listByIdTareoDetalle(tareoDetalleVO.getId()));
 
+
+        float productividad = 0.0f;
+
+        for(ProductividadVO p: tareoDetalleVO.getProductividadVOList()){
+            productividad= productividad + p.getValue();
+        }
+
+        tareoDetalleVO.setProductividad(productividad);
+
+
         return tareoDetalleVO;
     }
 

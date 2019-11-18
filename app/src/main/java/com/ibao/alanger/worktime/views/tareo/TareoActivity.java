@@ -22,15 +22,11 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
-import com.ibao.alanger.worktime.adapters.RViewAdapterListTrabajadoresInactive;
-import com.ibao.alanger.worktime.adapters.RViewAdapterProductividad;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
-import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.productividad.ProductividadActivity;
-import com.ibao.alanger.worktime.views.productividad.ProductividadLiveData;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.util.Objects;
@@ -42,6 +38,8 @@ public class TareoActivity extends AppCompatActivity {
 
 
     private static Context ctx;
+
+    private static View root;
 
     private static FloatingActionButton fabAddTrabajador;
     private static FloatingActionButton fabOptions;
@@ -57,11 +55,10 @@ public class TareoActivity extends AppCompatActivity {
     private static RecyclerView tareo_rViewTActivos;
     private static RecyclerView tareo_rViewTInactivos;
 
-    private static RViewAdapterListTrabajadoresInactive adapterActivo;
-    private static RViewAdapterListTrabajadoresInactive adapterInactivo;
+    private static RViewAdapterListTrabajadores adapterActivo;
+    private static RViewAdapterListTrabajadores adapterInactivo;
 
     public static final String EXTRA_TAREO = "tareo";
-
 
     private TareoLiveData model;
 
@@ -72,14 +69,14 @@ public class TareoActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
         declaration();
         events();
 
     }
 
     private void cargarListas() {
-        adapterActivo = new RViewAdapterListTrabajadoresInactive(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),true);
+
+        adapterActivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),true);
         adapterActivo.setOnClicListener(v->{
 
             int pos = tareo_rViewTActivos.getChildAdapterPosition(v);
@@ -94,8 +91,10 @@ public class TareoActivity extends AppCompatActivity {
                 }
             }
         });
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(tareo_rViewTActivos);
         tareo_rViewTActivos.setAdapter(adapterActivo);
-        adapterInactivo = new RViewAdapterListTrabajadoresInactive(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),false);
+
+        adapterInactivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),false);
         adapterInactivo.setOnClicListener(v->{
             int pos = tareo_rViewTInactivos.getChildAdapterPosition(v);
             int i=0;
@@ -109,6 +108,7 @@ public class TareoActivity extends AppCompatActivity {
                 }
             }
         });
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(tareo_rViewTInactivos);
         tareo_rViewTInactivos.setAdapter(adapterInactivo);
 
     }
@@ -168,7 +168,6 @@ public class TareoActivity extends AppCompatActivity {
 
     }
 
-
     private int REQUEST_CODE_ADD = 11;
 
     private void goToTransference(String EXTRA_MODE,TareoVO tareoVO){
@@ -196,7 +195,6 @@ public class TareoActivity extends AppCompatActivity {
         fabAddTrabajador.setClickable(flag);
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -218,6 +216,7 @@ public class TareoActivity extends AppCompatActivity {
 
         assert b != null;
 
+        root = findViewById(R.id.root);
         tareo_Fundo = findViewById(R.id.tareo_Fundo);
         tareo_Cultivo = findViewById(R.id.tareo_Cultivo);
         tareo_Labor = findViewById(R.id.tareo_Labor);
@@ -227,8 +226,6 @@ public class TareoActivity extends AppCompatActivity {
         tareo_nHoras = findViewById(R.id.tareo_nHoras);
         tareo_rViewTActivos = findViewById(R.id.tareo_rViewTActivos);
         tareo_rViewTInactivos = findViewById(R.id.tareo_rViewTInactivos);
-
-
 
 
         model = ViewModelProviders.of(this).get(TareoLiveData.class);
@@ -258,10 +255,7 @@ public class TareoActivity extends AppCompatActivity {
                     }
                 }
 
-
-
 /*
-
                 temp.setProductividad(0);
                 //contando productividad
                 for(ProductividadVO p: temp.getProductividadVOList()){
@@ -321,29 +315,33 @@ public class TareoActivity extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
-            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().remove(viewHolder.getAdapterPosition());
+            int index = viewHolder.getAdapterPosition();
+            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
+
+            model.deleteTareoDetalle(item);
             new TareoDAO(ctx).deleteById(item.getId());
-            final int index = viewHolder.getAdapterPosition();
+
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
-            //enviar(fp1_tietRefA.getText().toString(),fp1_tietRefB.getText().toString(),productList);
 
-            Snackbar snackbar = Snackbar.make((View) findViewById((int)viewHolder.getItemId()),"Se Borró una Labor",Snackbar.LENGTH_LONG);
-/*
+            Snackbar snackbar = Snackbar.make(root,"Se borro la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     new TareoDetalleDAO(ctx).insert(item);
-                    TAREOVO.getTareoDetalleVOList().add(index,item);
-
+                    model.addTareoDetalle(index,item);
                     adapterActivo.notifyDataSetChanged();
                     adapterInactivo.notifyDataSetChanged();
                 }
             });
 
- */
             snackbar.show();
         }
     };
+
+
+
+
 
 }

@@ -1,5 +1,7 @@
 package com.ibao.alanger.worktime.views.productividad;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -32,6 +34,12 @@ public class ProductividadLiveData extends ViewModel {
         change();
     }
 
+
+    public void addProductividad(int index,ProductividadVO productividadVO){
+        tareoDetalleVO.getProductividadVOList().add(index,productividadVO);
+        change();
+    }
+
     public void deleteProductividad(ProductividadVO productividadVO){
         tareoDetalleVO.getProductividadVOList().remove(productividadVO);
         change();
@@ -43,11 +51,17 @@ public class ProductividadLiveData extends ViewModel {
         change();
     }
 
-
     private static void change(){
+
         TareoLiveData model = new TareoLiveData();
-        model.modifyTareoDetalle(tareoDetalleVO);
+        float pro = 0.0f;
+        for(ProductividadVO p:tareoDetalleVO.getProductividadVOList()){
+            pro = pro + p.getValue();
+        }
+        tareoDetalleVO.setProductividad(pro);
         _tareoDetalleVO.setValue(tareoDetalleVO);
+        model.modifyTareoDetalle(tareoDetalleVO);
+        Log.d(TAG,"productividad :"+tareoDetalleVO.getProductividad());
     }
 
     public void modifyProductividad(ProductividadVO pro) {
@@ -60,7 +74,8 @@ public class ProductividadLiveData extends ViewModel {
                 break;
             }
         }
-        change();
 
+        change();
     }
+    private static String TAG = ProductividadLiveData.class.getSimpleName();
 }

@@ -1,4 +1,4 @@
-package com.ibao.alanger.worktime.adapters;
+package com.ibao.alanger.worktime.views.productividad;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
-import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 
 import java.util.List;
 

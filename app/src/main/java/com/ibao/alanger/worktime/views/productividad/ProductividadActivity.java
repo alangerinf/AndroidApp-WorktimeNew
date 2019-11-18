@@ -1,9 +1,11 @@
 package com.ibao.alanger.worktime.views.productividad;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -16,15 +18,16 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
-import com.ibao.alanger.worktime.adapters.RViewAdapterProductividad;
 import com.ibao.alanger.worktime.models.DAO.ProductividadDAO;
 import com.ibao.alanger.worktime.models.VO.internal.ProductividadVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
@@ -42,7 +45,7 @@ public class ProductividadActivity extends AppCompatActivity {
     public static final String EXTRA_TAREODETALLE = "productividad";
 
 
-
+    View root;
     RecyclerView productividad_rView;
     TextView productividad_hIni;
     TextView productividad_hFin;
@@ -74,6 +77,7 @@ public class ProductividadActivity extends AppCompatActivity {
     }
 
     private void declare() {
+        root = findViewById(R.id.root);
         productividad_rView = findViewById(R.id.productividad_rView);
         productividad_hIni = findViewById(R.id.productividad_hIni);
         productividad_hFin = findViewById(R.id.productividad_hFin);
@@ -84,11 +88,6 @@ public class ProductividadActivity extends AppCompatActivity {
 
 
 
-
-        productividad_DNI.setText(TAREODETALLEVO.getTrabajadorVO().getDni());
-        productividad_Name.setText(TAREODETALLEVO.getTrabajadorVO().getName().equals("")?"Sin Nombre":TAREODETALLEVO.getTrabajadorVO().getName());
-        productividad_productividad.setText(""+TAREODETALLEVO.getProductividad());
-
         Date dateIni = getHourFromDate(TAREODETALLEVO.getTimeStart());
 
         productividad_hIni.setText(""+(dateIni.getHours()<10?"0"+dateIni.getHours():dateIni.getHours())+":"+(dateIni.getMinutes()<10?"0"+dateIni.getMinutes():dateIni.getMinutes())+":"+(dateIni.getSeconds()<10?"0"+dateIni.getSeconds():dateIni.getSeconds()));
@@ -97,9 +96,6 @@ public class ProductividadActivity extends AppCompatActivity {
             productividad_hFin.setText(""+(dateFin.getHours()<10?"0"+dateFin.getHours():dateFin.getHours())+":"+(dateFin.getMinutes()<10?"0"+dateFin.getMinutes():dateFin.getMinutes())+":"+(dateFin.getSeconds()<10?"0"+dateFin.getSeconds():dateFin.getSeconds()));
 
         }
-
-
-
 
 
         productividad_fabAdd.setOnClickListener(v->{
@@ -113,13 +109,17 @@ public class ProductividadActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable final TareoDetalleVO temp){
 
+                productividad_DNI.setText(temp.getTrabajadorVO().getDni());
+                productividad_Name.setText(temp.getTrabajadorVO().getName().equals("")?"Sin Nombre":TAREODETALLEVO.getTrabajadorVO().getName());
+                productividad_productividad.setText(""+temp.getProductividad());
 
+                /*
                 temp.setProductividad(0);
                 //contando productividad
                 for(ProductividadVO p: temp.getProductividadVOList()){
                     temp.setProductividad(temp.getProductividad()+p.getValue());
                 }
-
+*/
                 productividad_productividad.setText(""+temp.getProductividad());
 
                 adapter.notifyDataSetChanged();
@@ -133,12 +133,15 @@ public class ProductividadActivity extends AppCompatActivity {
         model.getTareoDetalleVO().observe(this, nameObserver);
 
         model.setTareoDetalleVO(TAREODETALLEVO);
+
         adapter = new RViewAdapterProductividad(ctx, ProductividadLiveData.getTareoDetalleVO().getValue().getProductividadVOList());
         adapter.setOnClicListener(v->{
             int index = productividad_rView.getChildAdapterPosition(v);
             ProductividadVO temp = ProductividadLiveData.getTareoDetalleVO().getValue().getProductividadVOList().get(index);
             showPopup(temp,false);
         });
+
+        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(productividad_rView);
         productividad_rView.setAdapter(adapter);
 
     }
@@ -159,7 +162,7 @@ public class ProductividadActivity extends AppCompatActivity {
         Dialog dialogClose;
         dialogClose = new Dialog(this);
         dialogClose.setContentView(R.layout.activity_productividad_dialog_add);
-        Button prodadd_btnSave = (Button) dialogClose.findViewById(R.id.prodadd_btnSave);
+        MaterialButton prodadd_btnSave = (MaterialButton) dialogClose.findViewById(R.id.prodadd_btnSave);
         ImageView prodadd_iVienClose = (ImageView) dialogClose.findViewById(R.id.prodadd_iVienClose);
         TextView prodadd_tViewDateTime = dialogClose.findViewById(R.id.prodadd_tViewDateTime);
         prodadd_tViewDateTime.setText(""+pro.getDateTime());
@@ -285,6 +288,37 @@ public class ProductividadActivity extends AppCompatActivity {
     }
 
     String TAG = ProductividadActivity.class.getSimpleName();
+
+
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            final int index = viewHolder.getAdapterPosition();//esto tiene q ir arriba porq la programacion reaccitva elimina de inmediato en el recycler view sin actualizar
+            final ProductividadVO item = ProductividadLiveData.getTareoDetalleVO().getValue().getProductividadVOList().get(index);
+            model.deleteProductividad(item);
+
+            new ProductividadDAO(ctx).deleteById(item.getId());
+
+            Snackbar snackbar = Snackbar.make(root,"Se elimino "+item.getValue()+" de productividad",Snackbar.LENGTH_LONG);
+
+            snackbar.setAction("Deshacer", v -> {
+                new ProductividadDAO(ctx).insert(item);
+                model.addProductividad(index,item);
+            });
+
+            snackbar.show();
+        }
+    };
+
+
+
+
 
 }
 

@@ -1,4 +1,4 @@
-package com.ibao.alanger.worktime.adapters;
+package com.ibao.alanger.worktime.views.tareo;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,8 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 
-public class RViewAdapterListTrabajadoresInactive
-        extends RecyclerView.Adapter<RViewAdapterListTrabajadoresInactive.ViewHolder>
+public class RViewAdapterListTrabajadores
+        extends RecyclerView.Adapter<RViewAdapterListTrabajadores.ViewHolder>
         implements View.OnClickListener{
 
     private List<TareoDetalleVO> tareoDetalleVOList;
@@ -32,9 +32,9 @@ public class RViewAdapterListTrabajadoresInactive
 
     private View.OnClickListener onClickListener;
 
-    private String TAG = RViewAdapterListTrabajadoresInactive.class.getSimpleName();
+    private String TAG = RViewAdapterListTrabajadores.class.getSimpleName();
 
-    public RViewAdapterListTrabajadoresInactive(Context ctx, List<TareoDetalleVO> tareoDetalleVOList,boolean isActive) {
+    public RViewAdapterListTrabajadores(Context ctx, List<TareoDetalleVO> tareoDetalleVOList, boolean isActive) {
 
         this.tareoDetalleVOList = new ArrayList<>();
                 this.tareoDetalleVOList.addAll(tareoDetalleVOList);
