@@ -34,6 +34,7 @@ import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.transference.CustomScannerActivity;
 import com.ibao.alanger.worktime.views.transference.PageViewModel;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
+import com.ibao.alanger.worktime.views.transference.helpers.VerifyPersonal;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -194,28 +195,47 @@ public class AddPersonalFragment extends Fragment {
             int hour = Integer.valueOf(time[0]);
             int minutes = Integer.valueOf(time[1]);
 
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = new Date();
+            date.setHours(hour);
+            date.setMinutes(minutes);
+            date = removeSeconds(date);
+            String hora = formatter.format(date);
+
+
+            /****
+             * TODO: CAMBIANDO LA FORMA DE VALIDAR PARA TENER TODO MAPEADO EN UNA CLASE
+             */
+            try {
+                if(VerifyPersonal.verify(mParamTAREOVOB,PageViewModel.getMutable(),MY_EXTRA_MODE,dni,hora)){
+
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
             if(dni.length()==8){
 
                 if(verificarDNI(MY_EXTRA_MODE,dni)){
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date date = new Date();
-                    date.setHours(hour);
-                    date.setMinutes(minutes);
-                    date = removeSeconds(date);
+
 
                     TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
+
 
                     if (MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){
                         Snackbar snackbar= Snackbar.make(root,"Entrada Trabajador "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                         snackbar.show();
-                        tareoDetalleVO.setTimeStart(formatter.format(date));
+                        tareoDetalleVO.setTimeStart(hora);
                     }
                     if(MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR)){
                         Snackbar snackbar= Snackbar.make(root,"Salida Trabajador "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                         snackbar.show();
-                        tareoDetalleVO.setTimeEnd(formatter.format(date));
+                        tareoDetalleVO.setTimeEnd(hora);
                     }
                     //buscar si existe
 
@@ -233,6 +253,7 @@ public class AddPersonalFragment extends Fragment {
         });
     }
 
+    /*
     public boolean  verificarDNI(String MODE,String dni){
 
         boolean flag = true;//valido
@@ -243,7 +264,8 @@ public class AddPersonalFragment extends Fragment {
                 if(t.getTrabajadorVO().getDni().equals(dni)){
                     flag=false;
                     Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Lista",Snackbar.LENGTH_SHORT);
-                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
+                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(
+                            getActivity(), R.color.red_pastel));
                     snackbar.show();
                     break;
                 }
@@ -308,6 +330,8 @@ public class AddPersonalFragment extends Fragment {
 
         return flag;
     }
+
+     */
     public static Date removeSeconds(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
