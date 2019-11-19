@@ -27,9 +27,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     private final SparseArray<WeakReference<Fragment>> instantiatedFragments = new SparseArray<>();
 
     private List<String> TAB_TITLES;
-
+/*
+    public static final String EXTRA_MODE_ADD_TRABAJADOR= TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
     public static final String EXTRA_MODE_ADD_TRABAJADOR= TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
     public static final String EXTRA_TAREOVO=TabbetActivity.EXTRA_TAREOVO;
+ */
 
     public static String MY_EXTRA_MODE;
 

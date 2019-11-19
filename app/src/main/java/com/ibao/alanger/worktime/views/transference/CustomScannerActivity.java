@@ -67,7 +67,7 @@ public class CustomScannerActivity extends AppCompatActivity implements
     private static String MY_EXTRA_MODE;
 
     public static final String EXTRA_MODE_ADD_TRABAJADORES= "add trabajadores";
-    public static final String EXTRA_TAREO= "TAREO";
+    public static final String EXTRA_TAREO= "TAREOVO";
 
     private static TareoVO TAREOVO;
 
@@ -85,7 +85,7 @@ public class CustomScannerActivity extends AppCompatActivity implements
         Bundle b = getIntent().getExtras();
         HOUR = b.getString(EXTRA_HOUR);
 
-        MY_EXTRA_MODE = b.getString(EXTRA_MODE_ADD_TRABAJADORES);
+        MY_EXTRA_MODE = b.getString(EXTRA_MODE);
 
         if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADORES)){
             TAREOVO = (TareoVO) b.getSerializable(EXTRA_TAREO);

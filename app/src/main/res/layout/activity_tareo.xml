@@ -27,7 +27,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tareo_Fundo"
+                android:id="@+id/tareo_tViewFundo"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:text="@string/separador" />
 
             <TextView
-                android:id="@+id/tareo_Cultivo"
+                android:id="@+id/tareo_tViewCultivo"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tareo_Labor"
+            android:id="@+id/tareo_tViewLabor"
             style="@style/tView_Tittle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                 android:src="@drawable/ic__time_black_24dp" />
 
             <TextView
-                android:id="@+id/tareo_dateTime"
+                android:id="@+id/tareo_tViewDateTime"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:src="@drawable/ic_monetization_on_black_24dp" />
 
             <TextView
-                android:id="@+id/tareo_costCenter"
+                android:id="@+id/tareo_tViewCostCenter"
                 style="@style/tView_secondaryText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -272,20 +272,35 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tareo_fabOptions"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
+        app:fabSize="mini"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:backgroundTint="@color/colorAccent"
-        app:rippleColor="@color/colorPrimaryDark"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:rippleColor="@color/colorAccent"
         app:srcCompat="@drawable/ic_settings_white_24dp"
-        android:scaleX="0.8"
-        android:scaleY="0.8"
         tools:ignore="MissingConstraints" />
+
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/tareo_fabAdddTrabajador"
+        android:id="@+id/tareo_fabRemoveTrabajador"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/margin_min"
+        app:backgroundTint="@color/red_pastel"
+        app:layout_constraintBottom_toTopOf="@id/tareo_fabAddTrabajador"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="@color/colorPrimaryDark"
+        app:srcCompat="@drawable/ic_person_sleep_24dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/tareo_fabAddTrabajador"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -295,10 +310,10 @@
         android:layout_marginBottom="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:rippleColor="@color/colorAccent"
+        app:backgroundTint="@color/colorAccent"
+        app:rippleColor="@color/colorPrimaryDark"
+        android:tint="@color/white"
         app:srcCompat="@drawable/ic_person_add_white_24dp"
-
         />
 
 

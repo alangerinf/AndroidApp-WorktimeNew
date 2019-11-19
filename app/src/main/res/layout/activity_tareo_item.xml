@@ -193,13 +193,14 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tareo_item_fab"
+        app:fabSize="mini"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/margin_min"
-        app:backgroundTint="@color/colorAccent"
-        app:rippleColor="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"
         app:srcCompat="@drawable/ic_transfer_within_a_station_black_24dp"
         />
 

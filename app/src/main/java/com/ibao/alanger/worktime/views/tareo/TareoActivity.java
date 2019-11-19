@@ -33,6 +33,7 @@ import java.util.Objects;
 
 import static com.ibao.alanger.worktime.views.productividad.ProductividadActivity.EXTRA_TAREODETALLE;
 import static com.ibao.alanger.worktime.views.transference.TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
+import static com.ibao.alanger.worktime.views.transference.TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR;
 
 public class TareoActivity extends AppCompatActivity {
 
@@ -42,6 +43,7 @@ public class TareoActivity extends AppCompatActivity {
     private static View root;
 
     private static FloatingActionButton fabAddTrabajador;
+    private static FloatingActionButton fabRemoveTrabajador;
     private static FloatingActionButton fabOptions;
 
     private static TextView tareo_Fundo;
@@ -123,11 +125,10 @@ public class TareoActivity extends AppCompatActivity {
     int selectOnDialog=0;
     private void showOptions(){
 
-        String[] items = new String[4];
+        String[] items = new String[3];
         items[0] = getString(R.string.anhadir_productividad_grupal);
         items[1] = getString(R.string.transferencia);
-        items[2] = getString(R.string.salida_personal);
-        items[3] = getString(R.string.finalizar_labor);
+        items[2] = getString(R.string.finalizar_labor);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(getString(R.string.seleccione_opcion));
@@ -142,14 +143,10 @@ public class TareoActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (selectOnDialog){
                     case 0:
-
                         break;
                     case 1:
                         break;
                     case 2:
-
-                        break;
-                    case 3:
                         break;
 
                 }
@@ -169,18 +166,23 @@ public class TareoActivity extends AppCompatActivity {
     }
 
     private int REQUEST_CODE_ADD = 11;
+    private int REQUEST_CODE_REMOVE = 12;
 
-    private void goToTransference(String EXTRA_MODE,TareoVO tareoVO){
+    private void goToTransferenceActivity(String EXTRA_MODE, TareoVO tareoVO){
         Intent i = new Intent(ctx, TabbetActivity.class);
-        i.putExtra(TabbetActivity.EXTRA_MODE,TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR);
+        i.putExtra(TabbetActivity.EXTRA_MODE,EXTRA_MODE);
         i.putExtra(TabbetActivity.EXTRA_TAREOVO,tareoVO);
-        startActivityForResult(i,EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)?REQUEST_CODE_ADD:0);
+        startActivityForResult(i,EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)?REQUEST_CODE_ADD:REQUEST_CODE_REMOVE);
     }
 
 
     private void events() {
         fabAddTrabajador.setOnClickListener(v->{
-            goToTransference(EXTRA_MODE_ADD_TRABAJADOR,model.getTareoVO().getValue());
+            goToTransferenceActivity(EXTRA_MODE_ADD_TRABAJADOR,model.getTareoVO().getValue());
+            disableInputs();
+        });
+        fabRemoveTrabajador.setOnClickListener(v->{
+            goToTransferenceActivity(EXTRA_MODE_REMOVE_TRABAJADOR,model.getTareoVO().getValue());
             disableInputs();
         });
         fabOptions.setOnClickListener(v->{
@@ -193,6 +195,9 @@ public class TareoActivity extends AppCompatActivity {
         boolean flag = false;
         fabAddTrabajador.setFocusable(flag);
         fabAddTrabajador.setClickable(flag);
+
+        fabRemoveTrabajador.setFocusable(flag);
+        fabRemoveTrabajador.setClickable(flag);
     }
 
     @Override
@@ -203,13 +208,19 @@ public class TareoActivity extends AppCompatActivity {
 
     private void enableInputs() {
         boolean flag = true;
+
         fabAddTrabajador.setFocusable(flag);
         fabAddTrabajador.setClickable(flag);
+
+        fabRemoveTrabajador.setFocusable(flag);
+        fabRemoveTrabajador.setClickable(flag);
     }
 
     private void declaration() {
         ctx = this;
-        fabAddTrabajador = findViewById(R.id.tareo_fabAdddTrabajador);
+        fabAddTrabajador = findViewById(R.id.tareo_fabAddTrabajador);
+        fabRemoveTrabajador = findViewById(R.id.tareo_fabRemoveTrabajador);
+
         fabOptions = findViewById(R.id.tareo_fabOptions);
 
         Bundle b = getIntent().getExtras();
@@ -217,11 +228,11 @@ public class TareoActivity extends AppCompatActivity {
         assert b != null;
 
         root = findViewById(R.id.root);
-        tareo_Fundo = findViewById(R.id.tareo_Fundo);
-        tareo_Cultivo = findViewById(R.id.tareo_Cultivo);
-        tareo_Labor = findViewById(R.id.tareo_Labor);
-        tareo_dateTime = findViewById(R.id.tareo_dateTime);
-        tareo_costCenter = findViewById(R.id.tareo_costCenter);
+        tareo_Fundo = findViewById(R.id.tareo_tViewFundo);
+        tareo_Cultivo = findViewById(R.id.tareo_tViewCultivo);
+        tareo_Labor = findViewById(R.id.tareo_tViewLabor);
+        tareo_dateTime = findViewById(R.id.tareo_tViewDateTime);
+        tareo_costCenter = findViewById(R.id.tareo_tViewCostCenter);
         tareo_nTrabajadores = findViewById(R.id.tareo_nTrabajadores);
         tareo_nHoras = findViewById(R.id.tareo_nHoras);
         tareo_rViewTActivos = findViewById(R.id.tareo_rViewTActivos);
@@ -298,7 +309,7 @@ public class TareoActivity extends AppCompatActivity {
                     Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
 
                 }else {
-                    Toast.makeText(ctx,"nos e recibio nada",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx,"no se recibio nada",Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Log.d(TAG, "onActivityResult " +e.toString());
@@ -324,7 +335,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se borro la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se borró la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override

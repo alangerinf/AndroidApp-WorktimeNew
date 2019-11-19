@@ -44,6 +44,7 @@ public class  TabbetActivity extends AppCompatActivity
     public static final String EXTRA_MODE= "extra_mode";
 
     public static final String EXTRA_MODE_ADD_TRABAJADOR="ADD TRABAJADOR";
+    public static final String EXTRA_MODE_REMOVE_TRABAJADOR="REMOVE TRABAJADOR";
     public static final String EXTRA_TAREOVO="TAREOVO";
 
     public static String MY_EXTRA_MODE;
@@ -61,12 +62,22 @@ public class  TabbetActivity extends AppCompatActivity
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
-
         Bundle b = getIntent().getExtras();
 
         MY_EXTRA_MODE = b.getString(EXTRA_MODE);
 
+
+        //obtenemos el TAREO PARA HACERLE MODIFICACIONES, ESE MISMO ES Q SE DEVUELVE A LA ACTIVIDAD ANTERIOR PARA PARCHAR LOS CAMBIOS EN LA INTERFACE
         if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADOR)){
+            setTitle("Entrada Trabajadores");
+
+            TAREO_RETURN = (TareoVO) b.getSerializable(EXTRA_TAREOVO);
+            Log.d(TAG,""+ TAREO_RETURN);
+        }
+
+        if(MY_EXTRA_MODE.equals(EXTRA_MODE_REMOVE_TRABAJADOR)){
+            setTitle("Salida Trabajadores");
+
             TAREO_RETURN = (TareoVO) b.getSerializable(EXTRA_TAREOVO);
             Log.d(TAG,""+ TAREO_RETURN);
         }
