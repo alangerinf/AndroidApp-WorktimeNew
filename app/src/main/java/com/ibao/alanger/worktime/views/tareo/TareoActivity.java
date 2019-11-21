@@ -76,6 +76,8 @@ public class TareoActivity extends AppCompatActivity {
 
     }
 
+
+
     private void cargarListas() {
 
         adapterActivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),true);
@@ -93,7 +95,7 @@ public class TareoActivity extends AppCompatActivity {
                 }
             }
         });
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(tareo_rViewTActivos);
+        new ItemTouchHelper(itemTouchHelperCallBackActive).attachToRecyclerView(tareo_rViewTActivos);
         tareo_rViewTActivos.setAdapter(adapterActivo);
 
         adapterInactivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),false);
@@ -110,7 +112,7 @@ public class TareoActivity extends AppCompatActivity {
                 }
             }
         });
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(tareo_rViewTInactivos);
+        new ItemTouchHelper(itemTouchHelperCallBackInactive).attachToRecyclerView(tareo_rViewTInactivos);
         tareo_rViewTInactivos.setAdapter(adapterInactivo);
 
     }
@@ -125,10 +127,9 @@ public class TareoActivity extends AppCompatActivity {
     int selectOnDialog=0;
     private void showOptions(){
 
-        String[] items = new String[3];
+        String[] items = new String[2];
         items[0] = getString(R.string.anhadir_productividad_grupal);
-        items[1] = getString(R.string.transferencia);
-        items[2] = getString(R.string.finalizar_labor);
+        items[1] = getString(R.string.finalizar_labor);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(getString(R.string.seleccione_opcion));
@@ -145,8 +146,6 @@ public class TareoActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        break;
-                    case 2:
                         break;
 
                 }
@@ -266,6 +265,19 @@ public class TareoActivity extends AppCompatActivity {
                     }
                 }
 
+                int countActivos = 0;
+                for(TareoDetalleVO tad: temp.getTareoDetalleVOList()){
+                    if(tad.getTimeEnd().isEmpty()){
+                        countActivos++;
+                    }
+                }
+
+                if(countActivos>0){
+                        fabRemoveTrabajador.show();
+                }else {
+                        fabRemoveTrabajador.hide();
+                }
+
 /*
                 temp.setProductividad(0);
                 //contando productividad
@@ -300,12 +312,11 @@ public class TareoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_ADD) {
+        //if (requestCode == REQUEST_CODE_ADD) {
             try {
                 Bundle recibidos = (data.getExtras());
                 if (recibidos != null) {
                     model.setTareoVO( (TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
-
                     Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
 
                 }else {
@@ -314,10 +325,10 @@ public class TareoActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.d(TAG, "onActivityResult " +e.toString());
             }
-        }
+        //}
     }
 
-    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBackActive = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             return false;
@@ -327,7 +338,47 @@ public class TareoActivity extends AppCompatActivity {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             int index = viewHolder.getAdapterPosition();
-            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
+
+
+            final TareoDetalleVO item = adapterActivo.getTareoDetalle(index);
+
+
+            model.deleteTareoDetalle(item);
+            new TareoDAO(ctx).deleteById(item.getId());
+
+            adapterActivo.notifyDataSetChanged();
+            adapterInactivo.notifyDataSetChanged();
+
+            Snackbar snackbar = Snackbar.make(root,"Se borró la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+
+            snackbar.setAction("Deshacer", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new TareoDetalleDAO(ctx).insert(item);
+                    model.addTareoDetalle(index,item);
+                    adapterActivo.notifyDataSetChanged();
+                    adapterInactivo.notifyDataSetChanged();
+                }
+            });
+
+            snackbar.show();
+        }
+    };
+
+    private ItemTouchHelper.SimpleCallback itemTouchHelperCallBackInactive = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            int index = viewHolder.getAdapterPosition();
+
+            final TareoDetalleVO item = adapterInactivo.getTareoDetalle(index);
+
+//            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
 
             model.deleteTareoDetalle(item);
             new TareoDAO(ctx).deleteById(item.getId());

@@ -35,11 +35,11 @@ import java.util.List;
 public class ListPersonalAddedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM_EXTRA_MODE = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String MY_EXTRA_MODE;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -60,7 +60,7 @@ public class ListPersonalAddedFragment extends Fragment {
     public static ListPersonalAddedFragment newInstance(String param1, String param2) {
         ListPersonalAddedFragment fragment = new ListPersonalAddedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM_EXTRA_MODE, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -75,7 +75,7 @@ public class ListPersonalAddedFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            MY_EXTRA_MODE = getArguments().getString(ARG_PARAM_EXTRA_MODE);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -101,7 +101,7 @@ public class ListPersonalAddedFragment extends Fragment {
             @Override
             public void onChanged(List<TareoDetalleVO> tareoDetalleVOList) {
                 Log.d(TAG,"tamaaño "+tareoDetalleVOList.size());
-                adapter = new RViewAdapterTransferListTrabajadores(getContext(),tareoDetalleVOList);
+                adapter = new RViewAdapterTransferListTrabajadores(getContext(),tareoDetalleVOList,MY_EXTRA_MODE);
                 new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(flpa_rView);
                 flpa_rView.setAdapter(adapter);
             }

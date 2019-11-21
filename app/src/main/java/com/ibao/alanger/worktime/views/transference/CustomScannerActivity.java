@@ -1,5 +1,6 @@
 package com.ibao.alanger.worktime.views.transference;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,12 +13,15 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
@@ -25,6 +29,7 @@ import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.transference.helpers.VerifyPersonal;
 import com.ibao.alanger.worktime.views.transference.ui.main.AddPersonalFragment;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -66,7 +71,6 @@ public class CustomScannerActivity extends AppCompatActivity implements
 
     private static String MY_EXTRA_MODE;
 
-    public static final String EXTRA_MODE_ADD_TRABAJADORES= "add trabajadores";
     public static final String EXTRA_TAREO= "TAREOVO";
 
     private static TareoVO TAREOVO;
@@ -74,26 +78,38 @@ public class CustomScannerActivity extends AppCompatActivity implements
 
     public static String HOUR;
 
+    Context ctx;
+
+    private View root;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_scanner);
+        ctx= this;
 
         statusLight=false;
         fAButtonLinterna = findViewById(R.id.fAButtonLinterna);
 
+        root = findViewById(R.id.root);
         Bundle b = getIntent().getExtras();
         HOUR = b.getString(EXTRA_HOUR);
 
         MY_EXTRA_MODE = b.getString(EXTRA_MODE);
 
-        if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADORES)){
-            TAREOVO = (TareoVO) b.getSerializable(EXTRA_TAREO);
+        TAREOVO = (TareoVO) b.getSerializable(EXTRA_TAREO);
+
+        switch (MY_EXTRA_MODE){
+            case TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR:
+
+                setTitle(HOUR.equals("")?"Entrada Trabajadores":"Entrada "+HOUR);
+                break;
+            case TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR:
+
+                setTitle(HOUR.equals("")?"Salida Trabajadores":"Salida "+HOUR);
+                break;
         }
 
-        setTitle(HOUR.equals("")?"Agregar Trabajadores":"Agregar Trabajadores "+HOUR);
-
-        tareoDetalleVOList = new ArrayList<>();
         validarPermisos();
 
         fAButtonLinterna.setOnClickListener(new View.OnClickListener() {
@@ -187,51 +203,89 @@ public class CustomScannerActivity extends AppCompatActivity implements
     }
 
     private BeepManager beepManager;
-    private static List<TareoDetalleVO> tareoDetalleVOList;
+
+    private boolean isShowenError = false;
+
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
         public void barcodeResult(BarcodeResult result) {
 
-            String resultado=result.getText().toString();
-            Log.d(TAG,"tamaño "+resultado.length());
+            if(!isShowenError) {
 
-            if(resultado == null || verifiarDuplicado(resultado) || resultado.length()!=8) {//si s e rechazo
-                // Prevent duplicate scans
-                Log.d(TAG,resultado+"DUPLICADO");
 
-                return;
-            }else {
+                String DNI = result.getText();
+                Log.d(TAG, "tamaño " + DNI.length());
+
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date();
-                if(!HOUR.equals("")){
-                    String time[] = HOUR.toString().split(":");
+                if (!HOUR.equals("")) {
+                    String time[] = HOUR.split(":");
                     int hour = Integer.valueOf(time[0]);
                     int minutes = Integer.valueOf(time[1]);
                     date.setHours(hour);
                     date.setMinutes(minutes);
                     date = removeSeconds(date);
                 }
-                TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
-                tareoDetalleVO.setTimeStart(formatter.format(date));
-                TrabajadorVO trabajadorVO = new TrabajadorVO();
-                trabajadorVO.setDni(resultado);
-                tareoDetalleVO.setTrabajadorVO(trabajadorVO);
 
-                tareoDetalleVOList.add(tareoDetalleVO);
-                PageViewModel.addTrabajador(tareoDetalleVO);
+                try {
 
-                Log.d(TAG,resultado+"ingresado");
+                    if (!VerifyPersonal.verify(true, TAREOVO, PageViewModel.getMutable(), MY_EXTRA_MODE, DNI, formatter.format(date))) {//si s e rechazo
+                        // Prevent duplicate scans
+                        Log.d(TAG, DNI + "DUPLICADO");
 
-                //Toast.makeText(getBaseContext(),"Trabajador agregado: "+resultado/*+" "+muestraVO.getName()*/,Toast.LENGTH_SHORT).show();
-                barcodeScannerView.setStatusText(result.getText());
-                handler.post(runnable);
-    /*
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("qr",resultado);
-                setResult(RESULT_OK,returnIntent);
-                finish();
-                overridePendingTransition(R.anim.right_in, R.anim.right_out);
-    */
+                        return;
+                    } else {
+                        TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
+                        String mensaje = "ERROR";
+                        switch (MY_EXTRA_MODE) {
+
+                            case TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR:
+                                tareoDetalleVO.setTimeStart(formatter.format(date));
+                                mensaje = "Entrada Trabajador " + DNI + " " + formatter.format(date);
+                                break;
+
+                            case TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR:
+                                tareoDetalleVO.setTimeEnd(formatter.format(date));
+                                mensaje = "Salida Trabajador " + DNI + " " + formatter.format(date);
+                                break;
+                        }
+                        TrabajadorVO trabajadorVO = new TrabajadorVO();
+                        trabajadorVO.setDni(DNI);
+                        tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+
+
+                        PageViewModel.addTrabajador(tareoDetalleVO);
+
+
+                        barcodeScannerView.setStatusText(result.getText());
+
+
+                        Snackbar snackbar = Snackbar.make(root, mensaje, Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
+                        snackbar.show();
+
+                        isShowenError = true;
+                        handler.post(runnable);
+                        handler.postDelayed(()->{
+                            isShowenError = false;
+                        },1500);
+
+                    }
+                } catch (Exception e) {
+
+                    isShowenError = true;
+                    handler.post(runnable);
+
+                    handler.post(() -> {
+                        Snackbar snackbar = Snackbar.make(root, e.getMessage(), Snackbar.LENGTH_SHORT);
+                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(ctx, R.color.red_pastel));
+                        snackbar.show();
+                    });
+
+                    handler.postDelayed(()->{
+                        isShowenError = false;
+                    },1500);
+                }
             }
         }
 
@@ -240,6 +294,7 @@ public class CustomScannerActivity extends AppCompatActivity implements
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                beepManager.setBeepEnabled(false);
                 beepManager.setVibrateEnabled(true);
                 beepManager.playBeepSoundAndVibrate();
             }
@@ -250,30 +305,6 @@ public class CustomScannerActivity extends AppCompatActivity implements
         public void possibleResultPoints(List<ResultPoint> resultPoints) {
         }
     };
-
-    boolean verifiarDuplicado(String newDNI){
-        for(TareoDetalleVO td : tareoDetalleVOList){
-            if( td.getTrabajadorVO().getDni().equals(newDNI)){
-                return true;
-            }
-        }
-
-        for(TareoDetalleVO td : PageViewModel.getMutable()){
-            if( td.getTrabajadorVO().getDni().equals(newDNI)){
-                return true;
-            }
-        }
-        for(TareoDetalleVO t :  TAREOVO.getTareoDetalleVOList()){
-                if(t.getTrabajadorVO().getDni().equals(newDNI)){
-                    return true;
-                }
-        }
-        //falta un for para buscar en la bd
-
-
-
-        return false;
-    }
 
     @Override
     public void onBackPressed() {

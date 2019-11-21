@@ -76,6 +76,12 @@ public class RViewAdapterListTrabajadores
 
     }
 
+
+    public TareoDetalleVO getTareoDetalle (int index){
+        return tareoDetalleVOList.get(index);
+    }
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

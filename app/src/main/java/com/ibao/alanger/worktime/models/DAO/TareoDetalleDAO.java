@@ -72,6 +72,21 @@ public class TareoDetalleDAO {
         return temp;
     }
 
+    public int updateSalidaby_dni_idTareo(int idTareo, String DNI, String horaSalida){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        String [] args = {
+                            DNI,
+                            String.valueOf(idTareo)
+        };
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREODETALLE_DATEEND,horaSalida);
+        int temp = db.update(TAB_TAREODETALLE,values,TAB_TAREODETALLE_DNI+"=? AND "+TAB_TAREODETALLE_IDTAREO+"=?",args);
+        db.close();
+        conn.close();
+        return temp;
+    }
+
 
     public long insert(TareoDetalleVO tareoDetalleVO){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
@@ -88,7 +103,6 @@ public class TareoDetalleDAO {
         for(ProductividadVO pro: tareoDetalleVO.getProductividadVOList()){
             new ProductividadDAO(ctx).insert(pro);
         }
-
         db.close();
         conn.close();
         return temp;
@@ -103,11 +117,11 @@ public class TareoDetalleDAO {
             Cursor cursor = db.rawQuery(
                     _SELECT+
                             "*"+
-                        _FROM+
+                            _FROM+
                             TAB_TAREODETALLE +" as E "+
-                        _WHERE+
+                            _WHERE+
                             "E."+TAB_TAREODETALLE_ID+" = "+ id
-            ,null);
+                    ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
                 temp = getAtributtes(cursor);
@@ -122,6 +136,8 @@ public class TareoDetalleDAO {
         }
         return temp;
     }
+
+
 
 
     public TareoDetalleVO selectByIdProductividad(int idProductividad){

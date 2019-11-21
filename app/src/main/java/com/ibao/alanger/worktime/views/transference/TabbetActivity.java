@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -92,13 +94,41 @@ public class  TabbetActivity extends AppCompatActivity
                 viewPager.setCurrentItem(1);
             }else {
                 Intent returnIntent = new Intent();
-                for(TareoDetalleVO tad :PageViewModel.getMutable()){
-                    int i =(int) new TareoDetalleDAO(getBaseContext()).insert(TAREO_RETURN.getId(),tad.getTrabajadorVO().getDni(),tad.getTimeStart());
+
+                switch (MY_EXTRA_MODE){
+                    case TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR:
+                        for(TareoDetalleVO tad :PageViewModel.getMutable()){
+                            int i =(int) new TareoDetalleDAO(getBaseContext()).insert(TAREO_RETURN.getId(),tad.getTrabajadorVO().getDni(),tad.getTimeStart());
                             tad.setId(i);
                             tad.setIdTareo(TAREO_RETURN.getId());
+                        }
+                        TAREO_RETURN.getTareoDetalleVOList().addAll(PageViewModel.getMutable());
+                        break;
+                    case TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR:
+
+                        for(TareoDetalleVO tad :PageViewModel.getMutable()){
+                            //if is update
+                            if(new TareoDetalleDAO(getBaseContext()).updateSalidaby_dni_idTareo(TAREO_RETURN.getId(),tad.getTrabajadorVO().getDni(),tad.getTimeEnd()) > 0){
+
+                                Log.d(TAG,"actualizado "+tad.getTrabajadorVO().getDni());
+                                //buscarlo en TAREO_RETURN
+                                for(TareoDetalleVO TD: TAREO_RETURN.getTareoDetalleVOList()){
+                                    if(TD.getTrabajadorVO().getDni().equals(tad.getTrabajadorVO().getDni())) {//si lo encuentra
+                                        TD.setTimeEnd(tad.getTimeEnd());
+                                        Log.d(TAG,TD.getTrabajadorVO().getDni());
+                                        break;
+                                    }
+                                }
+                            }else {
+                                Log.d(TAG,"se mamo");
+                                throw new NullPointerException(TAG+"se mamo");
+
+                            }
+                        }
+
+                        break;
                 }
-                TAREO_RETURN.getTareoDetalleVOList().addAll(PageViewModel.getMutable());
-                if(MY_EXTRA_MODE.equals(EXTRA_MODE_ADD_TRABAJADOR))
+
                 returnIntent.putExtra("TAREOVO", TAREO_RETURN);
                 setResult(RESULT_OK,returnIntent);
                 finish();

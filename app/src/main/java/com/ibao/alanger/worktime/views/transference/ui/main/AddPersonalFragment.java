@@ -26,7 +26,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
@@ -40,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.EXTRA_HOUR;
 import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.REQUEST_QR;
@@ -56,7 +54,7 @@ import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity
 public class AddPersonalFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM_EXTRA_MODE = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String TAG = AddPersonalFragment.class.getSimpleName();
@@ -92,7 +90,7 @@ public class AddPersonalFragment extends Fragment {
     public static AddPersonalFragment newInstance(String param1, TareoVO paramTareoVOB) {
         AddPersonalFragment fragment = new AddPersonalFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM_EXTRA_MODE, param1);
         args.putSerializable(ARG_PARAM2, paramTareoVOB);
         fragment.setArguments(args);
         return fragment;
@@ -102,7 +100,7 @@ public class AddPersonalFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            MY_EXTRA_MODE = getArguments().getString(ARG_PARAM1);
+            MY_EXTRA_MODE = getArguments().getString(ARG_PARAM_EXTRA_MODE);
             mParamTAREOVOB = (TareoVO) getArguments().getSerializable(ARG_PARAM2);
         }
     }
@@ -172,20 +170,15 @@ public class AddPersonalFragment extends Fragment {
 
 
         ftp_fabRestart.setOnClickListener(v->{
-            startHourCounter();
-            ftp_tieTextDNI.setText("");
-            ftp_tieTextDNI.requestFocus();
-            ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-                    .showSoftInput(ftp_tieTextDNI, InputMethodManager.SHOW_FORCED);
+            restart();
         });
 
         ftp_fabQR.setOnClickListener(v->{
 
             Intent i = new Intent(getActivity(),CustomScannerActivity.class);
-
             i.putExtra(CustomScannerActivity.EXTRA_TAREO,mParamTAREOVOB);
             i.putExtra(EXTRA_HOUR,isCounterRun?"":""+ftp_tieTextHour.getText().toString());
-            i.putExtra(CustomScannerActivity.EXTRA_MODE,CustomScannerActivity.EXTRA_MODE_ADD_TRABAJADORES);
+            i.putExtra(CustomScannerActivity.EXTRA_MODE,MY_EXTRA_MODE);
             startActivityForResult(i,REQUEST_QR);
         });
 
@@ -207,22 +200,10 @@ public class AddPersonalFragment extends Fragment {
              * TODO: CAMBIANDO LA FORMA DE VALIDAR PARA TENER TODO MAPEADO EN UNA CLASE
              */
             try {
-                if(VerifyPersonal.verify(mParamTAREOVOB,PageViewModel.getMutable(),MY_EXTRA_MODE,dni,hora)){
-
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            if(dni.length()==8){
-
-                if(verificarDNI(MY_EXTRA_MODE,dni)){
-
-
+                if(VerifyPersonal.verify(true,mParamTAREOVOB,PageViewModel.getMutable(),MY_EXTRA_MODE,dni,hora)){
                     TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
+
+                    Log.d(TAG, MY_EXTRA_MODE);
 
 
                     if (MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){
@@ -244,94 +225,36 @@ public class AddPersonalFragment extends Fragment {
                     tareoDetalleVO.setTrabajadorVO(trabajadorVO);
 
                     PageViewModel.addTrabajador(tareoDetalleVO);
+
+                    restart();
+                }else{
+                    Log.d(TAG,"error de verificacion");
                 }
-            }else {
-                Snackbar snackbar= Snackbar.make(root,"DNI invalido",Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
+            } catch (NullPointerException e) {
+                Log.d(TAG,e.toString());
+                Snackbar snackbar= Snackbar.make(root,e.getMessage(),Snackbar.LENGTH_SHORT);
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red_pastel));
                 snackbar.show();
             }
+
+
+
+
+
+
+
         });
     }
 
-    /*
-    public boolean  verificarDNI(String MODE,String dni){
-
-        boolean flag = true;//valido
-        List<TareoDetalleVO> tareoDetalleVOList = PageViewModel.getMutable();
-
-        if(MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){
-            for(TareoDetalleVO t :  tareoDetalleVOList){
-                if(t.getTrabajadorVO().getDni().equals(dni)){
-                    flag=false;
-                    Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Lista",Snackbar.LENGTH_SHORT);
-                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(
-                            getActivity(), R.color.red_pastel));
-                    snackbar.show();
-                    break;
-                }
-            }
-            if(flag){//el tareo acutal
-                for(TareoDetalleVO t :  mParamTAREOVOB.getTareoDetalleVOList()){
-                    if(t.getTrabajadorVO().getDni().equals(dni)){
-                        flag=false;
-                        Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Labor",Snackbar.LENGTH_SHORT);
-                        snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
-                        snackbar.show();
-                        break;
-                    }
-                }
-            }
-
-            if(flag){//buscar en otras actividades
-
-            }
-
-        }
-
-        if(MODE.equals(TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR)){
-            for(TareoDetalleVO t :  tareoDetalleVOList){
-                if(t.getTrabajadorVO().getDni().equals(dni)){
-                    flag=false;
-                    Snackbar snackbar= Snackbar.make(root,"Trabajador ya agregado a la Lista",Snackbar.LENGTH_SHORT);
-                    snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
-                    snackbar.show();
-                    break;
-                }
-            }
-
-            boolean encontrado = false;
-            if(flag){//el tareo acutal
-                for(TareoDetalleVO t :  mParamTAREOVOB.getTareoDetalleVOList()){
-                    if(t.getTrabajadorVO().getDni().equals(dni)){ // si ya esta agregado a la labor
-                        encontrado = true;
-                        if(!t.getTimeEnd().equals("")){ //si ya tiene salida
-                            flag=false;
-                            Snackbar snackbar= Snackbar.make(root,"Trabajador ya marcó salida",Snackbar.LENGTH_SHORT);
-                            snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
-                            snackbar.show();
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if(!encontrado && flag){//buscar en otras actividades
-                flag=false;
-                Snackbar snackbar= Snackbar.make(root,"Trabajador no ha sido registrado en la actividad",Snackbar.LENGTH_SHORT);
-                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.red_pastel));
-                snackbar.show();
-            }
-
-            if(flag){//buscar en otras actividades
-
-            }
-        }
-
-
-        return flag;
+    void restart(){
+        startHourCounter();
+        ftp_tieTextDNI.setText("");
+        ftp_tieTextDNI.requestFocus();
+        ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .showSoftInput(ftp_tieTextDNI, InputMethodManager.SHOW_FORCED);
     }
 
-     */
+
     public static Date removeSeconds(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.util.List;
 
@@ -23,12 +25,14 @@ public class RViewAdapterTransferListTrabajadores
 
     List<TareoDetalleVO> tareoDetalleVOS;
     Context ctx;
+    String MY_EXTRA_MODE;
 
     private View.OnClickListener onClickListener;
 
-    public RViewAdapterTransferListTrabajadores(Context ctx, List<TareoDetalleVO> tareoDetalleVOS) {
+    public RViewAdapterTransferListTrabajadores(Context ctx, List<TareoDetalleVO> tareoDetalleVOS,String MY_EXTRA_MODE) {
         this.tareoDetalleVOS = tareoDetalleVOS;
         this.ctx = ctx;
+        this.MY_EXTRA_MODE = MY_EXTRA_MODE;
     }
 
     @NonNull
@@ -51,7 +55,15 @@ public class RViewAdapterTransferListTrabajadores
         TareoDetalleVO item = tareoDetalleVOS.get(position);
         holder.flpa_item_DNI.setText(""+item.getTrabajadorVO().getDni());
         holder.flpa_item_Name.setText(item.getTrabajadorVO().getName().equals("")?"Sin Nombre":item.getTrabajadorVO().getName());
-        holder.flpa_item_Hour.setText(""+item.getTimeStart());
+
+        if(MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){
+            holder.flpa_item_Hour.setText(""+item.getTimeStart());
+            holder.flpa_item_Hour.setTextColor(ContextCompat.getColor(ctx, R.color.colorAccent));
+        }else {
+            holder.flpa_item_Hour.setText(""+item.getTimeEnd());
+            holder.flpa_item_Hour.setTextColor(ContextCompat.getColor(ctx, R.color.red_pastel));
+        }
+
     }
 
     public void setOnClicListener(View.OnClickListener listener){

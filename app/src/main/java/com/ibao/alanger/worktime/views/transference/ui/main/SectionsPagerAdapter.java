@@ -54,7 +54,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         if(position==0){
            fragment= AddPersonalFragment.newInstance(MY_EXTRA_MODE,TAREOVO);
         }else {
-            fragment= ListPersonalAddedFragment.newInstance("","");
+            fragment= ListPersonalAddedFragment.newInstance(MY_EXTRA_MODE,"");
         }
 
         return fragment;
