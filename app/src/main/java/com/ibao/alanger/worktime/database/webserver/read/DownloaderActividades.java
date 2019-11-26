@@ -4,45 +4,38 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.app.AppController;
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.database.FakeLoader;
 import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
-import com.ibao.alanger.worktime.models.DAO.EmpresaDAO;
-
+import com.ibao.alanger.worktime.models.DAO.ActividadDAO;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_RAZON;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_RUC;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_STATUS;
-import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.STATUS_FINISHED;
-import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_EMPRESAS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_ACTIVIDAD_STATUS;
+import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_ACTIVIDADES;
 
 
-public class DownloaderEmpresas implements Downloader{
+public class DownloaderActividades implements Downloader{
 
     Context ctx;
 
     public static int STATUS;
 
-    public static String TAG = DownloaderEmpresas.class.getSimpleName();
+    public static String TAG = DownloaderActividades.class.getSimpleName();
 
-    public DownloaderEmpresas(Context ctx){
+    public DownloaderActividades(Context ctx){
         STATUS = ConectionConfig.STATUS_CREATED;
         this.ctx = ctx;
     }
@@ -57,49 +50,43 @@ public class DownloaderEmpresas implements Downloader{
         STATUS =ConectionConfig.STATUS_STARTED;
 
         StringRequest sr = new StringRequest(Request.Method.POST,
-                URL_DOWN_EMPRESAS,
+                URL_DOWN_ACTIVIDADES,
                 response -> {
                     try {
                         JSONArray main = new JSONArray(response);
                         if(main.length()>0){
-                            new EmpresaDAO(ctx).dropTable();
+                            new ActividadDAO(ctx).dropTable();
                             STATUS = ConectionConfig.STATUS_PROCESSING;
                         }
 
-                        final String SQLINSERT = "INSERT INTO " +
-                                TAB_EMPRESA+
-                                "("+
-                                TAB_EMPRESA_ID+","+
-                                TAB_EMPRESA_COD+","+
-                                TAB_EMPRESA_RAZON+","+
-                                TAB_EMPRESA_RUC+","+
-                                TAB_EMPRESA_NAME+","+
-                                TAB_EMPRESA_STATUS+" "+
-                                ") "+
-                                "VALUES ";
 
+                        final String SQLINSERT =  "INSERT INTO " +
+                                TAB_ACTIVIDAD+
+                                "("+
+                                TAB_ACTIVIDAD_ID+","+
+                                TAB_ACTIVIDAD_COD+","+
+                                TAB_ACTIVIDAD_NAME+","+
+                                TAB_ACTIVIDAD_STATUS+" "+
+                                ")"+
+                                "VALUES ";
                         String insert = SQLINSERT;
 
                         for(int i=0;i<main.length();i++){
                             JSONObject data = new JSONObject(main.get(i).toString());
                             int id = data.getInt("id");
+                            String cod = data.getString("codigo");
                             String name = data.getString("nombre");
                             int status = 1;
 
-                            Log.d(TAG,"INSERTANDO "+i+" : "+id+" "+name);
-
+                            Log.d(TAG,"INSERTING :"+id+" "+cod+" "+name+" "+status);
 
                             insert=insert +
                                     "("+
                                     id+","+
-                                    "\""+""+"\""+","+
-                                    "\""+""+"\""+","+
-                                    "\""+""+"\""+","+
+                                    "\""+cod+"\""+","+
                                     "\""+name+"\""+","+
                                     status+
                                     ")";
-
-                            Log.d(TAG,insert);
 
                             if(i%1000==0&& i>0){
                                 try{
@@ -126,21 +113,23 @@ public class DownloaderEmpresas implements Downloader{
                             db.close();
                             conn.close();
                         }catch (Exception e){
-                            Log.d(TAG,e.toString());
+                            Log.e(TAG,e.toString());
                         }
-                    STATUS=STATUS_FINISHED;
+                    STATUS =ConectionConfig.STATUS_FINISHED;
                     } catch (JSONException e) {
                         Log.e(TAG,e.toString());
-                        STATUS=ConectionConfig.STATUS_ERROR_PARSE;
+                        STATUS =ConectionConfig.STATUS_ERROR_PARSE;
                     }
                 },
                 error -> {
-   //                 progress.dismiss();
+
                     Log.e(TAG,error.toString());
+
                     Toast.makeText(ctx,TAG+ ctx.getString(R.string.error_conexion_servidor), Toast.LENGTH_LONG).show();
-                    STATUS=ConectionConfig.STATUS_ERROR_HTTP_ERROR;
+                    STATUS =ConectionConfig.STATUS_ERROR_HTTP_ERROR;
+
                 }){
-/*
+            /*
             @Override
             protected Map<String, String> getParams(){
                 Map<String, String> params = new HashMap<String, String>();
@@ -152,7 +141,9 @@ public class DownloaderEmpresas implements Downloader{
 
                 return params;
             }
-*/
+
+             */
+
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<String, String>();

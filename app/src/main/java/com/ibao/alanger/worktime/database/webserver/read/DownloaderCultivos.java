@@ -10,9 +10,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.app.AppController;
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
-import com.ibao.alanger.worktime.database.FakeLoader;
 import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
-import com.ibao.alanger.worktime.models.DAO.EmpresaDAO;
+import com.ibao.alanger.worktime.models.DAO.CultivoDAO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,26 +22,24 @@ import java.util.Map;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_RAZON;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_RUC;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA_STATUS;
-import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.STATUS_FINISHED;
-import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_EMPRESAS;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_HASLABOR;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_STATUS;
+import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_CULTUVOS;
 
 
-public class DownloaderEmpresas implements Downloader{
+public class DownloaderCultivos implements Downloader{
 
     Context ctx;
 
     public static int STATUS;
 
-    public static String TAG = DownloaderEmpresas.class.getSimpleName();
+    public static String TAG = DownloaderCultivos.class.getSimpleName();
 
-    public DownloaderEmpresas(Context ctx){
+    public DownloaderCultivos(Context ctx){
         STATUS = ConectionConfig.STATUS_CREATED;
         this.ctx = ctx;
     }
@@ -57,25 +54,24 @@ public class DownloaderEmpresas implements Downloader{
         STATUS =ConectionConfig.STATUS_STARTED;
 
         StringRequest sr = new StringRequest(Request.Method.POST,
-                URL_DOWN_EMPRESAS,
+                URL_DOWN_CULTUVOS,
                 response -> {
                     try {
                         JSONArray main = new JSONArray(response);
                         if(main.length()>0){
-                            new EmpresaDAO(ctx).dropTable();
+                            new CultivoDAO(ctx).dropTable();
                             STATUS = ConectionConfig.STATUS_PROCESSING;
                         }
 
-                        final String SQLINSERT = "INSERT INTO " +
-                                TAB_EMPRESA+
+                        final String SQLINSERT =  "INSERT INTO " +
+                                TAB_CULTIVO+
                                 "("+
-                                TAB_EMPRESA_ID+","+
-                                TAB_EMPRESA_COD+","+
-                                TAB_EMPRESA_RAZON+","+
-                                TAB_EMPRESA_RUC+","+
-                                TAB_EMPRESA_NAME+","+
-                                TAB_EMPRESA_STATUS+" "+
-                                ") "+
+                                TAB_CULTIVO_ID+","+
+                                TAB_CULTIVO_COD+","+
+                                TAB_CULTIVO_NAME+","+
+                                TAB_CULTIVO_HASLABOR+", "+
+                                TAB_CULTIVO_STATUS+" "+
+                                ")"+
                                 "VALUES ";
 
                         String insert = SQLINSERT;
@@ -83,23 +79,21 @@ public class DownloaderEmpresas implements Downloader{
                         for(int i=0;i<main.length();i++){
                             JSONObject data = new JSONObject(main.get(i).toString());
                             int id = data.getInt("id");
+                            String cod = " ";
                             String name = data.getString("nombre");
+                            int hasLabor = data.getInt("hasLabor");
                             int status = 1;
 
-                            Log.d(TAG,"INSERTANDO "+i+" : "+id+" "+name);
-
+                            Log.d(TAG,"INSERTING :"+id+" "+cod+" "+name+" "+hasLabor+" "+status);
 
                             insert=insert +
                                     "("+
                                     id+","+
-                                    "\""+""+"\""+","+
-                                    "\""+""+"\""+","+
-                                    "\""+""+"\""+","+
+                                    "\""+cod+"\""+","+
                                     "\""+name+"\""+","+
+                                    hasLabor+","+
                                     status+
                                     ")";
-
-                            Log.d(TAG,insert);
 
                             if(i%1000==0&& i>0){
                                 try{
@@ -126,33 +120,23 @@ public class DownloaderEmpresas implements Downloader{
                             db.close();
                             conn.close();
                         }catch (Exception e){
-                            Log.d(TAG,e.toString());
+                            Log.e(TAG,e.toString());
                         }
-                    STATUS=STATUS_FINISHED;
+                    STATUS =ConectionConfig.STATUS_FINISHED;
                     } catch (JSONException e) {
                         Log.e(TAG,e.toString());
-                        STATUS=ConectionConfig.STATUS_ERROR_PARSE;
+                        STATUS =ConectionConfig.STATUS_ERROR_PARSE;
                     }
                 },
                 error -> {
-   //                 progress.dismiss();
+
                     Log.e(TAG,error.toString());
+
                     Toast.makeText(ctx,TAG+ ctx.getString(R.string.error_conexion_servidor), Toast.LENGTH_LONG).show();
-                    STATUS=ConectionConfig.STATUS_ERROR_HTTP_ERROR;
+                    STATUS =ConectionConfig.STATUS_ERROR_HTTP_ERROR;
+
                 }){
-/*
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
 
-                User temp = SharedPreferencesManager.getUser(ctx);
-
-                params.put("id", String.valueOf(temp.getId()));
-                params.put("idInspector", String.valueOf(temp.getToken()));
-
-                return params;
-            }
-*/
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<String, String>();

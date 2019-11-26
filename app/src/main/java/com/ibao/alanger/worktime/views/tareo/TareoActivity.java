@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.Utilities;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
@@ -133,31 +134,26 @@ public class TareoActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(getString(R.string.seleccione_opcion));
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                selectOnDialog = which;
-            }
-        });
-        builder.setPositiveButton(R.string.seleccionar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (selectOnDialog){
-                    case 0:
-                        break;
-                    case 1:
-                        break;
+        builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
+        builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
+            switch (selectOnDialog){
+                case 0:
+                    break;
+                case 1:
 
-                }
-                enableInputs();
+                    for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
+                     if(ta.getTimeEnd().isEmpty()){
+                         Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
+                         new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
+                     }
+
+                    }
+                    break;
+
             }
+            enableInputs();
         });
-        builder.setNegativeButton(R.string.cancelar,  new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                enableInputs();
-            }
-        });
+        builder.setNegativeButton(R.string.cancelar, (dialog, which) -> enableInputs());
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);
         dialog.show();

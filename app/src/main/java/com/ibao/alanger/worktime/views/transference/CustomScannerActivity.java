@@ -253,9 +253,7 @@ public class CustomScannerActivity extends AppCompatActivity implements
                         trabajadorVO.setDni(DNI);
                         tareoDetalleVO.setTrabajadorVO(trabajadorVO);
 
-
                         PageViewModel.addTrabajador(tareoDetalleVO);
-
 
                         barcodeScannerView.setStatusText(result.getText());
 

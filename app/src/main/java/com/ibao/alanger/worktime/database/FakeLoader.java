@@ -58,7 +58,6 @@ public class FakeLoader {
         new ActividadDAO(ctx).insert(2,"atc2","actividad2",true);
     }
 
-
     public void loadLabores(){
         new LaborDAO(ctx).dropTable();
         new LaborDAO(ctx).insert(1,"lab1","labor1",true,0,0,false,"",1,"1,2,3",true);

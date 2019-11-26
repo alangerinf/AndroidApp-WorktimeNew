@@ -40,14 +40,15 @@ public class MainActivity extends AppCompatActivity
 
         ctx = this;
         //FakeLoader
+
         FakeLoader fl = new FakeLoader(ctx);
-        fl.loadEmpresas();
-        fl.loadFundos();
-        fl.loadCultivos();
-        fl.loadActividades();
+       // fl.loadEmpresas();
+        //fl.loadFundos();
+        //fl.loadCultivos();
+       // fl.loadActividades();
         fl.loadLotes();
         fl.loadLabores();
-        fl.loadCCoste();
+        //fl.loadCCoste();
 
 
         myFragment = new MainFragment();

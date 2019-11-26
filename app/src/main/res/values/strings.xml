@@ -69,4 +69,5 @@
     <string name="asistencia">ASISTENCIA</string>
     <string name="control_de_asistencia">Control de Asistencia</string>
     <string name="error_conexion_servidor">Error conectando con el servidor</string>
+    <string name="update_status">Actualizando</string>
 </resources>

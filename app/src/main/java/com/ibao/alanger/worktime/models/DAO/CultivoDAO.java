@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.models.VO.external.CultivoVO;
-import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +21,12 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_HASL
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_NAME;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_CULTIVO_STATUS;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_FUNDO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDCULTIVO;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._STRASC;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._n;
 

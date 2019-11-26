@@ -146,9 +146,7 @@ public class DataBaseDesign {
                     AND +
                     TAB_CCOSTE_STATUS + TAB_CCOSTE_STATUS_TYPE + N_NULL+
                     ")";
-    
 
-    
     //TABLE AGRUPACION_ACTIVIDAD
     public static final String  TAB_ACTIVIDAD              = "LaborVO",
                                 TAB_ACTIVIDAD_ID               = "id",
@@ -170,7 +168,6 @@ public class DataBaseDesign {
                     AND +
                     TAB_ACTIVIDAD_STATUS + TAB_ACTIVIDAD_STATUS_TYPE + N_NULL+
                     ")";
-
 
     public static final String  TAB_CULTIVO             = "Cultivo",
                                 TAB_CULTIVO_ID              = "id",
@@ -196,7 +193,6 @@ public class DataBaseDesign {
                     AND +
                     TAB_CULTIVO_STATUS + TAB_CULTIVO_STATUS_TYPE+ N_NULL+
                     ")";
-
 
     public static final String  TAB_TRABAJADOR              = "Trabajador",
                                 TAB_TRABAJADOR_DNI              = "dni",

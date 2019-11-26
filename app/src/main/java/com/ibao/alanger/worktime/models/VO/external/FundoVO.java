@@ -14,7 +14,7 @@ public class FundoVO implements Serializable {
                                 TAB_FUNDO_NAME_TYPE         = TYPE_VARCHAR,
                                 TAB_FUNDO_IDEMPRESA         = "idEmpresa",
                                 TAB_FUNDO_IDEMPRESA_TYPE    = TYPE_INTEGER,
-                                TAB_FUNDO_STATUS            = "status",
+                                TAB_FUNDO_STATUS            = "STATUS",
                                 TAB_FUNDO_STATUS_TYPE       = TYPE_BOOLEAN;
      */
     private int id;

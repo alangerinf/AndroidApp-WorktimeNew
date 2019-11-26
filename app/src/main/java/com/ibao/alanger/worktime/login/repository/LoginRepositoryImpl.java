@@ -6,7 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.ibao.alanger.worktime.ConectionConfig;
+import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
 import com.ibao.alanger.worktime.app.AppController;
 import com.ibao.alanger.worktime.login.interactor.LoginInteractor;
 import com.ibao.alanger.worktime.models.User;
