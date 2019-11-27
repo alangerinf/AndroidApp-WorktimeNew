@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
-import com.ibao.alanger.worktime.adapters.RViewAdapterTransferListTrabajadores;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.views.transference.PageViewModel;
 

@@ -307,15 +307,32 @@ public class AddPersonalFragment extends Fragment {
         ftp_fabRestart = getView().findViewById(R.id.ftp_fabRestart);
         ftp_btnAdd = getView().findViewById(R.id.ftp_btnAdd);
 
-        ((TextView)getView().findViewById(R.id.ftp_tViewFundo)).setText(mParamTAREOVOB.getFundoVO().getName());
-        ((TextView)getView().findViewById(R.id.ftp_tViewCultivo)).setText(mParamTAREOVOB.getCultivoVO().getName());
-        ((TextView)getView().findViewById(R.id.ftp_tViewLabor)).setText(mParamTAREOVOB.getLaborVO().getName());
-        ((TextView)getView().findViewById(R.id.ftp_tViewDateTime)).setText(mParamTAREOVOB.getDateTimeStart());
+        TareoVO temp = mParamTAREOVOB;
 
-        if(mParamTAREOVOB.getLaborVO().isDirecto()){
-            ((TextView)getView().findViewById(R.id.ftp_tViewCostCenter)).setText(mParamTAREOVOB.getLoteVO().getCod());
+        TextView tViewFundo = getView().findViewById(R.id.ftp_tViewFundo);
+        TextView tViewDateTiem = getView().findViewById(R.id.ftp_tViewDateTime);
+
+        TextView tViewLabor = getView().findViewById(R.id.ftp_tViewLabor);
+        TextView tViewCultivo = getView().findViewById(R.id.ftp_tViewCultivo);
+        TextView tViewCostCenter = getView().findViewById(R.id.ftp_tViewCostCenter);
+
+
+
+        tViewDateTiem.setText(temp.getDateTimeStart());
+        tViewFundo.setText(temp.getFundoVO().getName());
+        if(temp.isAsistencia()){
+            tViewLabor.setText(getString(R.string.control_de_asistencia));
+            tViewCultivo.setText(temp.getEmpresaVO().getName());
+            tViewCostCenter.setText(getString(R.string.asistencia));
         }else {
-            ((TextView)getView().findViewById(R.id.ftp_tViewCostCenter)).setText(mParamTAREOVOB.getCentroCosteVO().getName());
+            tViewLabor.setText(temp.getLaborVO().getName());
+            tViewFundo.setText(temp.getFundoVO().getName());
+            tViewCultivo.setText(temp.getCultivoVO().getName());
+            if(temp.getLaborVO().isDirecto()){
+                tViewCostCenter.setText(temp.getLoteVO().getCod());
+            }else {
+                tViewCostCenter.setText(temp.getCentroCosteVO().getName());
+            }
         }
 
         if(MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){

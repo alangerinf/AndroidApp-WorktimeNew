@@ -81,37 +81,49 @@ public class TareoActivity extends AppCompatActivity {
 
     private void cargarListas() {
 
+
         adapterActivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),true);
+
+
+
         adapterActivo.setOnClicListener(v->{
 
-            int pos = tareo_rViewTActivos.getChildAdapterPosition(v);
-            int i=0;
-            for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
-                if(ta.getTimeEnd().equals("")){ //si esta activo
-                    if(i==pos){
-                        goToProductividad(ta);
-                        break;
+            if(!model.getTareoVO().getValue().isAsistencia()){
+                int pos = tareo_rViewTActivos.getChildAdapterPosition(v);
+                int i=0;
+                for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
+                    if(ta.getTimeEnd().equals("")){ //si esta activo
+                        if(i==pos){
+                            goToProductividad(ta);
+                            break;
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
+
         });
         new ItemTouchHelper(itemTouchHelperCallBackActive).attachToRecyclerView(tareo_rViewTActivos);
         tareo_rViewTActivos.setAdapter(adapterActivo);
 
         adapterInactivo = new RViewAdapterListTrabajadores(ctx,model.getTareoVO().getValue().getTareoDetalleVOList(),false);
+
         adapterInactivo.setOnClicListener(v->{
-            int pos = tareo_rViewTInactivos.getChildAdapterPosition(v);
-            int i=0;
-            for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
-                if(!ta.getTimeEnd().equals("")){ //si esta activo
-                    if(i==pos){
-                        goToProductividad(ta);
-                        break;
+            if(!model.getTareoVO().getValue().isAsistencia()){
+                int pos = tareo_rViewTInactivos.getChildAdapterPosition(v);
+                int i=0;
+                for(TareoDetalleVO ta : model.getTareoVO().getValue().getTareoDetalleVOList()){
+                    if(!ta.getTimeEnd().equals("")){ //si esta activo
+                        if(i==pos){
+                            goToProductividad(ta);
+                            break;
+                        }
+                        i++;
                     }
-                    i++;
                 }
             }
+
+
         });
         new ItemTouchHelper(itemTouchHelperCallBackInactive).attachToRecyclerView(tareo_rViewTInactivos);
         tareo_rViewTInactivos.setAdapter(adapterInactivo);
@@ -140,12 +152,13 @@ public class TareoActivity extends AppCompatActivity {
                 case 0:
                     break;
                 case 1:
-
                     for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
                      if(ta.getTimeEnd().isEmpty()){
                          Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
                          new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
                      }
+                     new TareoDAO(ctx).updateFinishHourById(model.getTareoVO().getValue().getId(),Utilities.getDateTime());
+                     onBackPressed();
 
                     }
                     break;

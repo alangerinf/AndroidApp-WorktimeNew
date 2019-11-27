@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.update.UpdateService;
-import com.ibao.alanger.worktime.views.MainActivity;
+import com.ibao.alanger.worktime.views.main.MainActivity;
 
 
 public class ActivityUpdate extends AppCompatActivity {

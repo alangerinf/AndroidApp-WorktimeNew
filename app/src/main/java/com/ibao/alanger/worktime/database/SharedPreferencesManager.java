@@ -19,7 +19,8 @@ public class SharedPreferencesManager {
     private static String user_user = "user";
     private static String user_name = "name";
     private static String user_password = "password";
-    private static String user_token = "token";
+    private static String user_idSupervisor = "idSupervisor";
+    private static String user_fundos = "idFundos";
 
     public static boolean saveUser(Context ctx, User user){
         boolean flag = false;
@@ -29,8 +30,9 @@ public class SharedPreferencesManager {
             editor.putInt(user_id,user.getId());
             editor.putString(user_user,user.getUser());
             editor.putString(user_password,user.getPassword());
-            editor.putString(user_token,user.getToken());
+            editor.putInt(user_idSupervisor,user.getIdSupervisor());
             editor.putString(user_name,user.getName());
+            editor.putString(user_fundos,user.getFundos());
             flag = editor.commit();
         }catch (Exception e){
             Log.d(TAG,"saveUser:"+e.toString());
@@ -50,18 +52,21 @@ public class SharedPreferencesManager {
                         &&
                         preferences.contains(user_password)
                         &&
-                        preferences.contains(user_token)
+                        preferences.contains(user_idSupervisor)
                         &&
                         preferences.contains(user_name)
+                        &&
+                        preferences.contains(user_fundos)
                 ){
-                    //user.setId(preferences.getInt(user_id,0));
+
                     user = new User();
-                    user.setId(12);
+                    user.setId(preferences.getInt(user_id,0));
                     user.setUser(preferences.getString(user_user,""));
                     user.setPassword(preferences.getString(user_password,""));
-                    user.setToken(preferences.getString(user_token,""));
+                    user.setIdSupervisor(preferences.getInt(user_idSupervisor,0));
                     user.setName(preferences.getString(user_name,""));
-                    Log.d(TAG,"getUser token "+user.getToken() );
+                    user.setFundos(preferences.getString(user_fundos,""));
+
                 }
             }catch (Exception e) {
                 Log.d(TAG,"getUser:" + e.toString()) ;

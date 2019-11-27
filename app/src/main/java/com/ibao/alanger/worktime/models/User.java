@@ -3,12 +3,17 @@ package com.ibao.alanger.worktime.models;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private int id;
     private String user;
     private String name;
     private String password;
-    private String token;
+    private int idSupervisor;
+    private String fundos;
+    private List<Integer> idFundoList;
 
 
     public String toString(){
@@ -23,7 +28,8 @@ public class User {
         user="";
         name="";
         password="";
-        token="";
+        fundos="";
+        idFundoList = new ArrayList<>();
     }
 
     public String getName() {
@@ -58,11 +64,29 @@ public class User {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
+    public int getIdSupervisor() {
+        return idSupervisor;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setIdSupervisor(int idSupervisor) {
+        this.idSupervisor = idSupervisor;
     }
+
+    public String getFundos() {
+        return fundos;
+    }
+
+    public void setFundos(String fundos) {
+        this.fundos = fundos;
+        idFundoList = new ArrayList<>();
+        String[] temp = fundos.split(",");
+        for(String idF : temp){
+            idFundoList.add(Integer.valueOf(idF));
+        }
+    }
+
+    public List<Integer> getIdFundoList() {
+        return idFundoList;
+    }
+
 }

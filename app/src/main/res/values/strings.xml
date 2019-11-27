@@ -2,8 +2,8 @@
     <string name="app_name">WorkTime</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Worktime</string>
+    <string name="nav_header_subtitle">soporte@ibao.pe</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -43,6 +43,9 @@
     <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
     <string name="lista_de_personal">Lista de Trabajadores</string>
     <string name="createTareo">Creando Actividad</string>
+    <string name="createTareoDirecto">Creando Actividad Directa</string>
+    <string name="createTareoIndirecto">Creando Actividad Indirecta</string>
+    <string name="createTareoAsistencia">Creando Actividad Asistencia</string>
     <string name="seleccione_tipo_Actividad">Seleccione Tipo de Labor</string>
     <string name="directo">DIRECTA</string>
     <string name="indirecto">INDIRECTA</string>

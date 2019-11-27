@@ -16,6 +16,9 @@ import java.util.List;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ISDIRECT;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_PRODUCTIVIDAD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_PRODUCTIVIDAD_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO;
@@ -23,15 +26,18 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_DATEEN
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_DATESTART;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDCCOSTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDCULTIVO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDLABOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDLOTE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ISACTIVE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ISASISTENCIA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_PRODUCTIVIDAD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._WHERE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign._n;
 
 
 public class TareoDAO {
@@ -58,7 +64,7 @@ public class TareoDAO {
         return flag;
     }
 
-    public long insert(int idLabor ,int idLote,int idCCoste,int idFundo, boolean isAsistencia){
+    public long insert(int idLabor ,int idLote,int idCCoste,int idFundo,int idCultivo, boolean isAsistencia){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -66,8 +72,24 @@ public class TareoDAO {
         values.put(TAB_TAREO_IDLOTE,idLote);
         values.put(TAB_TAREO_IDCCOSTE,idCCoste);
         values.put(TAB_TAREO_IDFUNDO,idFundo);
+        values.put(TAB_TAREO_IDCULTIVO,idCultivo);
         values.put(TAB_TAREO_ISASISTENCIA,isAsistencia);
         long temp = db.insert(TAB_TAREO,TAB_TAREO_ID,values);
+        db.close();
+        conn.close();
+        return temp;
+    }
+
+    public long updateFinishHourById(int idTareo,String dateTimeEnd){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        String[] args = {
+                String.valueOf(idTareo)
+        };
+
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREO_DATEEND,dateTimeEnd);
+        long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
         db.close();
         conn.close();
         return temp;
@@ -82,12 +104,14 @@ public class TareoDAO {
         int idLote = tareoVO.getLoteVO()!=null?tareoVO.getLoteVO().getId():0;
         int idCCoste = tareoVO.getCentroCosteVO()!=null?tareoVO.getCentroCosteVO().getId():0;
         int idFundo = tareoVO.getFundoVO()!=null?tareoVO.getFundoVO().getId():0;
+        int idCultivo = tareoVO.getCultivoVO()!=null?tareoVO.getCultivoVO().getId():0;
 
         values.put(TAB_TAREO_ID,tareoVO.getId());
         values.put(TAB_TAREO_IDLABOR,idLabor);
         values.put(TAB_TAREO_IDLOTE,idLote);
         values.put(TAB_TAREO_IDCCOSTE,idCCoste);
         values.put(TAB_TAREO_IDFUNDO,idFundo);
+        values.put(TAB_TAREO_IDCULTIVO,idCultivo);
         values.put(TAB_TAREO_ISASISTENCIA,tareoVO.isAsistencia());
         values.put(TAB_TAREO_DATESTART,tareoVO.getDateTimeStart());
         values.put(TAB_TAREO_DATEEND,tareoVO.getDateTimeEnd());
@@ -95,7 +119,6 @@ public class TareoDAO {
         values.put(TAB_TAREO_ISACTIVE,tareoVO.isActive());
 
         long temp = db.insert(TAB_TAREO,TAB_TAREO_ID,values);
-
 
         if(temp>0){
             for(TareoDetalleVO td : tareoVO.getTareoDetalleVOList()){
@@ -107,6 +130,7 @@ public class TareoDAO {
         conn.close();
         return temp;
     }
+
 
     public TareoVO selectById(int id){
         ConexionSQLiteHelper c=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
@@ -160,8 +184,8 @@ public class TareoDAO {
         try{
             Cursor cursor= db.rawQuery(
                     _SELECT+
-                        "*"+
-                    _FROM+
+                            "*"+
+                            _FROM+
                             TAB_TAREO,
                     null
             );
@@ -174,6 +198,112 @@ public class TareoDAO {
         }catch (Exception e){
             Toast.makeText(ctx,TAG+" listAll "+e.toString(), Toast.LENGTH_SHORT).show();
             Log.d(TAG," listAll "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
+
+    public List<TareoVO> listAsistencia(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                    _SELECT+
+                            "*"+
+                            _FROM+
+                            TAB_TAREO+
+                            _WHERE+
+                            TAB_TAREO_ISASISTENCIA+"=1"
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listAsistencia "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listAsistencia "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
+
+    public List<TareoVO> listDirectos(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                    _SELECT+
+                            "T.*"+
+                            _FROM+
+                            TAB_TAREO+" as T"+_n+
+                            TAB_LABOR+" as L"+
+                            _WHERE+
+                            "T."+TAB_TAREO_ISASISTENCIA+"= 0"+
+                            _AND+
+                            "T."+TAB_TAREO_IDLABOR+" = "+"L."+TAB_LABOR_ID+
+                            _AND+
+                            "L."+TAB_LABOR_ISDIRECT+" = 1"
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listDirectos "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listDirectos "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
+
+    public List<TareoVO> listIndirecto(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                    _SELECT+
+                            "T.*"+
+                            _FROM+
+                            TAB_TAREO+" as T"+_n+
+                            TAB_LABOR+" as L"+
+                            _WHERE+
+                            "T."+TAB_TAREO_ISASISTENCIA+"= 0"+
+                            _AND+
+                            "T."+TAB_TAREO_IDLABOR+" = "+"L."+TAB_LABOR_ID+
+                            _AND+
+                            "L."+TAB_LABOR_ISDIRECT+" = 0"
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listIndirecto "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listIndirecto "+e.toString());
         }finally {
             db.close();
             c.close();
@@ -194,11 +324,6 @@ public class TareoDAO {
                    break;
                case TAB_TAREO_IDLOTE:
                    tareoVO.setLoteVO(new LoteDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
-                   if(tareoVO.getLoteVO()!=null){
-                       tareoVO.setFundoVO(new FundoDAO(ctx).selectByIdLote(tareoVO.getLoteVO().getId()));
-                       tareoVO.setEmpresaVO(new EmpresaDAO(ctx).selectByIdLote(tareoVO.getLoteVO().getId()));
-                       tareoVO.setCultivoVO(new CultivoDAO(ctx).selectByIdLote(tareoVO.getLoteVO().getId()));
-                   }
                    break;
                case TAB_TAREO_IDCCOSTE:
                    tareoVO.setCentroCosteVO(new CentroCosteDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
@@ -211,6 +336,9 @@ public class TareoDAO {
                    if(tareoVO.getFundoVO()!=null){
                        tareoVO.setEmpresaVO(new EmpresaDAO(ctx).selectByIdFundo(tareoVO.getFundoVO().getId()));
                    }
+                   break;
+               case TAB_TAREO_IDCULTIVO:
+                   tareoVO.setCultivoVO(new CultivoDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
                    break;
                case TAB_TAREO_DATESTART:
                    tareoVO.setDateTimeStart(cursor.getString(cursor.getColumnIndex(name)));

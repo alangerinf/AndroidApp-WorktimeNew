@@ -278,6 +278,8 @@ public class DataBaseDesign {
                                 TAB_TAREO_IDCCOSTE_TYPE         = TYPE_INTEGER,
                                 TAB_TAREO_IDFUNDO               = "idFundo",
                                 TAB_TAREO_IDFUNDO_TYPE          = TYPE_INTEGER,
+                                TAB_TAREO_IDCULTIVO             = "idCultivo",
+                                TAB_TAREO_IDCULTIVO_TYPE        = TYPE_INTEGER,
                                 TAB_TAREO_DATESTART             = "dateStart",
                                 TAB_TAREO_DATESTART_TYPE        = TYPE_DATETIME,
                                 TAB_TAREO_DATEEND               = "dateEnd",
@@ -289,7 +291,7 @@ public class DataBaseDesign {
                                 TAB_TAREO_ISASISTENCIA          = "isAsistencia",
                                 TAB_TAREO_ISASISTENCIA_TYPE     = TYPE_BOOLEAN;
 
-
+    
     public static final String CREATETABLE_TAREO =
             TABLE_CREATE+TAB_TAREO+"("+
                     TAB_TAREO_ID   + TAB_TAREO_ID_TYPE   + PK + AUTOINCREMET+
@@ -301,6 +303,8 @@ public class DataBaseDesign {
                     TAB_TAREO_IDCCOSTE + TAB_TAREO_IDCCOSTE_TYPE +
                     AND +
                     TAB_TAREO_IDFUNDO + TAB_TAREO_IDFUNDO_TYPE + N_NULL+
+                    AND +
+                    TAB_TAREO_IDCULTIVO + TAB_TAREO_IDCULTIVO_TYPE + N_NULL+
                     AND +
                     TAB_TAREO_DATESTART + TAB_TAREO_DATESTART_TYPE+ DEF_DATE_NOW+
                     AND +

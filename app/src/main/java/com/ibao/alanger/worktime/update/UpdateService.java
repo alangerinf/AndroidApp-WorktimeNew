@@ -25,6 +25,8 @@ import com.ibao.alanger.worktime.database.webserver.read.DownloaderCentroCostes;
 import com.ibao.alanger.worktime.database.webserver.read.DownloaderCultivos;
 import com.ibao.alanger.worktime.database.webserver.read.DownloaderEmpresas;
 import com.ibao.alanger.worktime.database.webserver.read.DownloaderFundos;
+import com.ibao.alanger.worktime.database.webserver.read.DownloaderLabores;
+import com.ibao.alanger.worktime.database.webserver.read.DownloaderLotes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,8 @@ public class UpdateService extends IntentService {
         DOWNLOADERS.add(new DownloaderCultivos(ctx));
         DOWNLOADERS.add(new DownloaderEmpresas(ctx));
         DOWNLOADERS.add(new DownloaderFundos(ctx));
+        DOWNLOADERS.add(new DownloaderLabores(ctx));
+        DOWNLOADERS.add(new DownloaderLotes(ctx));
         Log.d(TAG,"TAMAÑAO DE DESCARGADORES "+DOWNLOADERS.size());
 
     }
@@ -272,6 +276,16 @@ public class UpdateService extends IntentService {
 
                     if(downName.equals(DownloaderFundos.class.getSimpleName())){
                         INPROGESS_NAME="Fundos";
+                        continue;
+                    }
+
+                    if(downName.equals(DownloaderLabores.class.getSimpleName())){
+                        INPROGESS_NAME="Labores";
+                        continue;
+                    }
+
+                    if(downName.equals(DownloaderLotes.class.getSimpleName())){
+                        INPROGESS_NAME="Lotes";
                         continue;
                     }
 

@@ -11,7 +11,7 @@ import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.app.AppController;
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
-import com.ibao.alanger.worktime.models.DAO.LaborDAO;
+import com.ibao.alanger.worktime.models.DAO.LoteDAO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,30 +22,25 @@ import java.util.Map;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_COD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ID;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_IDACTIVIDAD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ISDIRECT;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ISTAREA;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_LISTIDCULTIVO;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_MAGNITUD;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_STATUS;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_THEORICALCOST;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_THEORICALHOURS;
-import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_LABOR;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_COD;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_ID;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDCULTIVO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_IDFUNDO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_NUM;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LOTE_STATUS;
+import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_LOTES;
 
 
-public class DownloaderLabores implements Downloader{
+public class DownloaderLotes implements Downloader{
 
     Context ctx;
 
     public static int STATUS;
 
-    public static String TAG = DownloaderLabores.class.getSimpleName();
+    public static String TAG = DownloaderLotes.class.getSimpleName();
 
-    public DownloaderLabores(Context ctx){
+    public DownloaderLotes(Context ctx){
         STATUS = ConectionConfig.STATUS_CREATED;
         this.ctx = ctx;
     }
@@ -60,30 +55,24 @@ public class DownloaderLabores implements Downloader{
         STATUS =ConectionConfig.STATUS_STARTED;
 
         StringRequest sr = new StringRequest(Request.Method.POST,
-                URL_DOWN_LABOR,
+                URL_DOWN_LOTES,
                 response -> {
                     try {
                         JSONArray main = new JSONArray(response);
                         if(main.length()>0){
-                            new LaborDAO(ctx).dropTable();
+                            new LoteDAO(ctx).dropTable();
                             STATUS = ConectionConfig.STATUS_PROCESSING;
                         }
 
-
                         final String SQLINSERT =  "INSERT INTO " +
-                                TAB_LABOR+
+                                TAB_LOTE+
                                 "("+
-                                TAB_LABOR_ID+","+
-                                TAB_LABOR_COD+","+
-                                TAB_LABOR_NAME+","+
-                                TAB_LABOR_ISDIRECT+", "+
-                                TAB_LABOR_THEORICALCOST+", "+
-                                TAB_LABOR_THEORICALHOURS+", "+
-                                TAB_LABOR_ISTAREA+", "+
-                                TAB_LABOR_IDACTIVIDAD+", "+
-                                TAB_LABOR_LISTIDCULTIVO+", "+
-                                TAB_LABOR_MAGNITUD+", "+
-                                TAB_LABOR_STATUS+" "+
+                                TAB_LOTE_ID+","+
+                                TAB_LOTE_IDFUNDO+","+
+                                TAB_LOTE_IDCULTIVO+","+
+                                TAB_LOTE_NUM+", "+
+                                TAB_LOTE_COD+", "+
+                                TAB_LOTE_STATUS+" "+
                                 ")"+
                                 "VALUES ";
                         String insert = SQLINSERT;
@@ -91,31 +80,21 @@ public class DownloaderLabores implements Downloader{
                         for(int i=0;i<main.length();i++){
                             JSONObject data = new JSONObject(main.get(i).toString());
                             int id = data.getInt("id");
-                            int idActividad = data.getInt("idActividad");
-                            String listIdCultivo = data.getString("listIdCultivo");
+                            int idFundo = data.getInt("idFundo");
+                            int idCultivo = data.getInt("idCultivo");
+                            String numero = data.getString("numeroLote");
                             String codigo = data.getString("codigo");
-                            String nombre = data.getString("nombre");
-                            int isDirect = data.getInt("isDirect");
-                            int isTarea = data.getInt("isTarea");
-                            double theoricalHours = data.getDouble("theoricalHours");
-                            double theoricalCost = data.getDouble("theoricalCost");
-                            String magnitud = data.getString("magnitud");
                             int status = 1;
 
-                            Log.d(TAG,"INSERTING :"+id+" "+idActividad+" "+codigo+" "+nombre+" "+status);
+                            Log.d(TAG,"INSERTING :"+id+" "+idFundo+" "+idCultivo+" "+numero+" "+codigo+" "+status);
 
                             insert=insert +
                                     "("+
                                     id+","+
+                                    idFundo+","+
+                                    idCultivo+","+
+                                    "\""+numero+"\""+","+
                                     "\""+codigo+"\""+","+
-                                    "\""+nombre+"\""+","+
-                                    isDirect+","+
-                                    theoricalCost+","+
-                                    theoricalHours+","+
-                                    isTarea+","+
-                                    idActividad+","+
-                                    "\""+listIdCultivo+"\""+","+
-                                    "\""+magnitud+"\""+","+
                                     status+
                                     ")";
 

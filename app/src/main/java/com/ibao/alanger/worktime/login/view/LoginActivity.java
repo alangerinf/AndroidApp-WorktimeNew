@@ -26,7 +26,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenter;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenterImpl;
-import com.ibao.alanger.worktime.views.MainActivity;
+import com.ibao.alanger.worktime.views.main.MainActivity;
 
 
 public class LoginActivity extends Activity implements LoginView{

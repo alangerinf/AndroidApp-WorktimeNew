@@ -132,6 +132,8 @@ public class CreateTareoActivity extends AppCompatActivity {
                     int posLote = spnLote.getSelectedItemPosition();
                     int posCCoste = spnCentroCoste.getSelectedItemPosition();
                     int posFundo = spnFundo.getSelectedItemPosition();
+                    int posCultivo = spnCultivo.getSelectedItemPosition();
+                    Log.d(TAG,posLabor+" "+posLote+" "+posCCoste+" "+posFundo+" "+posCultivo);
                     try {
 
                         int idLabor =  posLabor==-1?0:listLabores.get(posLabor).getId();
@@ -140,8 +142,10 @@ public class CreateTareoActivity extends AppCompatActivity {
                         Log.d(TAG,"idLote:"+idLote);
                         int idCCoste = posCCoste==-1?0:listCentroCoste.get(posCCoste).getId();
                         Log.d(TAG,"idCCoste:"+posCCoste+"    "+idCCoste);
-                        int idFundo = listFundos.get(posFundo).getId();
-                        Log.d(TAG," idFundo:"+idFundo);
+                        int idFundo = posFundo==-1?0:listFundos.get(posFundo).getId();
+                        Log.d(TAG," idFundo:"+((CREATE_TYPE==TYPE_ASISTENCIA)?idFundo:0));
+                        int idCultivo = posCultivo==-1?0:listCultivos.get(posCultivo).getId();
+                        Log.d(TAG," idCultivo:"+idCultivo);
 
                         long id =   new TareoDAO(ctx)
                                         .insert(
@@ -149,11 +153,13 @@ public class CreateTareoActivity extends AppCompatActivity {
                                                 idLote,
                                                 idCCoste,
                                                 idFundo,
+                                                idCultivo,
                                                 CREATE_TYPE==TYPE_ASISTENCIA
                                         );
+
                         goToTareo(id);
                     }catch (Exception e){
-                        Toast.makeText(ctx,TAG+" events"+e.toString(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(ctx,TAG+" events "+e.toString(),Toast.LENGTH_LONG).show();
                         Log.d(TAG,"events "+e.toString());
                     }
 
@@ -196,7 +202,7 @@ public class CreateTareoActivity extends AppCompatActivity {
             try{
                 listEmpresas.get(posEmpresa).getId();
                 listFundos.get(posFundo).getId();
-                listCultivos.get(posCultivo).getId();
+                //listCultivos.get(posCultivo).getId();
                 listActividades.get(posActividad).getId();
                 listLabores.get(posLabor).getId();
                 listCentroCoste.get(posCCoste).getId();
@@ -318,14 +324,17 @@ public class CreateTareoActivity extends AppCompatActivity {
                 switch (selectOnDialog){
 
                     case 0:
+                        setTitle(R.string.createTareoDirecto);
                         CREATE_TYPE=TYPE_DIRECTA;//DIRECTA
                         cargarDirecto();
                         break;
                     case 1:
+                        setTitle(R.string.createTareoIndirecto);
                         CREATE_TYPE=TYPE_INDIRECTA;
                         cargarIndirecto();
                         break;
                     case 2:
+                        setTitle(R.string.createTareoAsistencia);
                         CREATE_TYPE=TYPE_ASISTENCIA;
                         cargarAsistencia();
                         break;
@@ -345,6 +354,7 @@ public class CreateTareoActivity extends AppCompatActivity {
     }
 
     private void cargarDirecto(){
+
         selectorEmpresa.setVisibility(View.VISIBLE);
         selectorFundo.setVisibility(View.VISIBLE);
         selectorCultivo.setVisibility(View.VISIBLE);
@@ -430,7 +440,7 @@ public class CreateTareoActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         spnLote.setAdapter(null);
-                        loadSpnLote();
+                        //loadSpnLote();
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {

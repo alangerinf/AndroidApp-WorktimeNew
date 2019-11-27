@@ -3,26 +3,25 @@ package com.ibao.alanger.worktime.views;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.login.view.LoginActivity;
 import com.ibao.alanger.worktime.database.SharedPreferencesManager;
+import com.ibao.alanger.worktime.views.main.MainActivity;
 import com.ibao.alanger.worktime.models.User;
 
 import static com.ibao.alanger.worktime.database.ConexionSQLiteHelper.VERSION_DB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.DATABASE_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_EMPRESA;
 
 
 public class ActivityPreloader extends Activity {
@@ -32,6 +31,8 @@ public class ActivityPreloader extends Activity {
     static TextView tViewlogo_p1;
     static TextView tViewlogo_p2;
     static Context ctx;
+
+    String TAG = ActivityPreloader.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +101,13 @@ public class ActivityPreloader extends Activity {
             {
                 User user = SharedPreferencesManager.getUser(ctx);
                 if(user!=null){
+                    Log.d(TAG,"go to main");
                     startActivity(new Intent(this, MainActivity.class));
                 }else {
+                    Log.d(TAG,"go to login");
                     startActivity(new Intent(this, LoginActivity.class));
                 }
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             },2000);
     }
 

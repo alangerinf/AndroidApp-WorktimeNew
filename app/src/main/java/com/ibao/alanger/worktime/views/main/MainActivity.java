@@ -1,6 +1,7 @@
-package com.ibao.alanger.worktime.views;
+package com.ibao.alanger.worktime.views.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,7 +12,11 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ibao.alanger.worktime.R;
-import com.ibao.alanger.worktime.database.FakeLoader;
+import com.ibao.alanger.worktime.update.view.ActivityUpdate;
+import com.ibao.alanger.worktime.views.main.fragments.AllTareoFragment;
+import com.ibao.alanger.worktime.views.main.fragments.AsistenciaTareoFragment;
+import com.ibao.alanger.worktime.views.main.fragments.DirectTareoFragment;
+import com.ibao.alanger.worktime.views.main.fragments.IndirectTareoFragment;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -23,7 +28,10 @@ import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MainFragment.OnFragmentInteractionListener{
+        AllTareoFragment.OnFragmentInteractionListener,
+        AsistenciaTareoFragment.OnFragmentInteractionListener,
+        DirectTareoFragment.OnFragmentInteractionListener,
+        IndirectTareoFragment.OnFragmentInteractionListener{
 
 
     private Fragment myFragment = null;
@@ -41,17 +49,17 @@ public class MainActivity extends AppCompatActivity
         ctx = this;
         //FakeLoader
 
-        FakeLoader fl = new FakeLoader(ctx);
+       // FakeLoader fl = new FakeLoader(ctx);
        // fl.loadEmpresas();
         //fl.loadFundos();
         //fl.loadCultivos();
        // fl.loadActividades();
-        fl.loadLotes();
-        fl.loadLabores();
+        //fl.loadLotes();
+        //fl.loadLabores();
         //fl.loadCCoste();
 
 
-        myFragment = new MainFragment();
+        myFragment = new AllTareoFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
 
@@ -63,7 +71,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
+        navigationView.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -89,12 +97,11 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,19 +111,32 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        switch (id){
+            case R.id.nav_all:
+                myFragment = new AllTareoFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
+                break;
+            case R.id.nav_direct:
+                myFragment = new DirectTareoFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
+                break;
+            case R.id.nav_indirect:
+                myFragment = new IndirectTareoFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
+                break;
+            case R.id.nav_asistencia:
+                myFragment = new AsistenciaTareoFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
+                break;
+            case R.id.nav_download:
+                startActivity(new Intent(this, ActivityUpdate.class));
+                break;
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
+
+
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

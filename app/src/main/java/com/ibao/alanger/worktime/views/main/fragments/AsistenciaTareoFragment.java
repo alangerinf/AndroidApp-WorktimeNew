@@ -1,25 +1,26 @@
-package com.ibao.alanger.worktime.views;
+package com.ibao.alanger.worktime.views.main.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
-import com.ibao.alanger.worktime.adapters.RViewAdapterMainListTareo;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.CreateTareoActivity;
+import com.ibao.alanger.worktime.views.main.RViewAdapterMainListTareo;
 import com.ibao.alanger.worktime.views.tareo.TareoActivity;
 
 import java.util.List;
@@ -31,12 +32,12 @@ import static com.ibao.alanger.worktime.views.tareo.TareoActivity.EXTRA_TAREO;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
+ * {@link AsistenciaTareoFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link AsistenciaTareoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class AsistenciaTareoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,27 +53,21 @@ public class MainFragment extends Fragment {
     private static RecyclerView rView;
     private static RViewAdapterMainListTareo adapter;
     private static FloatingActionButton fab;
+    private static TextView tViewTittle;
 
     private static Context ctx;
     private static View root;
 
     private static List<TareoVO> tareoVOList;
 
-    public MainFragment() {
+    public AsistenciaTareoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
+
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
+    public static AsistenciaTareoFragment newInstance(String param1, String param2) {
+        AsistenciaTareoFragment fragment = new AsistenciaTareoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,11 +87,14 @@ public class MainFragment extends Fragment {
     void declaration(){
         ctx = getContext();
 
-        tareoVOList = new TareoDAO(ctx).listAll();
+        tareoVOList = new TareoDAO(ctx).listAsistencia();
+
+        tViewTittle = getView().findViewById(R.id.fmain_tViewTittle);
+        tViewTittle.setText("Listas de Asistencia");
 
         fab = getView().findViewById(R.id.fmain_fab);
         fab.setOnClickListener(v->{
-            Intent i = new Intent(getContext(),CreateTareoActivity.class);
+            Intent i = new Intent(getContext(), CreateTareoActivity.class);
             i.putExtra(EXTRA_CREATE_MODE,CREATE_MODE_MAIN);
             startActivity(i);
             fab.setClickable(false);

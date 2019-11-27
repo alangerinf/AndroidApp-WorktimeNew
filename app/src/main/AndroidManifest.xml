@@ -31,10 +31,7 @@
         <activity
             android:name=".update.view.ActivityUpdate"
             android:theme="@style/AppThemeMaterial.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".views.CreateTareoActivity"
             android:theme="@style/AppThemeMaterial"
@@ -42,15 +39,16 @@
         <activity
             android:name=".views.SelectTareoActivity"
             android:label="@string/select_tareo_activity_name" />
-        <activity android:name=".views.productividad.ProductividadActivity" />
-        <activity android:name=".views.testActivity" />
+        <activity android:name=".views.productividad.ProductividadActivity"
+            android:label="Productividad"
+            />
         <activity
             android:name=".views.tareo.TareoActivity"
             android:label="@string/tareo_labor_name">
 
         </activity>
         <activity
-            android:name=".views.MainActivity"
+            android:name=".views.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
 
@@ -59,8 +57,11 @@
         <activity
             android:name=".views.ActivityPreloader"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.Fullscreen">
-
+            android:uiOptions="splitActionBarWhenNarrow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity

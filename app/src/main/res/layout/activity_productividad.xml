@@ -233,7 +233,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -248,6 +247,7 @@
         app:backgroundTint="@color/colorAccent"
         app:rippleColor="@color/colorPrimaryDark"
         app:srcCompat="@drawable/ic_settings_white_24dp"
+        android:visibility="gone"
         android:scaleX="0.8"
         android:scaleY="0.8"
         tools:ignore="MissingConstraints" />
