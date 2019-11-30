@@ -132,6 +132,10 @@ public class ProductividadActivity extends AppCompatActivity {
 
                 adapter.notifyDataSetChanged();
 
+                TextView tViewSinItems = findViewById(R.id.tViewSin);
+                tViewSinItems.setVisibility(temp.getProductividadVOList().size()>0?View.INVISIBLE:View.VISIBLE);
+
+
 
 
             }
@@ -225,7 +229,7 @@ public class ProductividadActivity extends AppCompatActivity {
         prodadd_btnSave.setOnClickListener(v -> {
 
             if(eTextCantidad.getText().toString().equals("0")){
-                Toast.makeText(ctx,"No puede agregar una productividad 0",Toast.LENGTH_LONG).show();
+                Toast.makeText(ctx,"Ingrese un valor válido",Toast.LENGTH_LONG).show();
             }else {
                 String numero = eTextCantidad.getText().toString();
                 if(numero.charAt(numero.length()-1)=='.'){
@@ -239,7 +243,7 @@ public class ProductividadActivity extends AppCompatActivity {
                             pro.setDateTime(getHour());
                             pro.setIdTareoDetalle( TAREODETALLEVO.getId());
                             model.addProductividad(pro);
-                            Toast.makeText(ctx,"Se agregaron "+eTextCantidad.getText().toString()+"",Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(ctx,"Se agregaron "+eTextCantidad.getText().toString()+"",Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(ctx,"error al insertar",Toast.LENGTH_LONG).show();
                         }
@@ -313,7 +317,7 @@ public class ProductividadActivity extends AppCompatActivity {
 
             new ProductividadDAO(ctx).deleteById(item.getId());
 
-            Snackbar snackbar = Snackbar.make(root,"Se elimino "+item.getValue()+" de productividad",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se eliminó una productividad",Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", v -> {
                 new ProductividadDAO(ctx).insert(item);

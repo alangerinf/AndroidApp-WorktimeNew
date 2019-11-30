@@ -137,6 +137,18 @@ public class TareoActivity extends AppCompatActivity {
 
     }
 
+    private void marcarSalida(){
+        for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
+            if(ta.getTimeEnd().isEmpty()){
+                Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
+                new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
+            }
+            new TareoDAO(ctx).updateFinishHourById(model.getTareoVO().getValue().getId(),Utilities.getDateTime());
+            onBackPressed();
+
+        }
+    }
+
     int selectOnDialog=0;
     private void showOptions(){
 
@@ -144,32 +156,52 @@ public class TareoActivity extends AppCompatActivity {
         items[0] = getString(R.string.anhadir_productividad_grupal);
         items[1] = getString(R.string.finalizar_labor);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-        builder.setTitle(getString(R.string.seleccione_opcion));
-        builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
-        builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
-            switch (selectOnDialog){
-                case 0:
-                    break;
-                case 1:
-                    for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
-                     if(ta.getTimeEnd().isEmpty()){
-                         Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
-                         new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
-                     }
-                     new TareoDAO(ctx).updateFinishHourById(model.getTareoVO().getValue().getId(),Utilities.getDateTime());
-                     onBackPressed();
+        if(model.getTareoVO().getValue().isAsistencia()){
+            items = new String[1];
+            items[0] = getString(R.string.finalizar_labor);
 
-                    }
-                    break;
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            builder.setTitle(getString(R.string.seleccione_opcion));
+            builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
+            builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
+                switch (selectOnDialog){
+                    case 0:
+                        marcarSalida();
+                        break;
 
-            }
-            enableInputs();
-        });
-        builder.setNegativeButton(R.string.cancelar, (dialog, which) -> enableInputs());
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.show();
+                }
+                enableInputs();
+            });
+            builder.setNegativeButton(R.string.cancelar, (dialog, which) -> enableInputs());
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+
+
+        }else {
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+            builder.setTitle(getString(R.string.seleccione_opcion));
+            builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
+            builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
+                switch (selectOnDialog){
+                    case 0:
+                        break;
+                    case 1:
+                        marcarSalida();
+                        break;
+
+                }
+                enableInputs();
+            });
+            builder.setNegativeButton(R.string.cancelar, (dialog, which) -> enableInputs());
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+
 
     }
 
@@ -358,7 +390,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se borró la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se borró un Trabajador de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override

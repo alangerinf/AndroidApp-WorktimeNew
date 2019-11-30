@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
@@ -103,6 +104,10 @@ public class ListPersonalAddedFragment extends Fragment {
                 adapter = new RViewAdapterTransferListTrabajadores(getContext(),tareoDetalleVOList,MY_EXTRA_MODE);
                 new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(flpa_rView);
                 flpa_rView.setAdapter(adapter);
+
+
+                TextView tViewSinItems = getView().findViewById(R.id.tViewSin);
+                tViewSinItems.setVisibility(tareoDetalleVOList.size()>0?View.INVISIBLE:View.VISIBLE);
             }
         });
 
@@ -158,7 +163,7 @@ public class ListPersonalAddedFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
             final int index = viewHolder.getAdapterPosition();//esto tiene q ir arriba porq la programacion reaccitva elimina de inmediato en el recycler view sin actualizar
             final TareoDetalleVO item = PageViewModel.removeTrabajador(viewHolder.getAdapterPosition());
-            Snackbar snackbar = Snackbar.make(root,"Se Borró una Labor"+index,Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador",Snackbar.LENGTH_LONG);
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

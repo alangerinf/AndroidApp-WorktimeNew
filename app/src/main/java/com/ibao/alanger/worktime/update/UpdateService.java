@@ -265,7 +265,7 @@ public class UpdateService extends IntentService {
                     }
 
                     if(downName.equals(DownloaderCentroCostes.class.getSimpleName())){
-                        INPROGESS_NAME="Centros de Coste";
+                        INPROGESS_NAME="Centro de Costos";
                         continue;
                     }
 
