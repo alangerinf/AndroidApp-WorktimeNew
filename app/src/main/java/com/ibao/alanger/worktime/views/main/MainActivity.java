@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity
         //fl.loadLabores();
         //fl.loadCCoste();
 
-
         myFragment = new AllTareoFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_main, myFragment).commit();
@@ -74,15 +73,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,15 +122,22 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, ActivityUpdate.class));
                 break;
 
-
         }
-
-
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            //super.onBackPressed();
+            moveTaskToBack(true);
+        }
     }
 
     @Override

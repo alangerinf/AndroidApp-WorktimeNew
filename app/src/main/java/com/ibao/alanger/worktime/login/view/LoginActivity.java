@@ -82,6 +82,9 @@ public class LoginActivity extends Activity implements LoginView{
 
 
         defaultAttributes();
+
+        eTextUser.setText("46671192");
+        eTextPassword.setText("123456");
     }
 
     void defaultAttributes(){

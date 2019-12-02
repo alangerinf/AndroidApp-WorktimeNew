@@ -54,6 +54,7 @@ public class ActivityUpdate extends AppCompatActivity {
                                 porcentaje.setText(porActual);
                                 if(porActual.equals("100%")){
                                     openMain();
+                                    finish();
                                 }
                             }
                             if(!mensaje.getText().toString().equals(menActual)){
