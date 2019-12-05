@@ -138,6 +138,10 @@ public class TareoActivity extends AppCompatActivity {
     }
 
     private void marcarSalida(){
+
+        if(model.getTareoVO().getValue().getTareoDetalleVOList().size()==0){
+            Toast.makeText(ctx,"Aun no se ingresan Trabajadores",Toast.LENGTH_SHORT).show();
+        }
         for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
             if(ta.getTimeEnd().isEmpty()){
                 Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
@@ -145,7 +149,6 @@ public class TareoActivity extends AppCompatActivity {
             }
             new TareoDAO(ctx).updateFinishHourById(model.getTareoVO().getValue().getId(),Utilities.getDateTime());
             onBackPressed();
-
         }
     }
 
@@ -180,7 +183,6 @@ public class TareoActivity extends AppCompatActivity {
 
         }else {
 
-
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             builder.setTitle(getString(R.string.seleccione_opcion));
             builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
@@ -191,7 +193,6 @@ public class TareoActivity extends AppCompatActivity {
                     case 1:
                         marcarSalida();
                         break;
-
                 }
                 enableInputs();
             });
@@ -385,7 +386,7 @@ public class TareoActivity extends AppCompatActivity {
 
 
             model.deleteTareoDetalle(item);
-            new TareoDAO(ctx).deleteById(item.getId());
+            new TareoDetalleDAO(ctx).deleteById(item.getId());
 
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
@@ -422,7 +423,7 @@ public class TareoActivity extends AppCompatActivity {
 //            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
 
             model.deleteTareoDetalle(item);
-            new TareoDAO(ctx).deleteById(item.getId());
+            new TareoDetalleDAO(ctx).deleteById(item.getId());
 
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();

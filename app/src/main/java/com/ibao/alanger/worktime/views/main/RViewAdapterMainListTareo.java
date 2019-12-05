@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 
@@ -67,6 +68,12 @@ public class RViewAdapterMainListTareo
             }
         }
 
+        if(item.getDateTimeEnd()==null||item.getDateTimeEnd().isEmpty()){
+            holder.fmain_item_fabCheck.hide();
+        }else {
+            holder.fmain_item_fabCheck.show();
+        }
+
     }
 
 
@@ -98,6 +105,7 @@ public class RViewAdapterMainListTareo
         TextView fmain_item_costCenter;
         TextView fmain_item_nTrabajadores;
         TextView fmain_item_nHoras;
+        FloatingActionButton fmain_item_fabCheck;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -109,6 +117,7 @@ public class RViewAdapterMainListTareo
             fmain_item_costCenter = itemView.findViewById(R.id.fmain_item_costCenter);
             fmain_item_nTrabajadores = itemView.findViewById(R.id.fmain_item_nTrabajadores);
             fmain_item_nHoras = itemView.findViewById(R.id.fmain_item_nHoras);
+            fmain_item_fabCheck = itemView.findViewById(R.id.fmain_item_fabCheck);
 
         }
     }

@@ -26,17 +26,13 @@
         >
         <menu>
             <item
-                android:id="@+id/nav_sincronize_asistencia"
-                android:icon="@drawable/ic_sync_black_24dp"
-                android:title= "Sincronizar asistencia" />
-            <item
                 android:id="@+id/nav_download"
                 android:icon="@drawable/ic_system_update_black_24dp"
                 android:title= "Descargar datos" />
             <item
-                android:id="@+id/nav_update_finish"
+                android:id="@+id/nav_update"
                 android:icon="@drawable/ic_backup_black_24dp"
-                android:title="Sincronizar finalizados" />
+                android:title="Subir data" />
         </menu>
     </item>
 

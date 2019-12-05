@@ -33,6 +33,11 @@
             android:theme="@style/AppThemeMaterial.NoActionBar">
 
         </activity>
+
+        <activity
+            android:name=".upload.ActivityUpload"
+            android:theme="@style/AppThemeMaterial.NoActionBar" />
+
         <activity android:name=".views.CreateTareoActivity"
             android:theme="@style/AppThemeMaterial"
             />
@@ -80,6 +85,8 @@
             android:name=".update.UpdateService"
             android:enabled="true"
             android:exported="true" />
+
+
 
     </application>
 

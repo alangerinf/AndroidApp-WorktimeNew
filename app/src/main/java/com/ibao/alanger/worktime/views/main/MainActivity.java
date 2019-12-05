@@ -2,6 +2,7 @@ package com.ibao.alanger.worktime.views.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,7 +13,11 @@ import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.SharedPreferencesManager;
+import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.update.view.ActivityUpdate;
+import com.ibao.alanger.worktime.upload.ActivityUpload;
+import com.ibao.alanger.worktime.views.ActivityPreloader;
 import com.ibao.alanger.worktime.views.main.fragments.AllTareoFragment;
 import com.ibao.alanger.worktime.views.main.fragments.AsistenciaTareoFragment;
 import com.ibao.alanger.worktime.views.main.fragments.DirectTareoFragment;
@@ -25,6 +30,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -38,7 +44,6 @@ public class MainActivity extends AppCompatActivity
     private Context ctx;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,13 +52,14 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         ctx = this;
+
         //FakeLoader
 
-       // FakeLoader fl = new FakeLoader(ctx);
-       // fl.loadEmpresas();
-        //fl.loadFundos();
+        // FakeLoader fl = new FakeLoader(ctx);
+        // fl.loadEmpresas();
+        // fl.loadFundos();
         //fl.loadCultivos();
-       // fl.loadActividades();
+        // fl.loadActividades();
         //fl.loadLotes();
         //fl.loadLabores();
         //fl.loadCCoste();
@@ -89,6 +95,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
+            if(new TareoDAO(ctx).listAll_UPLOAD().size()>0) {
+                Toast.makeText(ctx,"Aun no sincroniza sus labores",Toast.LENGTH_SHORT).show();
+            }else{
+                SharedPreferencesManager.deleteUser(ctx);
+                startActivity(new Intent(this, ActivityPreloader.class));
+            }
 
             return true;
         }
@@ -120,6 +132,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_download:
                 startActivity(new Intent(this, ActivityUpdate.class));
+                break;
+
+            case R.id.nav_update:
+                startActivity(new Intent(this, ActivityUpload.class));
                 break;
 
         }

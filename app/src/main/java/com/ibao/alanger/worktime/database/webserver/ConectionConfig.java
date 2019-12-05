@@ -15,6 +15,8 @@ public class ConectionConfig {
     public static final String URL_DOWN_LOTES =ROOT+"getLotes.php";
 
 
+    public static final String URL_UP_TAREO =ROOT+"insertTareos.php";
+
     public static final int STATUS_CREATED = 0;
     public static final int STATUS_STARTED = 1;
     public static final int STATUS_PROCESSING = 2;

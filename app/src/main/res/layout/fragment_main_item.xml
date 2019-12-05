@@ -170,14 +170,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fmaini_fab"
+        android:id="@+id/fmain_item_fabCheck"
         app:fabSize="mini"
         style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:clickable="false"
+        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/margin_min"
-        app:srcCompat="@drawable/ic_backup_white_24dp"
-        />
+        app:srcCompat="@drawable/ic_check_black_24dp"
+    />
 
 </androidx.cardview.widget.CardView>

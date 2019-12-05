@@ -161,12 +161,42 @@ public class TareoDAO {
         return temp;
     }
 
-    public int deleteById(int id){
+    public long deleteLogicById(int id){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
         SQLiteDatabase db = c.getReadableDatabase();
         String[] args = {
                 String.valueOf(id)
+        };
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREO_ISACTIVE,0);
+        long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
+        db.close();
+        c.close();
+        return temp;
+    }
+
+    public long unDeleteLogicById(int id){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        String[] args = {
+                String.valueOf(id)
+        };
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREO_ISACTIVE,1);
+        long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
+        db.close();
+        c.close();
+        return temp;
+    }
+
+    public int deleteById(int id){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        String[] args = {
+                String.valueOf(id),
         };
         int i =    db.delete(TAB_TAREO,TAB_TAREO_ID+"=?",args);
         new TareoDetalleDAO(ctx).deleteByIdTareo(id);
@@ -175,6 +205,36 @@ public class TareoDAO {
         return i;
     }
 
+
+    public List<TareoVO> listAll_UPLOAD(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                    _SELECT+
+                            "*"+
+                            _FROM+
+                            TAB_TAREO
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listAll "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listAll "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
 
     public List<TareoVO> listAll(){
         ConexionSQLiteHelper c;
@@ -185,8 +245,10 @@ public class TareoDAO {
             Cursor cursor= db.rawQuery(
                     _SELECT+
                             "*"+
-                            _FROM+
-                            TAB_TAREO,
+                        _FROM+
+                            TAB_TAREO+
+                        _WHERE+
+                            TAB_TAREO_ISACTIVE+"=1",
                     null
             );
             Log.d(TAG,"cantidad de tareos "+cursor.getCount());
@@ -214,10 +276,12 @@ public class TareoDAO {
             Cursor cursor= db.rawQuery(
                     _SELECT+
                             "*"+
-                            _FROM+
+                        _FROM+
                             TAB_TAREO+
-                            _WHERE+
-                            TAB_TAREO_ISASISTENCIA+"=1"
+                        _WHERE+
+                            TAB_TAREO_ISASISTENCIA+"=1"+
+                            _AND+
+                            TAB_TAREO_ISACTIVE+"=1"
                     ,
                     null
             );
@@ -251,6 +315,8 @@ public class TareoDAO {
                             TAB_LABOR+" as L"+
                             _WHERE+
                             "T."+TAB_TAREO_ISASISTENCIA+"= 0"+
+                            _AND+
+                            "T."+TAB_TAREO_ISACTIVE+"=1"+
                             _AND+
                             "T."+TAB_TAREO_IDLABOR+" = "+"L."+TAB_LABOR_ID+
                             _AND+
@@ -289,6 +355,8 @@ public class TareoDAO {
                             _WHERE+
                             "T."+TAB_TAREO_ISASISTENCIA+"= 0"+
                             _AND+
+                            "T."+TAB_TAREO_ISACTIVE+"=1"+
+                            _AND+
                             "T."+TAB_TAREO_IDLABOR+" = "+"L."+TAB_LABOR_ID+
                             _AND+
                             "L."+TAB_LABOR_ISDIRECT+" = 0"
@@ -310,6 +378,8 @@ public class TareoDAO {
         }
         return tareoVOS;
     }
+
+
 
     private TareoVO getAtributtes(Cursor cursor){
          TareoVO tareoVO = new TareoVO();

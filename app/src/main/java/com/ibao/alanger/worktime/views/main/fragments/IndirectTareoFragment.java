@@ -171,7 +171,7 @@ public class IndirectTareoFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             final TareoVO item = tareoVOList.remove(viewHolder.getAdapterPosition());
-            new TareoDAO(ctx).deleteById(item.getId());
+            new TareoDAO(ctx).deleteLogicById(item.getId());
             final int index = viewHolder.getAdapterPosition();
             adapter.notifyDataSetChanged();
 
@@ -179,7 +179,7 @@ public class IndirectTareoFragment extends Fragment {
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new TareoDAO(ctx).insert(item);
+                    new TareoDAO(ctx).unDeleteLogicById(item.getId());
                     tareoVOList.add(index,item);
                     adapter.notifyDataSetChanged();
                 }

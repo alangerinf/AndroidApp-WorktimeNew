@@ -24,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.webserver.write.UploadTareo;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenter;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenterImpl;
 import com.ibao.alanger.worktime.views.main.MainActivity;
@@ -170,8 +171,7 @@ public class LoginActivity extends Activity implements LoginView{
 
     @Override
     public void goHome() {
-        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-
+        Intent intent = new Intent(getBaseContext(), UploadTareo.class);
         View viewTemp = findViewById(R.id.logo);
         ActivityOptions options = (ActivityOptions) ActivityOptions.makeSceneTransitionAnimation
                 (this,
