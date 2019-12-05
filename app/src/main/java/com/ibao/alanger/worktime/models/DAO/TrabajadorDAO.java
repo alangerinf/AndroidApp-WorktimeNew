@@ -19,8 +19,6 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
-import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_STATUS;
-import static com.ibao.alanger.worktime.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -51,21 +49,20 @@ public class TrabajadorDAO {
     }
 
 
-    public boolean insert(String dni,String cod, String name,boolean status){
+    public boolean insert(String dni,String cod, String name){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();
         ContentValues values = new ContentValues();
             values.put(TAB_TRABAJADOR_DNI,dni);
             values.put(TAB_TRABAJADOR_COD,cod);
             values.put(TAB_TRABAJADOR_NAME,name);
-            values.put(TAB_TRABAJADOR_STATUS,status);
         long temp = db.insert(TAB_TRABAJADOR,null,values);
         db.close();
         conn.close();
         return temp > 0;
     }
 
-    public TrabajadorVO selectByDNI(int dni) {
+    public TrabajadorVO selectByDNI(String dni) {
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = c.getReadableDatabase();
@@ -75,15 +72,15 @@ public class TrabajadorDAO {
                     _SELECT +
                             "*"+
                         _FROM+
-                            TAB_TRABAJADOR+" as T"+
+                            TAB_TRABAJADOR+
                         _WHERE+
-                            "T."+TAB_TRABAJADOR_DNI+"="+ dni+
-                            _AND+
-                            "T."+TAB_TRABAJADOR_STATUS+"=1"
+                            TAB_TRABAJADOR_DNI+"="+ dni
                     ,null);
             if(cursor.getCount()>0){
                 cursor.moveToFirst();
                 temp = getAtributtes(cursor);
+            }else {
+                Log.d(TAG,"selectByDNI "+dni+ " no encontrado");
             }
             cursor.close();
         }catch (Exception e){
@@ -105,8 +102,6 @@ public class TrabajadorDAO {
                             "*"+
                         _FROM+
                             TAB_TRABAJADOR+" as T"+
-                        _WHERE+
-                            "T."+TAB_TRABAJADOR_STATUS+ " = "+ 1 +
                         _ORDERBY+
                             "T."+TAB_TRABAJADOR_NAME+
                             _STRASC
@@ -138,15 +133,15 @@ public class TrabajadorDAO {
                 case TAB_TRABAJADOR_NAME:
                     trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(name)));
                     break;
-                case TAB_TRABAJADOR_STATUS:
-                    trabajadorVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);
-                    break;
                 default:
                     Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();
                     Log.d(TAG," getAtributes error no se encuentra campo "+name);
                     break;
             }
+
         }
+            Log.d(TAG,"sleccionado: "+trabajadorVO.getCod()+" "+trabajadorVO.getDni()+" "+trabajadorVO.getName());
+
         return trabajadorVO;
     }
 

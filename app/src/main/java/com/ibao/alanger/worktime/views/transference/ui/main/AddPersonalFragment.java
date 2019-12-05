@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.DAO.TrabajadorDAO;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
@@ -205,26 +206,31 @@ public class AddPersonalFragment extends Fragment {
 
                     Log.d(TAG, MY_EXTRA_MODE);
 
+                    //buscar si existe
+
+                    TrabajadorVO trabajadorVO = new TrabajadorDAO(getActivity()).selectByDNI(dni);
+                    if(trabajadorVO==null){
+                        trabajadorVO = new TrabajadorVO();
+                        trabajadorVO.setDni(dni);
+                        trabajadorVO.setName("Sin Nombre");;
+                    }
+                    tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+
+                    PageViewModel.addTrabajador(tareoDetalleVO);
+
 
                     if (MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR)){
-                        Snackbar snackbar= Snackbar.make(root,"Entrada Trabajador "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar= Snackbar.make(root,"Entrada "+trabajadorVO.getName()+" "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                         snackbar.show();
                         tareoDetalleVO.setTimeStart(hora);
                     }
                     if(MY_EXTRA_MODE.equals(TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR)){
-                        Snackbar snackbar= Snackbar.make(root,"Salida Trabajador "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
+                        Snackbar snackbar= Snackbar.make(root,"Salida Trabajador "+trabajadorVO.getName()+" "+dni+" "+formatter.format(date),Snackbar.LENGTH_SHORT);
                         snackbar.getView().setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                         snackbar.show();
                         tareoDetalleVO.setTimeEnd(hora);
                     }
-                    //buscar si existe
-
-                    TrabajadorVO trabajadorVO = new TrabajadorVO();
-                    trabajadorVO.setDni(dni);
-                    tareoDetalleVO.setTrabajadorVO(trabajadorVO);
-
-                    PageViewModel.addTrabajador(tareoDetalleVO);
 
                     restart();
                 }else{
@@ -236,12 +242,6 @@ public class AddPersonalFragment extends Fragment {
                 snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red_pastel));
                 snackbar.show();
             }
-
-
-
-
-
-
 
         });
     }
@@ -394,7 +394,6 @@ public class AddPersonalFragment extends Fragment {
         }catch (Exception e){
             Log.d(TAG,e.toString());
         }
-
 
         if(hour != 0 && minute != 0 ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

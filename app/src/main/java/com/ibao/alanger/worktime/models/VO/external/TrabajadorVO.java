@@ -7,13 +7,11 @@ public class TrabajadorVO implements Serializable {
     private String dni;
     private String cod;
     private String name;
-    private boolean status;
 
     public TrabajadorVO(){
         this.cod="";
         this.dni="";
         this.name="";
-        this.status=true;
     }
 
 
@@ -41,11 +39,4 @@ public class TrabajadorVO implements Serializable {
         this.name = name;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 }

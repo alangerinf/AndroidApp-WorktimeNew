@@ -233,14 +233,15 @@ public class TareoDetalleDAO {
                    tareoDetalleVO.setProductividad(cursor.getFloat(cursor.getColumnIndex(name)));
                    break;
                case TAB_TAREODETALLE_DNI:
-
-                   TrabajadorVO trabajadorVO = new TrabajadorDAO(ctx).selectByDNI(cursor.getColumnIndex(name));
+                   TrabajadorVO trabajadorVO = new TrabajadorDAO(ctx).selectByDNI(cursor.getString(cursor.getColumnIndex(name)));
                    if(trabajadorVO==null){
                        trabajadorVO = new TrabajadorVO();
                        trabajadorVO.setDni(cursor.getString(cursor.getColumnIndex(name)));
-                       trabajadorVO.setName("Sin Nombre");
-                       tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+                       trabajadorVO.setName("Sin Nombre");;
+                   }else{
+                       Log.d(TAG,"seleccionado: "+trabajadorVO.getDni()+" "+trabajadorVO.getName());
                    }
+                   tareoDetalleVO.setTrabajadorVO(trabajadorVO);
                    break;
                case TAB_TAREODETALLE_DATESTART:
                    tareoDetalleVO.setTimeStart(cursor.getString(cursor.getColumnIndex(name)));

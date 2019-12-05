@@ -13,6 +13,7 @@ public class ConectionConfig {
     public static final String URL_DOWN_FUNDOS =ROOT+"getFundos.php";
     public static final String URL_DOWN_LABOR =ROOT+"getLabores.php";
     public static final String URL_DOWN_LOTES =ROOT+"getLotes.php";
+    public static final String URL_DOWN_TRABAJADORES =ROOT+"getTrabajadores.php";
 
 
     public static final String URL_UP_TAREO =ROOT+"insertTareos.php";

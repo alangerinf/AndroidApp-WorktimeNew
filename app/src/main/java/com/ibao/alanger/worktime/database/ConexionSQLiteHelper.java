@@ -8,7 +8,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.*;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper{
 
-    public static int VERSION_DB = 4;
+    public static int VERSION_DB = 5;
 
     public ConexionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

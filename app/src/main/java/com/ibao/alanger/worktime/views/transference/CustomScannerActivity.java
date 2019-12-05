@@ -26,6 +26,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.models.DAO.TrabajadorDAO;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
@@ -236,24 +237,31 @@ public class CustomScannerActivity extends AppCompatActivity implements
                         return;
                     } else {
                         TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
+
+
+                        TrabajadorVO trabajadorVO = new TrabajadorDAO(ctx).selectByDNI(DNI);
+                        if(trabajadorVO==null){
+                            trabajadorVO = new TrabajadorVO();
+                            trabajadorVO.setDni(DNI);
+                            trabajadorVO.setName("Sin Nombre");;
+                        }
+                        tareoDetalleVO.setTrabajadorVO(trabajadorVO);
+
+                        PageViewModel.addTrabajador(tareoDetalleVO);
+
                         String mensaje = "ERROR";
                         switch (MY_EXTRA_MODE) {
 
                             case TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR:
                                 tareoDetalleVO.setTimeStart(formatter.format(date));
-                                mensaje = "Entrada Trabajador " + DNI + " " + formatter.format(date);
+                                mensaje = "Entrada "+trabajadorVO.getName()+ " " + DNI + " " + formatter.format(date);
                                 break;
 
                             case TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR:
                                 tareoDetalleVO.setTimeEnd(formatter.format(date));
-                                mensaje = "Salida Trabajador " + DNI + " " + formatter.format(date);
+                                mensaje = "Salida "+trabajadorVO.getName()+ " " + DNI + " " + formatter.format(date);
                                 break;
                         }
-                        TrabajadorVO trabajadorVO = new TrabajadorVO();
-                        trabajadorVO.setDni(DNI);
-                        tareoDetalleVO.setTrabajadorVO(trabajadorVO);
-
-                        PageViewModel.addTrabajador(tareoDetalleVO);
 
                         barcodeScannerView.setStatusText(result.getText());
 

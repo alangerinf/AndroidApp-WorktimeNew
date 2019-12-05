@@ -200,9 +200,7 @@ public class DataBaseDesign {
                                 TAB_TRABAJADOR_COD              = "cod",
                                 TAB_TRABAJADOR_COD_TYPE         = TYPE_VARCHAR,
                                 TAB_TRABAJADOR_NAME             = "name",
-                                TAB_TRABAJADOR_NAME_TYPE        = TYPE_VARCHAR,
-                                TAB_TRABAJADOR_STATUS           = "status",
-                                TAB_TRABAJADOR_STATUS_TYPE      = TYPE_BOOLEAN;
+                                TAB_TRABAJADOR_NAME_TYPE        = TYPE_VARCHAR;
 
     public static final String CREATETABLE_TRABAJADOR =
             TABLE_CREATE+TAB_TRABAJADOR+"("+
@@ -211,8 +209,6 @@ public class DataBaseDesign {
                     TAB_TRABAJADOR_COD + TAB_TRABAJADOR_COD_TYPE + N_NULL+
                     AND +
                     TAB_TRABAJADOR_NAME + TAB_TRABAJADOR_NAME_TYPE + N_NULL+
-                    AND +
-                    TAB_TRABAJADOR_STATUS + TAB_TRABAJADOR_STATUS_TYPE + N_NULL+
                     ")";
 
     public static final String  TAB_LABOR                   = "Labor",
