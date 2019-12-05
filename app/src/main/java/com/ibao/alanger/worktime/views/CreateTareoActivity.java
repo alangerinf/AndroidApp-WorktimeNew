@@ -32,13 +32,13 @@ import com.ibao.alanger.worktime.models.VO.external.EmpresaVO;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 import com.ibao.alanger.worktime.models.VO.external.LaborVO;
 import com.ibao.alanger.worktime.models.VO.external.LoteVO;
+import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 import com.ibao.alanger.worktime.views.tareo.TareoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.ibao.alanger.worktime.views.tareo.TareoActivity.EXTRA_TAREO;
 
 public class CreateTareoActivity extends AppCompatActivity {
 
@@ -48,10 +48,15 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     private static String MY_CREATE_MODE = "";
 
+    public static TareoVO MY_TAREO_EDIT = null;
 
-    public final static String EXTRA_CREATE_MODE= "extra_mode";
+
+    public final static String EXTRA_MODE = "extra_mode";
+    public final static String EXTRA_TAREO = "extra_tareo";
     //modo de creacion segun quien lo llame
-    public final static String CREATE_MODE_MAIN= "main";
+    public final static String MODE_MAIN = "main";
+    public final static String MODE_EDIT = "edit";
+
 
 
     private static MaterialButton btnDone;
@@ -104,6 +109,9 @@ public class CreateTareoActivity extends AppCompatActivity {
     private static final int TYPE_INDIRECTA = 2 ;
     private static final int TYPE_ASISTENCIA = 3 ;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +125,17 @@ public class CreateTareoActivity extends AppCompatActivity {
 
         declaration();
         events();
-        openDialogSelectActivitdadType();
+        if(MY_CREATE_MODE.equals(MODE_MAIN)){
+            openDialogSelectActivitdadType();
+        }else {
+            if(MY_TAREO_EDIT.isAsistencia()){
+                cargarAsistencia(MY_TAREO_EDIT);
+            }else if(MY_TAREO_EDIT.getLaborVO().isDirecto() ) {
+                 cargarDirecto(MY_TAREO_EDIT);
+            }else{
+                cargarIndirecto(MY_TAREO_EDIT);
+            }
+        }
 
     }
 
@@ -127,7 +145,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         btnDone.setOnClickListener(v->{
             if(verify()){
                 disableInputs();
-                if(MY_CREATE_MODE.equals(CREATE_MODE_MAIN)){ //si fue el modo normal de creación
+                if(MY_CREATE_MODE.equals(MODE_MAIN)){ //si fue el modo normal de creación
                     int posLabor = spnLabor.getSelectedItemPosition();
                     int posLote = spnLote.getSelectedItemPosition();
                     int posCCoste = spnCentroCoste.getSelectedItemPosition();
@@ -248,7 +266,6 @@ public class CreateTareoActivity extends AppCompatActivity {
     }
 
     void disableInputs(){
-
         disable(spnEmpresa);
         disable(spnFundo);
         disable(spnCultivo);
@@ -278,7 +295,6 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorLote = findViewById(R.id.ctareo_lLayoutLote);
         selectorCentroCoste = findViewById(R.id.ctareo_lLayoutCentroCosto);
 
-
         spnEmpresa = findViewById(R.id.ctareo_spnEmpresa);
         spnFundo = findViewById(R.id.ctareo_spnFundo);
         spnCultivo = findViewById(R.id.ctareo_spnCultivo);
@@ -294,52 +310,41 @@ public class CreateTareoActivity extends AppCompatActivity {
     void getBundle(){
         Bundle b = getIntent().getExtras();
         assert b != null;
-        MY_CREATE_MODE = b.getString(EXTRA_CREATE_MODE);
-
+        MY_CREATE_MODE = b.getString(EXTRA_MODE);
+        if(MY_CREATE_MODE.equals(MODE_EDIT)){
+            MY_TAREO_EDIT = (TareoVO) b.getSerializable(EXTRA_TAREO);
+        }
     }
-
-
 
     private int selectOnDialog =0; // used in openDialogSelectActivitdadType()
     protected void openDialogSelectActivitdadType(){
 
         String[] items = new String[3];
-        items[0] = getString(R.string.directo);
-        items[1] = getString(R.string.indirecto);
-        items[2] = getString(R.string.asistencia);
+            items[0] = getString(R.string.directo);
+            items[1] = getString(R.string.indirecto);
+            items[2] = getString(R.string.asistencia);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
         builder.setTitle(R.string.seleccione_tipo_Actividad);
 
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                selectOnDialog = which;
-            }
-        });
-        builder.setPositiveButton(R.string.seleccionar, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                switch (selectOnDialog){
-
-                    case 0:
-                        setTitle(R.string.createTareoDirecto);
-                        CREATE_TYPE=TYPE_DIRECTA;//DIRECTA
-                        cargarDirecto();
-                        break;
-                    case 1:
-                        setTitle(R.string.createTareoIndirecto);
-                        CREATE_TYPE=TYPE_INDIRECTA;
-                        cargarIndirecto();
-                        break;
-                    case 2:
-                        setTitle(R.string.createTareoAsistencia);
-                        CREATE_TYPE=TYPE_ASISTENCIA;
-                        cargarAsistencia();
-                        break;
-                }
-
+        builder.setSingleChoiceItems(items, 0, (dialog, which) -> selectOnDialog = which);
+        builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
+            switch (selectOnDialog){
+                case 0:
+                    setTitle(R.string.createTareoDirecto);
+                    CREATE_TYPE=TYPE_DIRECTA;//DIRECTA
+                    cargarDirecto();
+                    break;
+                case 1:
+                    setTitle(R.string.createTareoIndirecto);
+                    CREATE_TYPE=TYPE_INDIRECTA;
+                    cargarIndirecto();
+                    break;
+                case 2:
+                    setTitle(R.string.createTareoAsistencia);
+                    CREATE_TYPE=TYPE_ASISTENCIA;
+                    cargarAsistencia();
+                    break;
             }
         });
         builder.setNegativeButton(R.string.cancelar,  new DialogInterface.OnClickListener() {
@@ -353,6 +358,51 @@ public class CreateTareoActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void cargarDirecto(TareoVO mytareo){
+        cargarDirecto();
+        for(int i=0;i<listEmpresas.size();i++){
+            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
+                spnEmpresa.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listCultivos.size();i++){
+            if(listCultivos.get(i).getId() == mytareo.getCultivoVO().getId()){
+                spnCultivo.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listActividades.size();i++){
+            if(listActividades.get(i).getId() == mytareo.getLaborVO().getIdActividad()){
+                spnActividad.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listFundos.size();i++){
+            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
+                spnFundo.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listLotes.size();i++){
+            if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
+                spnLote.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listLabores.size();i++){
+            if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
+                spnLabor.setSelection(i);
+                break;
+            }
+        }
+    }
+
     private void cargarDirecto(){
 
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -361,17 +411,16 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorActividad.setVisibility(View.VISIBLE);
         selectorLabor.setVisibility(View.VISIBLE);
         selectorLote.setVisibility(View.VISIBLE);
+
         selectorCentroCoste.setVisibility(View.GONE);
 
         loadSpnEmpresas();
         loadSpnCultivos();
         loadSpnActividades();
 
-
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spnLote.setAdapter(null);
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
                 spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -402,6 +451,7 @@ public class CreateTareoActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
         spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -414,19 +464,66 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
     }
 
+    private void cargarIndirecto(TareoVO mytareo){
+        cargarIndirecto();
+
+        for(int i=0;i<listEmpresas.size();i++){
+            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
+                spnEmpresa.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listCultivos.size();i++){
+            if(listCultivos.get(i).getId() == mytareo.getCultivoVO().getId()){
+                spnCultivo.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listActividades.size();i++){
+            if(listActividades.get(i).getId() == mytareo.getLaborVO().getIdActividad()){
+                spnActividad.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listFundos.size();i++){
+            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
+                spnFundo.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listCentroCoste.size();i++){
+            if(listCentroCoste.get(i).getId() == mytareo.getCentroCosteVO().getId()){
+                spnCentroCoste.setSelection(i);
+                break;
+            }
+        }
+
+        for(int i=0;i<listLabores.size();i++){
+            if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
+                spnLabor.setSelection(i);
+                break;
+            }
+        }
+    }
+
+
     private void cargarIndirecto(){
         selectorEmpresa.setVisibility(View.VISIBLE);
         selectorFundo.setVisibility(View.VISIBLE);
         selectorCultivo.setVisibility(View.VISIBLE);
         selectorActividad.setVisibility(View.VISIBLE);
         selectorLabor.setVisibility(View.VISIBLE);
-        selectorLote.setVisibility(View.GONE);
         selectorCentroCoste.setVisibility(View.VISIBLE);
+
+        selectorLote.setVisibility(View.GONE);
 
         loadSpnEmpresas();
         loadSpnCultivos();
         loadSpnActividades();
-
 
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -436,16 +533,6 @@ public class CreateTareoActivity extends AppCompatActivity {
 
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
-                spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        spnLote.setAdapter(null);
-                        //loadSpnLote();
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                });
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -474,6 +561,22 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
     }
 
+    private void cargarAsistencia(TareoVO mytareo){
+        cargarAsistencia();
+        for(int i=0;i<listEmpresas.size();i++){
+            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
+                spnEmpresa.setSelection(i);
+                break;
+            }
+        }
+        for(int i=0;i<listFundos.size();i++){
+            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
+                spnFundo.setSelection(i);
+                break;
+            }
+        }
+    }
+
 
     private void cargarAsistencia(){
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -485,13 +588,11 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorCentroCoste.setVisibility(View.GONE);
 
         loadSpnEmpresas();
-
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -514,11 +615,10 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     void goToTareo(long id){
         Intent i = new Intent(ctx, TareoActivity.class);
-        i.putExtra(EXTRA_TAREO,new TareoDAO(ctx).selectById((int)id));
+        i.putExtra(TareoActivity.EXTRA_TAREO,new TareoDAO(ctx).selectById((int)id));
         startActivity(i);
         finish();
     }
-
 
     // todo : Cargardores de empresas
     void loadSpnEmpresas(){

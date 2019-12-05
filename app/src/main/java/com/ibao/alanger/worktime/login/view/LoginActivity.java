@@ -27,6 +27,8 @@ import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.database.webserver.write.UploadTareo;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenter;
 import com.ibao.alanger.worktime.login.presenter.LoginPresenterImpl;
+import com.ibao.alanger.worktime.update.view.ActivityUpdate;
+import com.ibao.alanger.worktime.upload.ActivityUpload;
 import com.ibao.alanger.worktime.views.main.MainActivity;
 
 
@@ -166,12 +168,11 @@ public class LoginActivity extends Activity implements LoginView{
 
     @Override
     public void goRecoverPassword() {
-
     }
 
     @Override
     public void goHome() {
-        Intent intent = new Intent(getBaseContext(), UploadTareo.class);
+        Intent intent = new Intent(getBaseContext(), ActivityUpdate.class);
         View viewTemp = findViewById(R.id.logo);
         ActivityOptions options = (ActivityOptions) ActivityOptions.makeSceneTransitionAnimation
                 (this,

@@ -1,5 +1,7 @@
 package com.ibao.alanger.worktime.models.VO.internal;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ibao.alanger.worktime.models.VO.external.EmpresaVO;
 import com.ibao.alanger.worktime.models.VO.external.LaborVO;
 import com.ibao.alanger.worktime.models.VO.external.CentroCosteVO;
@@ -14,6 +16,7 @@ import java.util.List;
 public class TareoVO implements Serializable {
 
     private int id;
+    private int idWeb;
     private LaborVO laborVO;
     private CentroCosteVO centroCosteVO;
 
@@ -34,6 +37,7 @@ public class TareoVO implements Serializable {
 
     public TareoVO(){
         this.id=0;
+        this.idWeb=0;
         this.laborVO = null;
         this.loteVO = null;
         this.empresaVO = null;
@@ -55,6 +59,14 @@ public class TareoVO implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdWeb() {
+        return idWeb;
+    }
+
+    public void setIdWeb(int idWeb) {
+        this.idWeb = idWeb;
     }
 
     public LaborVO getLaborVO() {
@@ -161,5 +173,12 @@ public class TareoVO implements Serializable {
         isAsistencia = asistencia;
     }
 
+    public String toString(){
+
+        new Gson().toJson(
+                this,
+                new TypeToken<TareoVO>() {}.getType());
+        return new Gson().toJson(this);
+    }
 
 }

@@ -25,8 +25,8 @@ import com.ibao.alanger.worktime.views.tareo.TareoActivity;
 
 import java.util.List;
 
-import static com.ibao.alanger.worktime.views.CreateTareoActivity.CREATE_MODE_MAIN;
-import static com.ibao.alanger.worktime.views.CreateTareoActivity.EXTRA_CREATE_MODE;
+import static com.ibao.alanger.worktime.views.CreateTareoActivity.MODE_MAIN;
+import static com.ibao.alanger.worktime.views.CreateTareoActivity.EXTRA_MODE;
 import static com.ibao.alanger.worktime.views.tareo.TareoActivity.EXTRA_TAREO;
 
 /**
@@ -96,7 +96,7 @@ public class DirectTareoFragment extends Fragment {
         fab = getView().findViewById(R.id.fmain_fab);
         fab.setOnClickListener(v->{
             Intent i = new Intent(getContext(), CreateTareoActivity.class);
-            i.putExtra(EXTRA_CREATE_MODE,CREATE_MODE_MAIN);
+            i.putExtra(EXTRA_MODE, MODE_MAIN);
             startActivity(i);
             fab.setClickable(false);
             fab.setFocusable(false);

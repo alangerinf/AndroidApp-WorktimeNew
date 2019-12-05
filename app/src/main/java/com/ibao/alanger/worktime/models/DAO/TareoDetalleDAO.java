@@ -184,7 +184,7 @@ public class TareoDetalleDAO {
         String[] args = {
                 String.valueOf(id)
         };
-        int i = db.delete(TAB_PRODUCTIVIDAD,TAB_PRODUCTIVIDAD_ID+"=?",args);
+        int i = db.delete(TAB_TAREODETALLE,TAB_TAREODETALLE_ID+"=?",args);
         new ProductividadDAO(ctx).deleteByIdTareoDetalle(id);
         db.close();
         c.close();

@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
 import com.ibao.alanger.worktime.database.webserver.write.UploadTareo;

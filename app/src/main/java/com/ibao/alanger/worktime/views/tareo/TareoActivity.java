@@ -423,7 +423,8 @@ public class TareoActivity extends AppCompatActivity {
 //            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
 
             model.deleteTareoDetalle(item);
-            new TareoDetalleDAO(ctx).deleteById(item.getId());
+
+            Log.d(TAG,"borrando:"+item.getId()+" ,resp: " +new TareoDetalleDAO(ctx).deleteById(item.getId()));
 
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();

@@ -270,6 +270,8 @@ public class DataBaseDesign {
     public static final String  TAB_TAREO                   = "Tareo",
                                 TAB_TAREO_ID                    = "id",
                                 TAB_TAREO_ID_TYPE               = TYPE_INTEGER,
+                                TAB_TAREO_IDWEB                 = "idWeb",
+                                TAB_TAREO_IDWEB_TYPE            = TYPE_INTEGER,
                                 TAB_TAREO_IDLABOR               = "idActividad",
                                 TAB_TAREO_IDLABOR_TYPE          = TYPE_INTEGER,
                                 TAB_TAREO_IDLOTE                = "idLote",
@@ -295,6 +297,8 @@ public class DataBaseDesign {
     public static final String CREATETABLE_TAREO =
             TABLE_CREATE+TAB_TAREO+"("+
                     TAB_TAREO_ID   + TAB_TAREO_ID_TYPE   + PK + AUTOINCREMET+
+                    AND +
+                    TAB_TAREO_IDWEB   + TAB_TAREO_IDWEB_TYPE +
                     AND +
                     TAB_TAREO_IDLABOR + TAB_TAREO_IDLABOR_TYPE + N_NULL+
                     AND +

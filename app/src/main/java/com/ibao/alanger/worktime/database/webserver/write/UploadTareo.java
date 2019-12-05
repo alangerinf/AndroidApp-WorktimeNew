@@ -13,10 +13,15 @@ import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.LongFunction;
 
 import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_UP_TAREO;
 
@@ -47,18 +52,47 @@ public class UploadTareo {
                   //  progress.dismiss();
                     Log.d(TAG,"resp: "+response);
                     STATUS =ConectionConfig.STATUS_PROCESSING;
-                    /*
-                    if(response.charAt(0)!='{'){
-                        int i = response.indexOf("success");
-                        if(i!=-1){
-                            response = response.substring(i-2);
+
+                    try {
+                        JSONObject main = new JSONObject(response);
+
+                        if(main.getInt("success")==1){
+                            JSONArray arrayTareos = main.getJSONArray("data");
+                            for (int i=0; i<arrayTareos.length();i++){
+
+                                String temp = arrayTareos.getString(i);
+                                String[] IDS = temp.split(",");
+
+                                int idInternal = Integer.valueOf(IDS[0]);
+                                int idWeb = Integer.valueOf(IDS[1]);
+
+                                //updateIDWEB
+                                new TareoDAO(ctx).updateIdWeb(idInternal,idWeb);
+
+                            }
                         }
-                    }
-                     */
-                    for(TareoVO t: tareoVOS){
-                        if(!t.getDateTimeEnd().isEmpty() || !t.isActive()){ // si ya esta marcado como salida o esta boorado
-                            new TareoDAO(ctx).deleteById(t.getId());
+
+
+                        for (TareoVO t : tareoVOS) {
+                            Log.d(TAG, "tareo: " + t.toString());
+
+                            boolean isEnd = false;
+
+                            if (t.getDateTimeEnd() != null) {
+                                Log.d(TAG, "dateEnd not is null");
+                                if (!t.getDateTimeEnd().isEmpty()) {
+                                    isEnd = true;
+                                }
+                            }
+
+                            if (isEnd || !t.isActive()) { // si ya esta marcado como salida o esta boorado
+                                new TareoDAO(ctx).deleteById(t.getId());
+                            }
                         }
+                    }catch (JSONException e) {
+                        STATUS = ConectionConfig.STATUS_ERROR_PARSE;
+                        Log.e(TAG,e.toString());
+                        e.printStackTrace();
                     }
                     STATUS = ConectionConfig.STATUS_FINISHED;
                 },

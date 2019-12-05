@@ -30,6 +30,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDCULT
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDFUNDO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDLABOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDLOTE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_IDWEB;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ISACTIVE;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ISASISTENCIA;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_PRODUCTIVIDAD;
@@ -89,6 +90,21 @@ public class TareoDAO {
 
         ContentValues values = new ContentValues();
         values.put(TAB_TAREO_DATEEND,dateTimeEnd);
+        long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
+        db.close();
+        conn.close();
+        return temp;
+    }
+
+
+    public long updateIdWeb(int idTareo,int idWeb){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        String[] args = {
+                String.valueOf(idTareo)
+        };
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREO_IDWEB,idWeb);
         long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
         db.close();
         conn.close();
@@ -388,6 +404,9 @@ public class TareoDAO {
            switch (name){
                case TAB_TAREO_ID:
                    tareoVO.setId(cursor.getInt(cursor.getColumnIndex(name)));
+                   break;
+               case TAB_TAREO_IDWEB:
+                   tareoVO.setIdWeb(cursor.getInt(cursor.getColumnIndex(name)));
                    break;
                case TAB_TAREO_IDLABOR:
                    tareoVO.setLaborVO(new LaborDAO(ctx).selectById(cursor.getInt(cursor.getColumnIndex(name))));
