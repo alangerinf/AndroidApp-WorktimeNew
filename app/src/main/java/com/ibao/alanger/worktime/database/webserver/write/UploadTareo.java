@@ -72,7 +72,6 @@ public class UploadTareo {
                             }
                         }
 
-
                         for (TareoVO t : tareoVOS) {
                             Log.d(TAG, "tareo: " + t.toString());
 

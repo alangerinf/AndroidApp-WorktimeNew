@@ -81,6 +81,25 @@ public class TareoDAO {
         return temp;
     }
 
+
+    public long updateBasics(int idTareo,int idLabor,int idLote,int idCCoste,int idFundo,int idCultivo){
+        ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
+        SQLiteDatabase db = conn.getWritableDatabase();
+        String[] args = {
+                String.valueOf(idTareo)
+        };
+        ContentValues values = new ContentValues();
+        values.put(TAB_TAREO_IDLABOR,idLabor);
+        values.put(TAB_TAREO_IDLOTE,idLote);
+        values.put(TAB_TAREO_IDCCOSTE,idCCoste);
+        values.put(TAB_TAREO_IDFUNDO,idFundo);
+        values.put(TAB_TAREO_IDCULTIVO,idCultivo);
+        long temp = db.update(TAB_TAREO,values,TAB_TAREO_ID+"=?",args);
+        db.close();
+        conn.close();
+        return temp;
+    }
+
     public long updateFinishHourById(int idTareo,String dateTimeEnd){
         ConexionSQLiteHelper conn=new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB );
         SQLiteDatabase db = conn.getWritableDatabase();

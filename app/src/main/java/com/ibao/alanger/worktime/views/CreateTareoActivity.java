@@ -3,6 +3,7 @@ package com.ibao.alanger.worktime.views;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -57,7 +58,7 @@ public class CreateTareoActivity extends AppCompatActivity {
     public final static String MODE_MAIN = "main";
     public final static String MODE_EDIT = "edit";
 
-
+    private boolean isFirst;
 
     private static MaterialButton btnDone;
 
@@ -77,8 +78,6 @@ public class CreateTareoActivity extends AppCompatActivity {
     private static Spinner spnLote;
     private static Spinner spnCentroCoste;
 
-
-
     private static List<EmpresaVO> listEmpresas;
     private static List<String> listNombreEmpresas;
 
@@ -87,7 +86,6 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     private static List<LoteVO> listLotes;
     private static List<String> listNombreLotes;
-
 
     private static List<CentroCosteVO> listCentroCoste;
     private static List<String> listNombreCentroCostes;
@@ -110,8 +108,6 @@ public class CreateTareoActivity extends AppCompatActivity {
     private static final int TYPE_ASISTENCIA = 3 ;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +117,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        isFirst = true;
         getBundle();
 
         declaration();
@@ -128,12 +125,18 @@ public class CreateTareoActivity extends AppCompatActivity {
         if(MY_CREATE_MODE.equals(MODE_MAIN)){
             openDialogSelectActivitdadType();
         }else {
+            //if es edit mode
+            setTitle("Editando Datos");
+            Log.d(TAG,MY_TAREO_EDIT.toString());
             if(MY_TAREO_EDIT.isAsistencia()){
-                cargarAsistencia(MY_TAREO_EDIT);
+                Log.d(TAG,"isAsistencia");
+                cargarAsistencia();
             }else if(MY_TAREO_EDIT.getLaborVO().isDirecto() ) {
-                 cargarDirecto(MY_TAREO_EDIT);
+                 cargarDirecto();
+                Log.d(TAG,"isDirecto");
             }else{
-                cargarIndirecto(MY_TAREO_EDIT);
+                cargarIndirecto();
+                Log.d(TAG,"isIndirecto");
             }
         }
 
@@ -144,6 +147,7 @@ public class CreateTareoActivity extends AppCompatActivity {
     private void events() {
         btnDone.setOnClickListener(v->{
             if(verify()){
+
                 disableInputs();
                 if(MY_CREATE_MODE.equals(MODE_MAIN)){ //si fue el modo normal de creación
                     int posLabor = spnLabor.getSelectedItemPosition();
@@ -182,8 +186,55 @@ public class CreateTareoActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    Toast.makeText(ctx,"Modo sin Eventos",Toast.LENGTH_SHORT).show();
-                    enableInputs();
+
+                    if(MY_CREATE_MODE.equals(MODE_EDIT)){
+
+                        int posLabor = spnLabor.getSelectedItemPosition();
+                        int posLote = spnLote.getSelectedItemPosition();
+                        int posCCoste = spnCentroCoste.getSelectedItemPosition();
+                        int posFundo = spnFundo.getSelectedItemPosition();
+                        int posCultivo = spnCultivo.getSelectedItemPosition();
+                        Log.d(TAG,posLabor+" "+posLote+" "+posCCoste+" "+posFundo+" "+posCultivo);
+                        try {
+
+                            int idLabor =  posLabor==-1?0:listLabores.get(posLabor).getId();
+                            Log.d(TAG,"idLabor:"+idLabor);
+                            int idLote = posLote==-1?0:listLotes.get(posLote).getId();
+                            Log.d(TAG,"idLote:"+idLote);
+                            int idCCoste = posCCoste==-1?0:listCentroCoste.get(posCCoste).getId();
+                            Log.d(TAG,"idCCoste:"+posCCoste+"    "+idCCoste);
+                            int idFundo = posFundo==-1?0:listFundos.get(posFundo).getId();
+                            Log.d(TAG," idFundo:"+((MY_TAREO_EDIT.isAsistencia())?idFundo:0));
+                            int idCultivo = posCultivo==-1?0:listCultivos.get(posCultivo).getId();
+                            Log.d(TAG," idCultivo:"+idCultivo);
+
+                            long cant =   new TareoDAO(ctx)
+                                    .updateBasics(
+                                            MY_TAREO_EDIT.getId(),
+                                            idLabor,
+                                            idLote,
+                                            idCCoste,
+                                            idFundo,
+                                            idCultivo
+                                    );
+                            MY_TAREO_EDIT = new TareoDAO(ctx).selectById(MY_TAREO_EDIT.getId());
+
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra(CreateTareoActivity.EXTRA_TAREO,MY_TAREO_EDIT);
+                            setResult(Activity.RESULT_OK, resultIntent);
+                            finish();
+
+                        }catch (Exception e){
+                            Toast.makeText(ctx,TAG+" events "+e.toString(),Toast.LENGTH_LONG).show();
+                            Log.d(TAG,"events "+e.toString());
+                            setResult(Activity.RESULT_CANCELED);
+                            finish();
+                        }
+
+                    }else {
+                        Toast.makeText(ctx,"Modo sin Eventos",Toast.LENGTH_SHORT).show();
+                        enableInputs();
+                    }
                 }
             }else {
                 Toast.makeText(ctx, ctx.getString(R.string.error_complete_configuraciones),Toast.LENGTH_SHORT).show();
@@ -313,6 +364,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         MY_CREATE_MODE = b.getString(EXTRA_MODE);
         if(MY_CREATE_MODE.equals(MODE_EDIT)){
             MY_TAREO_EDIT = (TareoVO) b.getSerializable(EXTRA_TAREO);
+            Log.i(TAG,MY_TAREO_EDIT.toString());
         }
     }
 
@@ -357,9 +409,51 @@ public class CreateTareoActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.show();
     }
-
+/*
     private void cargarDirecto(TareoVO mytareo){
         cargarDirecto();
+
+        spnEmpresa.setOnItemClickListener(null);
+        spnCultivo.setOnItemClickListener(null);
+        spnActividad.setOnItemClickListener(null);
+        loadSpnEmpresas();
+        loadSpnCultivos();
+        loadSpnActividades();
+
+        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int ind, long l) {
+                spnFundo.setAdapter(null);
+                loadSpnFundos();
+                spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
+                        spnLote.setAdapter(null);
+                        loadSpnLote();
+                        for(int i=0;i<listLotes.size();i++){
+                            if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
+                                spnLote.setSelection(i);
+                                break;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                    }
+                });
+                for(int i=0;i<listFundos.size();i++){
+                    if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
+                        spnFundo.setSelection(i);
+                        break;
+                    }
+                }
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         for(int i=0;i<listEmpresas.size();i++){
             if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
                 spnEmpresa.setSelection(i);
@@ -367,12 +461,57 @@ public class CreateTareoActivity extends AppCompatActivity {
             }
         }
 
+        spnCultivo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
+                spnLote.setAdapter(null);
+                loadSpnLote();
+                spnLabor.setAdapter(null);
+                loadSpnLabor();
+
+                for(int i=0;i<listLotes.size();i++){
+                    if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
+                        spnLote.setSelection(i);
+                        break;
+                    }
+                }
+
+                for(int i=0;i<listLabores.size();i++){
+                    if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
+                        spnLabor.setSelection(i);
+                        break;
+                    }
+                }
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         for(int i=0;i<listCultivos.size();i++){
             if(listCultivos.get(i).getId() == mytareo.getCultivoVO().getId()){
                 spnCultivo.setSelection(i);
                 break;
             }
         }
+
+        spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
+                spnLabor.setAdapter(null);
+                loadSpnLabor();
+
+                for(int i=0;i<listLabores.size();i++){
+                    if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
+                        spnLabor.setSelection(i);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
 
         for(int i=0;i<listActividades.size();i++){
             if(listActividades.get(i).getId() == mytareo.getLaborVO().getIdActividad()){
@@ -381,28 +520,8 @@ public class CreateTareoActivity extends AppCompatActivity {
             }
         }
 
-        for(int i=0;i<listFundos.size();i++){
-            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
-                spnFundo.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listLotes.size();i++){
-            if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
-                spnLote.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listLabores.size();i++){
-            if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
-                spnLabor.setSelection(i);
-                break;
-            }
-        }
     }
-
+*/
     private void cargarDirecto(){
 
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -423,16 +542,30 @@ public class CreateTareoActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
+
                 spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         spnLote.setAdapter(null);
                         loadSpnLote();
+                        Log.i(TAG,"INTENTANDO POS LOTE EN SPN FUNDO");
+                        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                            tryPosicionateLote();
+                        }
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
                     }
                 });
+
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateFundo();
+                    Log.d(TAG,"posicionando fundo");
+                }else {
+                    Log.d(TAG,"no posiscion "+isFirst+" "+MY_CREATE_MODE);
+
+                }
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -446,6 +579,12 @@ public class CreateTareoActivity extends AppCompatActivity {
                 loadSpnLote();
                 spnLabor.setAdapter(null);
                 loadSpnLabor();
+
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateLote();
+                    tryPosicionateLabor();
+                    Log.i(TAG,"INTENTANDO POS LOTE EN SPN CULTIVO");
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -457,59 +596,21 @@ public class CreateTareoActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 spnLabor.setAdapter(null);
                 loadSpnLabor();
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateLabor();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-    }
+        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
 
-    private void cargarIndirecto(TareoVO mytareo){
-        cargarIndirecto();
-
-        for(int i=0;i<listEmpresas.size();i++){
-            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
-                spnEmpresa.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listCultivos.size();i++){
-            if(listCultivos.get(i).getId() == mytareo.getCultivoVO().getId()){
-                spnCultivo.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listActividades.size();i++){
-            if(listActividades.get(i).getId() == mytareo.getLaborVO().getIdActividad()){
-                spnActividad.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listFundos.size();i++){
-            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
-                spnFundo.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listCentroCoste.size();i++){
-            if(listCentroCoste.get(i).getId() == mytareo.getCentroCosteVO().getId()){
-                spnCentroCoste.setSelection(i);
-                break;
-            }
-        }
-
-        for(int i=0;i<listLabores.size();i++){
-            if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
-                spnLabor.setSelection(i);
-                break;
-            }
+            tryPosicionateEmpresa();
+            tryPosicionateCultivo();
+            tryPosicionateActividad();
         }
     }
-
 
     private void cargarIndirecto(){
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -527,12 +628,19 @@ public class CreateTareoActivity extends AppCompatActivity {
 
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
+
                 spnCentroCoste.setAdapter(null);
                 loadSpnCentroCoste();
 
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
+
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateCCoste();
+                    tryPosicionateFundo();
+                }
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -541,9 +649,13 @@ public class CreateTareoActivity extends AppCompatActivity {
 
         spnCultivo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
                 spnLabor.setAdapter(null);
                 loadSpnLabor();
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateLabor();
+                }
+
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -551,32 +663,200 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
         spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
                 spnLabor.setAdapter(null);
                 loadSpnLabor();
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateLabor();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+            tryPosicionateActividad();
+            tryPosicionateCultivo();
+            tryPosicionateEmpresa();
+        }
+
     }
 
-    private void cargarAsistencia(TareoVO mytareo){
-        cargarAsistencia();
-        for(int i=0;i<listEmpresas.size();i++){
-            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
-                spnEmpresa.setSelection(i);
+    private void tryPosicionateLote() {
+        Log.i(TAG,"tryPosicionateLote");
+        for(int i=0;i<listLotes.size();i++){
+            if(listLotes.get(i).getId() == MY_TAREO_EDIT.getLoteVO().getId()){
+                spnLote.setSelection(i);
                 break;
             }
         }
-        for(int i=0;i<listFundos.size();i++){
-            if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
+        trySetIsFirst();
+    }
+
+    private void trySetIsFirst(){
+        if(isFirst){
+            Log.i(TAG,"es first");
+            if(isFirst==verifySetComplete()){
+                isFirst=false;
+                Log.i(TAG,"cambio a no es first");
+            }
+        }else {
+                Log.i(TAG,"no es first");
+        }
+    }
+
+
+    private void tryPosicionateLabor() {
+        Log.i(TAG,"tryPosicionateLabor");
+        for(int i=0;i<listLabores.size();i++) {
+            if (listLabores.get(i).getId() == MY_TAREO_EDIT.getLaborVO().getId()) {
+                spnLabor.setSelection(i);
+                break;
+            }
+        }
+        trySetIsFirst();
+    }
+
+    private void tryPosicionateFundo() {
+        Log.i(TAG,"tryPosicionateFundo");
+        for (int i = 0; i < listFundos.size(); i++) {
+            if (listFundos.get(i).getId() == MY_TAREO_EDIT.getFundoVO().getId()) {
                 spnFundo.setSelection(i);
                 break;
             }
         }
+        trySetIsFirst();
     }
 
+    private void tryPosicionateCCoste(){
+        Log.i(TAG,"tryPosicionateCCoste");
+        for(int i=0;i<listCentroCoste.size();i++){
+            if(listCentroCoste.get(i).getId() == MY_TAREO_EDIT.getCentroCosteVO().getId()) {
+                spnCentroCoste.setSelection(i);
+                break;
+            }
+        }
+        trySetIsFirst();
+    }
+
+
+    private void tryPosicionateEmpresa(){
+        Log.i(TAG,"tryPosicionateEmpresa");
+        for(int i=0;i<listEmpresas.size();i++){
+            if(listEmpresas.get(i).getId() == MY_TAREO_EDIT.getEmpresaVO().getId()){
+                spnEmpresa.setSelection(i);
+                break;
+            }
+        }
+        trySetIsFirst();
+    }
+
+    private void tryPosicionateCultivo(){
+        Log.i(TAG,"tryPosicionateCultivo");
+        for(int i=0;i<listCultivos.size();i++){
+            if(listCultivos.get(i).getId() == MY_TAREO_EDIT.getCultivoVO().getId()){
+                spnCultivo.setSelection(i);
+                break;
+            }
+        }
+        trySetIsFirst();
+    }
+
+    private void tryPosicionateActividad(){
+        Log.i(TAG,"tryPosicionateActividad");
+        for(int i=0;i<listActividades.size();i++){
+            if(listActividades.get(i).getId() == MY_TAREO_EDIT.getLaborVO().getIdActividad()){
+                spnActividad.setSelection(i);
+                break;
+            }
+        }
+        trySetIsFirst();
+    }
+
+    private boolean verifySetComplete() {
+        boolean flag = false;
+        int posLabor = spnLabor.getSelectedItemPosition();
+        int posLote = spnLote.getSelectedItemPosition();
+        int posCCoste = spnCentroCoste.getSelectedItemPosition();
+        int posFundo = spnFundo.getSelectedItemPosition();
+        int posCultivo = spnCultivo.getSelectedItemPosition();
+        Log.d(TAG, posLabor + " " + posLote + " " + posCCoste + " " + posFundo + " " + posCultivo);
+        try {
+
+            int idLabor = posLabor == -1 ? 0 : listLabores.get(posLabor).getId();
+            Log.d(TAG, "idLabor:" + idLabor);
+            int idLote = posLote == -1 ? 0 : listLotes.get(posLote).getId();
+            Log.d(TAG, "idLote:" + idLote);
+            int idCCoste = posCCoste == -1 ? 0 : listCentroCoste.get(posCCoste).getId();
+            Log.d(TAG, "idCCoste:" + posCCoste + "    " + idCCoste);
+            int idFundo = posFundo == -1 ? 0 : listFundos.get(posFundo).getId();
+            Log.d(TAG, " idFundo:" + ((MY_TAREO_EDIT.isAsistencia()) ? idFundo : 0));
+            int idCultivo = posCultivo == -1 ? 0 : listCultivos.get(posCultivo).getId();
+            Log.d(TAG, " idCultivo:" + idCultivo);
+
+            TareoVO temp = MY_TAREO_EDIT;
+            if( (
+                    temp.getLaborVO().getId()==idLabor
+                    && temp.getLoteVO().getId()==idLote
+                    && temp.getLaborVO().isDirecto()
+                    && temp.getFundoVO().getId()==idFundo
+                    && temp.getCultivoVO().getId()==idCultivo
+                )
+                ||
+                (
+                        temp.getLaborVO().getId()==idLabor
+                        && temp.getCentroCosteVO().getId()==idCCoste
+                        && !temp.getLaborVO().isDirecto()
+                        && temp.getFundoVO().getId()==idFundo
+                        && temp.getCultivoVO().getId()==idCultivo
+
+                )
+            ){
+                Log.i(TAG, temp.getLoteVO().getCod()+"id: "+temp.getLoteVO().getId()+"="+idLote);
+                Log.i(TAG, temp.getLaborVO().getName()+"id: "+temp.getLaborVO().getId()+"="+idLabor);
+                Log.i(TAG,spnLote.getSelectedItem().toString());
+
+                flag=true;
+            }
+
+
+        }catch (Exception e){
+
+        }
+        return flag;
+    }
+/*
+    private void cargarAsistencia(TareoVO mytareo){
+        cargarAsistencia();
+
+        loadSpnEmpresas();
+        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG,"empresa seleccionada");
+                spnFundo.setAdapter(null);
+                loadSpnFundos();
+                for(int x=0;x<listFundos.size();x++){
+                    if(listFundos.get(x).getId() == mytareo.getFundoVO().getId()){
+                        spnFundo.setSelection(x);
+                        break;
+                    }
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        for(int x=0;x<listEmpresas.size();x++){
+            if(listEmpresas.get(x).getId() == mytareo.getEmpresaVO().getId()){
+                spnEmpresa.setSelection(x);
+                break;
+            }
+        }
+
+    }
+*/
 
     private void cargarAsistencia(){
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -591,13 +871,21 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG,"empresa seleccionada");
                 spnFundo.setAdapter(null);
                 loadSpnFundos();
+                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                    tryPosicionateFundo();
+                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
+        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+            tryPosicionateEmpresa();
+        }
 
     }
 
@@ -796,11 +1084,30 @@ public class CreateTareoActivity extends AppCompatActivity {
         int posActividad = spnActividad.getSelectedItemPosition();
         int posCultivo = spnCultivo.getSelectedItemPosition();
 
-        listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
-                listCultivos.get(posCultivo).getId(),
-                listActividades.get(posActividad).getId(),
-                CREATE_TYPE==TYPE_DIRECTA
-        );
+        Log.d(TAG,"idCultivo: "+listCultivos.get(posCultivo).getId());
+        Log.d(TAG,"idActividad: "+listActividades.get(posActividad).getId());
+
+        Log.d(TAG, "CREATE TIPE:"+CREATE_TYPE);
+
+        if(MY_CREATE_MODE.equals(MODE_MAIN)){
+            listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
+                    listCultivos.get(posCultivo).getId(),
+                    listActividades.get(posActividad).getId(),
+                    (CREATE_TYPE==TYPE_DIRECTA)
+            );
+        }else {
+            if(MY_CREATE_MODE.equals(MODE_EDIT)){
+                listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
+                        listCultivos.get(posCultivo).getId(),
+                        listActividades.get(posActividad).getId(),
+                        MY_TAREO_EDIT.getLaborVO().isDirecto());
+
+            }else {
+                Toast.makeText(ctx,"modo o tareo no reconocido",Toast.LENGTH_LONG).show();
+            }
+        }
+
+
         loadNombreLabores();
     }
 

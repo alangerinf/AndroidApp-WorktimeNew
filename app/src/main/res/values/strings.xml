@@ -73,4 +73,5 @@
     <string name="control_de_asistencia">Control de Asistencia</string>
     <string name="error_conexion_servidor">Error conectando con el servidor</string>
     <string name="update_status">Actualizando</string>
+    <string name="editar_basicos">Editar Datos</string>
 </resources>

@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +27,7 @@ import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoVO;
+import com.ibao.alanger.worktime.views.CreateTareoActivity;
 import com.ibao.alanger.worktime.views.productividad.ProductividadActivity;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
@@ -152,16 +153,28 @@ public class TareoActivity extends AppCompatActivity {
         }
     }
 
+    //codigo pasado para obtener el resultado de la edicion de datos basicos
+    static final int REQUEST_CODE_EDIT_BASICS =1234;
+    private void goToBasics(){
+        Intent i = new Intent(this, CreateTareoActivity.class);
+        i.putExtra(CreateTareoActivity.EXTRA_MODE,CreateTareoActivity.MODE_EDIT);
+        i.putExtra(CreateTareoActivity.EXTRA_TAREO,model.getTareoVO().getValue());//se le pasa el tareo como parametro
+        startActivityForResult(i, REQUEST_CODE_EDIT_BASICS);
+    }
+
+
     int selectOnDialog=0;
     private void showOptions(){
 
-        String[] items = new String[2];
-        items[0] = getString(R.string.anhadir_productividad_grupal);
-        items[1] = getString(R.string.finalizar_labor);
+        String[] items = new String[3];
+        items[0] = getString(R.string.editar_basicos);
+        items[1] = getString(R.string.anhadir_productividad_grupal);
+        items[2] = getString(R.string.finalizar_labor);
 
         if(model.getTareoVO().getValue().isAsistencia()){
-            items = new String[1];
-            items[0] = getString(R.string.finalizar_labor);
+            items = new String[2];
+            items[0] = getString(R.string.editar_basicos);
+            items[1] = getString(R.string.finalizar_labor);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
             builder.setTitle(getString(R.string.seleccione_opcion));
@@ -169,6 +182,10 @@ public class TareoActivity extends AppCompatActivity {
             builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
                 switch (selectOnDialog){
                     case 0:
+                        goToBasics();
+
+                        break;
+                    case 1:
                         marcarSalida();
                         break;
 
@@ -189,8 +206,11 @@ public class TareoActivity extends AppCompatActivity {
             builder.setPositiveButton(R.string.seleccionar, (dialog, which) -> {
                 switch (selectOnDialog){
                     case 0:
+                        goToBasics();
                         break;
                     case 1:
+                        break;
+                    case 2:
                         marcarSalida();
                         break;
                 }
@@ -202,12 +222,10 @@ public class TareoActivity extends AppCompatActivity {
             dialog.show();
         }
 
-
-
     }
 
-    private int REQUEST_CODE_ADD = 11;
-    private int REQUEST_CODE_REMOVE = 12;
+    private final int REQUEST_CODE_ADD = 11;
+    private final int REQUEST_CODE_REMOVE = 12;
 
     private void goToTransferenceActivity(String EXTRA_MODE, TareoVO tareoVO){
         Intent i = new Intent(ctx, TabbetActivity.class);
@@ -339,7 +357,6 @@ public class TareoActivity extends AppCompatActivity {
 
         model.setTareoVO( (TareoVO) b.getSerializable(EXTRA_TAREO));
 
-
         cargarListas();
     }
 
@@ -354,20 +371,31 @@ public class TareoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //if (requestCode == REQUEST_CODE_ADD) {
-            try {
-                Bundle recibidos = (data.getExtras());
-                if (recibidos != null) {
-                    model.setTareoVO( (TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
-                    Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
 
-                }else {
-                    Toast.makeText(ctx,"no se recibio nada",Toast.LENGTH_SHORT).show();
+        switch(requestCode) {
+            case REQUEST_CODE_EDIT_BASICS : {
+                if (resultCode == Activity.RESULT_OK) {
+                    // TODO Extract the data returned from the child Activity.
+                    model.setTareoVO((TareoVO) data.getSerializableExtra(CreateTareoActivity.EXTRA_TAREO));
+                    Toast.makeText(ctx,"Datos editados corrctamente",Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
-                Log.d(TAG, "onActivityResult " +e.toString());
+                break;
             }
-        //}
+            case REQUEST_CODE_ADD:
+            case REQUEST_CODE_REMOVE:
+
+                    Bundle recibidos = (data.getExtras());
+                    if (recibidos != null) {
+                        model.setTareoVO( (TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
+                        Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
+
+                    }else {
+                        Toast.makeText(ctx,"no se recibio nada",Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+
+        }
+
     }
 
     private ItemTouchHelper.SimpleCallback itemTouchHelperCallBackActive = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
@@ -378,13 +406,8 @@ public class TareoActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
             int index = viewHolder.getAdapterPosition();
-
-
             final TareoDetalleVO item = adapterActivo.getTareoDetalle(index);
-
-
             model.deleteTareoDetalle(item);
             new TareoDetalleDAO(ctx).deleteById(item.getId());
 
@@ -415,13 +438,8 @@ public class TareoActivity extends AppCompatActivity {
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-
             int index = viewHolder.getAdapterPosition();
-
             final TareoDetalleVO item = adapterInactivo.getTareoDetalle(index);
-
-//            final TareoDetalleVO item = model.getTareoVO().getValue().getTareoDetalleVOList().get(index);
-
             model.deleteTareoDetalle(item);
 
             Log.d(TAG,"borrando:"+item.getId()+" ,resp: " +new TareoDetalleDAO(ctx).deleteById(item.getId()));
