@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -44,7 +45,7 @@ import java.util.Objects;
 public class CreateTareoActivity extends AppCompatActivity {
 
 
-    String TAG = CreateTareoActivity.class.getSimpleName();
+    String TAG = "TAG"+CreateTareoActivity.class.getSimpleName();
 
 
     private static String MY_CREATE_MODE = "";
@@ -409,119 +410,8 @@ public class CreateTareoActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.show();
     }
-/*
-    private void cargarDirecto(TareoVO mytareo){
-        cargarDirecto();
 
-        spnEmpresa.setOnItemClickListener(null);
-        spnCultivo.setOnItemClickListener(null);
-        spnActividad.setOnItemClickListener(null);
-        loadSpnEmpresas();
-        loadSpnCultivos();
-        loadSpnActividades();
 
-        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int ind, long l) {
-                spnFundo.setAdapter(null);
-                loadSpnFundos();
-                spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-                        spnLote.setAdapter(null);
-                        loadSpnLote();
-                        for(int i=0;i<listLotes.size();i++){
-                            if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
-                                spnLote.setSelection(i);
-                                break;
-                            }
-                        }
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                });
-                for(int i=0;i<listFundos.size();i++){
-                    if(listFundos.get(i).getId() == mytareo.getFundoVO().getId()){
-                        spnFundo.setSelection(i);
-                        break;
-                    }
-                }
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
-        for(int i=0;i<listEmpresas.size();i++){
-            if(listEmpresas.get(i).getId() == mytareo.getEmpresaVO().getId()){
-                spnEmpresa.setSelection(i);
-                break;
-            }
-        }
-
-        spnCultivo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-                spnLote.setAdapter(null);
-                loadSpnLote();
-                spnLabor.setAdapter(null);
-                loadSpnLabor();
-
-                for(int i=0;i<listLotes.size();i++){
-                    if(listLotes.get(i).getId() == mytareo.getLoteVO().getId()){
-                        spnLote.setSelection(i);
-                        break;
-                    }
-                }
-
-                for(int i=0;i<listLabores.size();i++){
-                    if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
-                        spnLabor.setSelection(i);
-                        break;
-                    }
-                }
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-        for(int i=0;i<listCultivos.size();i++){
-            if(listCultivos.get(i).getId() == mytareo.getCultivoVO().getId()){
-                spnCultivo.setSelection(i);
-                break;
-            }
-        }
-
-        spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-                spnLabor.setAdapter(null);
-                loadSpnLabor();
-
-                for(int i=0;i<listLabores.size();i++){
-                    if(listLabores.get(i).getId() == mytareo.getLaborVO().getId()){
-                        spnLabor.setSelection(i);
-                        break;
-                    }
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
-        for(int i=0;i<listActividades.size();i++){
-            if(listActividades.get(i).getId() == mytareo.getLaborVO().getIdActividad()){
-                spnActividad.setSelection(i);
-                break;
-            }
-        }
-
-    }
-*/
     private void cargarDirecto(){
 
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -537,35 +427,20 @@ public class CreateTareoActivity extends AppCompatActivity {
         loadSpnCultivos();
         loadSpnActividades();
 
+        spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                loadSpnLote("spnFundo.setOnItemSelectedListener");
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spnFundo.setAdapter(null);
                 loadSpnFundos();
-
-                spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        spnLote.setAdapter(null);
-                        loadSpnLote();
-                        Log.i(TAG,"INTENTANDO POS LOTE EN SPN FUNDO");
-                        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                            tryPosicionateLote();
-                        }
-                    }
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                });
-
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateFundo();
-                    Log.d(TAG,"posicionando fundo");
-                }else {
-                    Log.d(TAG,"no posiscion "+isFirst+" "+MY_CREATE_MODE);
-
-                }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -575,16 +450,8 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnCultivo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spnLote.setAdapter(null);
-                loadSpnLote();
-                spnLabor.setAdapter(null);
+                loadSpnLote("spnCultivo.setOnItemSelectedListener");
                 loadSpnLabor();
-
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateLote();
-                    tryPosicionateLabor();
-                    Log.i(TAG,"INTENTANDO POS LOTE EN SPN CULTIVO");
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -594,11 +461,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spnLabor.setAdapter(null);
                 loadSpnLabor();
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateLabor();
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -606,11 +469,158 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
         if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
 
-            tryPosicionateEmpresa();
-            tryPosicionateCultivo();
-            tryPosicionateActividad();
+            handler.postDelayed(runLoadDirectoIsFirst,100);
         }
     }
+    Handler handler = new Handler();
+    Runnable runLoadDirectoIsFirst = new Runnable() {
+        @Override
+        public void run() {
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateEmpresa();
+
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateCultivo();
+
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateActividad();
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateFundo();
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateLabor();
+                }
+            }catch (Exception e){
+
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateLote();
+                }
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                   handler.postDelayed(runLoadDirectoIsFirst,100);
+            }
+        }
+    };
+
+
+    Runnable runLoadIndirectoIsFirst = new Runnable() {
+        @Override
+        public void run() {
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateEmpresa();
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateCultivo();
+
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateActividad();
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateFundo();
+                }
+
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateLabor();
+                }
+            }catch (Exception e){
+
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateCCoste();
+                }
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                handler.postDelayed(runLoadIndirectoIsFirst,100);
+            }
+        }
+    };
+
+
+    Runnable runLoadAsistenciaIsFirst = new Runnable() {
+        @Override
+        public void run() {
+
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateEmpresa();
+                }
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateFundo();
+                }
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
+
+            if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+                handler.postDelayed(runLoadAsistenciaIsFirst,100);
+            }
+
+        }
+    };
 
     private void cargarIndirecto(){
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -619,7 +629,6 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorActividad.setVisibility(View.VISIBLE);
         selectorLabor.setVisibility(View.VISIBLE);
         selectorCentroCoste.setVisibility(View.VISIBLE);
-
         selectorLote.setVisibility(View.GONE);
 
         loadSpnEmpresas();
@@ -629,18 +638,8 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-
-                spnCentroCoste.setAdapter(null);
                 loadSpnCentroCoste();
-
-                spnFundo.setAdapter(null);
                 loadSpnFundos();
-
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateCCoste();
-                    tryPosicionateFundo();
-                }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -650,12 +649,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnCultivo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-                spnLabor.setAdapter(null);
                 loadSpnLabor();
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateLabor();
-                }
-
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -664,11 +658,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnActividad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
-                spnLabor.setAdapter(null);
                 loadSpnLabor();
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateLabor();
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -676,11 +666,9 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
 
         if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-            tryPosicionateActividad();
-            tryPosicionateCultivo();
-            tryPosicionateEmpresa();
-        }
 
+            handler.postDelayed(runLoadIndirectoIsFirst,100);
+        }
     }
 
     private void tryPosicionateLote() {
@@ -781,82 +769,57 @@ public class CreateTareoActivity extends AppCompatActivity {
         int posCCoste = spnCentroCoste.getSelectedItemPosition();
         int posFundo = spnFundo.getSelectedItemPosition();
         int posCultivo = spnCultivo.getSelectedItemPosition();
-        Log.d(TAG, posLabor + " " + posLote + " " + posCCoste + " " + posFundo + " " + posCultivo);
         try {
-
             int idLabor = posLabor == -1 ? 0 : listLabores.get(posLabor).getId();
             Log.d(TAG, "idLabor:" + idLabor);
+
             int idLote = posLote == -1 ? 0 : listLotes.get(posLote).getId();
             Log.d(TAG, "idLote:" + idLote);
+
             int idCCoste = posCCoste == -1 ? 0 : listCentroCoste.get(posCCoste).getId();
             Log.d(TAG, "idCCoste:" + posCCoste + "    " + idCCoste);
+
             int idFundo = posFundo == -1 ? 0 : listFundos.get(posFundo).getId();
-            Log.d(TAG, " idFundo:" + ((MY_TAREO_EDIT.isAsistencia()) ? idFundo : 0));
+            Log.d(TAG, " idFundo:" + idFundo);
+
             int idCultivo = posCultivo == -1 ? 0 : listCultivos.get(posCultivo).getId();
             Log.d(TAG, " idCultivo:" + idCultivo);
 
             TareoVO temp = MY_TAREO_EDIT;
-            if( (
-                    temp.getLaborVO().getId()==idLabor
-                    && temp.getLoteVO().getId()==idLote
-                    && temp.getLaborVO().isDirecto()
-                    && temp.getFundoVO().getId()==idFundo
-                    && temp.getCultivoVO().getId()==idCultivo
-                )
-                ||
-                (
-                        temp.getLaborVO().getId()==idLabor
-                        && temp.getCentroCosteVO().getId()==idCCoste
-                        && !temp.getLaborVO().isDirecto()
-                        && temp.getFundoVO().getId()==idFundo
-                        && temp.getCultivoVO().getId()==idCultivo
 
-                )
-            ){
-                Log.i(TAG, temp.getLoteVO().getCod()+"id: "+temp.getLoteVO().getId()+"="+idLote);
-                Log.i(TAG, temp.getLaborVO().getName()+"id: "+temp.getLaborVO().getId()+"="+idLabor);
-                Log.i(TAG,spnLote.getSelectedItem().toString());
+            if(temp.isAsistencia()){
+                if(temp.getFundoVO().getId() == idFundo){
+                    flag=true;
+                }
+            }else {
+                if(temp.getLaborVO().isDirecto()) {
 
-                flag=true;
+                    if (temp.getLaborVO().getId() == idLabor
+                            && temp.getLoteVO().getId() == idLote
+                            && temp.getFundoVO().getId() == idFundo
+                            && temp.getCultivoVO().getId() == idCultivo
+                    ) {
+                        flag=true;
+                    }
+                }else { // si no es directo
+
+                    if(
+                            temp.getLaborVO().getId()==idLabor
+                                    && temp.getCentroCosteVO().getId()==idCCoste
+                                    && temp.getFundoVO().getId()==idFundo
+                                    && temp.getCultivoVO().getId()==idCultivo
+                    ){
+                        flag=true;
+                    }
+
+                }
             }
-
-
         }catch (Exception e){
+            Log.e(TAG,e.toString());
 
         }
         return flag;
     }
-/*
-    private void cargarAsistencia(TareoVO mytareo){
-        cargarAsistencia();
-
-        loadSpnEmpresas();
-        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG,"empresa seleccionada");
-                spnFundo.setAdapter(null);
-                loadSpnFundos();
-                for(int x=0;x<listFundos.size();x++){
-                    if(listFundos.get(x).getId() == mytareo.getFundoVO().getId()){
-                        spnFundo.setSelection(x);
-                        break;
-                    }
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-        for(int x=0;x<listEmpresas.size();x++){
-            if(listEmpresas.get(x).getId() == mytareo.getEmpresaVO().getId()){
-                spnEmpresa.setSelection(x);
-                break;
-            }
-        }
-
-    }
-*/
 
     private void cargarAsistencia(){
         selectorEmpresa.setVisibility(View.VISIBLE);
@@ -871,12 +834,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG,"empresa seleccionada");
-                spnFundo.setAdapter(null);
                 loadSpnFundos();
-                if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-                    tryPosicionateFundo();
-                }
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -884,7 +842,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
 
         if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-            tryPosicionateEmpresa();
+            handler.postDelayed(runLoadAsistenciaIsFirst,100);
         }
 
     }
@@ -910,12 +868,16 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de empresas
     void loadSpnEmpresas(){
+        Log.i(TAG,"loadSpnEmpresas");
         loadListEmpresas();
         ArrayAdapter<String> adaptadorEmpresas = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreEmpresas);
         spnEmpresa.setAdapter(adaptadorEmpresas);
 
         if(listNombreEmpresas.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_empresas),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)){
+                Toast.makeText(ctx, ctx.getString(R.string.sin_empresas),Toast.LENGTH_SHORT).show();
+            }
+            spnEmpresa.setAdapter(null);
         }
     }
     private void loadListEmpresas() {
@@ -935,11 +897,15 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de Cultivos
     void loadSpnCultivos(){
+        Log.i(TAG,"loadSpnCultivos");
         loadListCultivos();
         ArrayAdapter<String> adaptadorCultivos = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreCultivos);
         spnCultivo.setAdapter(adaptadorCultivos);
         if(listNombreCultivos.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_cultivos),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
+                Toast.makeText(ctx, ctx.getString(R.string.sin_cultivos), Toast.LENGTH_SHORT).show();
+            }
+            spnCultivo.setAdapter(null);
         }
     }
 
@@ -961,17 +927,22 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de Actividades
     void loadSpnActividades(){
+        Log.i(TAG,"loadSpnActividades");
         loadListActividades();
         ArrayAdapter<String> adaptadorActividades = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreActividades);
         spnActividad.setAdapter(adaptadorActividades);
         if(listNombreActividades.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_actividades),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)){
+
+                Toast.makeText(ctx, ctx.getString(R.string.sin_actividades),Toast.LENGTH_SHORT).show();
+            }
+
+            spnActividad.setAdapter(null);
         }
     }
 
     private void loadListActividades() {
         Log.d(TAG,"loadListActividades");
-
         listActividades = new ActividadDAO(ctx).listAll();
         cargarNombreActividad();
     }
@@ -986,11 +957,18 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de Fundos
     void loadSpnFundos(){
+        Log.i(TAG,"loadSpnFundos");
         loadListFundos();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreFundos);
         spnFundo.setAdapter(adapter);
         if(listNombreFundos.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_fundos),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
+
+                Toast.makeText(ctx, ctx.getString(R.string.sin_fundos),Toast.LENGTH_SHORT).show();
+
+            }
+            Log.d(TAG,"sinFundos");
+            spnFundo.setAdapter(null);
         }
     }
 
@@ -1014,11 +992,15 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de Fundos
     void loadSpnCentroCoste(){
+        Log.i(TAG,"loadSpnCentroCoste");
         loadListCentroCoste();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item, listNombreCentroCostes);
         spnCentroCoste.setAdapter(adapter);
         if(listNombreCentroCostes.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_centro_contes),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
+                Toast.makeText(ctx, ctx.getString(R.string.sin_centro_contes),Toast.LENGTH_SHORT).show();
+            }
+            spnCentroCoste.setAdapter(null);
         }
     }
 
@@ -1040,13 +1022,19 @@ public class CreateTareoActivity extends AppCompatActivity {
 
 
     // todo : Cargardores de Fundos
-    void loadSpnLote(){
+    void loadSpnLote(String responsable){
+        Log.i(TAG,responsable+" loadSpnLote "+"start");
         loadListLotes();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreLotes);
         spnLote.setAdapter(adapter);
         if(listNombreLotes.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_lotes),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
+                Toast.makeText(ctx, ctx.getString(R.string.sin_lotes),Toast.LENGTH_SHORT).show();
+            }
+
+            spnLote.setAdapter(null);
         }
+        Log.i(TAG,responsable+" loadSpnLote "+"finished");
     }
 
 
@@ -1070,11 +1058,15 @@ public class CreateTareoActivity extends AppCompatActivity {
 
     // todo : Cargardores de Fundos
     void loadSpnLabor(){
+        Log.i(TAG,"loadSpnLabor");
         loadListLabor();
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreLabores);
         spnLabor.setAdapter(adapter);
         if(listNombreLabores.size()==0){
-            Toast.makeText(ctx, ctx.getString(R.string.sin_labores),Toast.LENGTH_SHORT).show();
+            if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
+                Toast.makeText(ctx, ctx.getString(R.string.sin_labores),Toast.LENGTH_SHORT).show();
+            }
+            spnLabor.setAdapter(null);
         }
     }
 

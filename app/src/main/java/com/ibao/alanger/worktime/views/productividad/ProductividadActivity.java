@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Objects;
 
+import static com.ibao.alanger.worktime.Utilities.getHour;
+
 public class ProductividadActivity extends AppCompatActivity {
 
     private ProductividadLiveData model;
@@ -275,29 +277,6 @@ public class ProductividadActivity extends AppCompatActivity {
 
     }
 
-    String getHour(){
-        Calendar calendar = new GregorianCalendar();
-
-        int hour  = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-
-        String strHour = "";
-        String strMinute = "";
-
-        if(hour<10){
-            strHour = "0"+hour;
-        }else {
-            strHour = ""+hour;
-        }
-
-        if(minute<10){
-            strMinute = "0"+minute;
-        }else {
-            strMinute = ""+minute;
-        }
-
-        return strHour+":"+strMinute;
-    }
 
     String TAG = ProductividadActivity.class.getSimpleName();
 

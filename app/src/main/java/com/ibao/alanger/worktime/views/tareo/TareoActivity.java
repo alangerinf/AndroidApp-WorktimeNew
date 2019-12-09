@@ -11,18 +11,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.Utilities;
+import com.ibao.alanger.worktime.models.DAO.ProductividadDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TareoDetalleDAO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
@@ -33,6 +43,7 @@ import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 
 import java.util.Objects;
 
+import static com.ibao.alanger.worktime.Utilities.getHour;
 import static com.ibao.alanger.worktime.views.productividad.ProductividadActivity.EXTRA_TAREODETALLE;
 import static com.ibao.alanger.worktime.views.transference.TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR;
 import static com.ibao.alanger.worktime.views.transference.TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR;
@@ -209,6 +220,7 @@ public class TareoActivity extends AppCompatActivity {
                         goToBasics();
                         break;
                     case 1:
+                        showPopupAddProductividadGrupal();
                         break;
                     case 2:
                         marcarSalida();
@@ -383,16 +395,17 @@ public class TareoActivity extends AppCompatActivity {
             }
             case REQUEST_CODE_ADD:
             case REQUEST_CODE_REMOVE:
-
+                if (resultCode == Activity.RESULT_OK) {
                     Bundle recibidos = (data.getExtras());
                     if (recibidos != null) {
-                        model.setTareoVO( (TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
-                        Log.d(  TAG,"tamaño "+model.getTareoVO().getValue().getTareoDetalleVOList().size());
+                        model.setTareoVO((TareoVO) recibidos.getSerializable(TabbetActivity.EXTRA_TAREOVO));
+                        Log.d(TAG, "tamaño " + model.getTareoVO().getValue().getTareoDetalleVOList().size());
 
-                    }else {
-                        Toast.makeText(ctx,"no se recibio nada",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(ctx, "no se recibio nada", Toast.LENGTH_SHORT).show();
                     }
                     break;
+                }
 
         }
 
@@ -463,8 +476,92 @@ public class TareoActivity extends AppCompatActivity {
         }
     };
 
+    private void showPopupAddProductividadGrupal(){
+        Dialog dialogClose;
+        dialogClose = new Dialog(this);
+        dialogClose.setContentView(R.layout.activity_productividad_dialog_add);
+        MaterialButton prodadd_btnSave = (MaterialButton) dialogClose.findViewById(R.id.prodadd_btnSave);
+        ImageView prodadd_iVienClose = (ImageView) dialogClose.findViewById(R.id.prodadd_iVienClose);
+        TextView prodadd_tViewDateTime = dialogClose.findViewById(R.id.prodadd_tViewDateTime);
+        EditText eTextCantidad= dialogClose.findViewById(R.id.prodadd_eTextCantidad);
 
+        eTextCantidad.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
 
+                if(eTextCantidad.getText().toString().equals("0.")){
 
+                }else {
+                    if(eTextCantidad.getText().toString().equals("")||(Float.valueOf(eTextCantidad.getText().toString())==0&&eTextCantidad.getText().toString().length()>1)){
+                        Log.d(TAG,"flag1");
+                        Handler handler = new Handler();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                eTextCantidad.setText("0");
+                                eTextCantidad.setSelection(eTextCantidad.getText().toString().length());
+                            }
+                        });
+
+                    }
+                    try{
+                        Log.d(TAG,eTextCantidad.getText().toString().substring(0,2));
+                    }catch (Exception e){
+                        Log.d(TAG,e.toString());
+                    }
+                    if(eTextCantidad.getText().toString().length()>1&& eTextCantidad.getText().charAt(0)=='0' && !eTextCantidad.getText().toString().substring(0,2).equals("0.")){
+                        eTextCantidad.setText(eTextCantidad.getText().toString().substring(1));
+                        eTextCantidad.setSelection(eTextCantidad.getText().toString().length());
+                    }
+                }
+
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        prodadd_iVienClose.setOnClickListener(v -> dialogClose.dismiss());
+        prodadd_btnSave.setOnClickListener(v -> {
+
+            if(eTextCantidad.getText().toString().equals("0")){
+                Toast.makeText(ctx,"Ingrese un valor válido",Toast.LENGTH_LONG).show();
+            }else {
+                String valor = eTextCantidad.getText().toString();
+                if(valor.charAt(valor.length()-1)=='.'){
+                    eTextCantidad.setError("valor invalido");
+                }else {
+                    for(TareoDetalleVO td : model.getTareoVO().getValue().getTareoDetalleVOList()) {
+                        long id = new ProductividadDAO(ctx).insert(td.getId(), valor, getHour());
+                        if (id > 0) {
+                            td.getProductividadVOList().add(new ProductividadDAO(ctx).selectById((int) id));
+                        }
+                    }
+                    model.setTareoVO(new TareoDAO(ctx).selectById(model.getTareoVO().getValue().getId()));
+                    dialogClose.dismiss();
+                }
+            }
+        });
+
+        dialogClose.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogClose.show();
+
+        eTextCantidad.setSelection(eTextCantidad.getText().toString().length());
+
+        //actualizacion de hora en el dialog
+        Handler handlerHourUpdater = new Handler();
+        Runnable runHourUpdater = new Runnable() {
+            @Override
+            public void run() {
+                prodadd_tViewDateTime.setText(getHour());
+                handlerHourUpdater.postDelayed(this,1000);
+            }
+        };
+        handlerHourUpdater.post(runHourUpdater);
+    }
 }
