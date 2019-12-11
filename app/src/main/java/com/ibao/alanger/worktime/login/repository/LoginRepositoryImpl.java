@@ -80,6 +80,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                                 userTemp.setName(usuario.getString("name"));
                                 userTemp.setFundos(usuario.getString("idFundo"));
                                 userTemp.setIdSupervisor(usuario.getInt("idSupervisor"));
+                                userTemp.setPermisoManual(usuario.getInt("permisoManual")>0);
                                 interactor.signSuccess(userTemp);
                             }else {
                                 interactor.signError("Lista de usuarios vacia");

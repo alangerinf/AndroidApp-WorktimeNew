@@ -26,6 +26,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_SUSPENCION;
 import static com.ibao.alanger.worktime.database.webserver.ConectionConfig.URL_DOWN_TRABAJADORES;
 
 
@@ -66,7 +67,8 @@ public class DownloaderTrabajadores implements Downloader{
                                 "("+
                                 TAB_TRABAJADOR_COD+","+
                                 TAB_TRABAJADOR_DNI+","+
-                                TAB_TRABAJADOR_NAME+" "+
+                                TAB_TRABAJADOR_NAME+", "+
+                                TAB_TRABAJADOR_SUSPENCION+" "+
                                 ")"+
                                 "VALUES ";
                         String insert = SQLINSERT;
@@ -80,14 +82,16 @@ public class DownloaderTrabajadores implements Downloader{
                             String codigo = data.getString("codigo");
                             String nroDocumento = data.getString("nroDocumento");
                             String nombre = data.getString("nombre");
+                            String suspencion = data.getString("suspencion");
 
-                            Log.d(TAG,"INSERTING :"+codigo+" "+nroDocumento+" "+nombre);
+                            Log.d(TAG,"INSERTING :"+codigo+" "+nroDocumento+" "+nombre+" "+suspencion);
 
                             insert=insert +
                                     "("+
                                     "\""+codigo+"\""+","+
                                     "\""+nroDocumento+"\""+","+
-                                    "\""+nombre+"\""+
+                                    "\""+nombre+"\""+","+
+                                    "\""+suspencion+"\""+
                                     ")";
 
                             if(i%1000==0&& i>0){

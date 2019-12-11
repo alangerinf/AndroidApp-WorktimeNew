@@ -8,6 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
+import com.ibao.alanger.worktime.database.SharedPreferencesManager;
+import com.ibao.alanger.worktime.models.User;
 import com.ibao.alanger.worktime.models.VO.external.FundoVO;
 
 import java.util.ArrayList;
@@ -156,9 +158,16 @@ public class FundoDAO {
                             "F."+TAB_FUNDO_NAME+
                             _STRASC
                     ,null);
+            User user = SharedPreferencesManager.getUser(ctx);
+            List <Integer> fundos = user.getIdFundoList();
             while (cursor.getCount()>0 && cursor.moveToNext()){
                 FundoVO temp = getAtributtes(cursor);
-                fundoVOS.add(temp);
+                for(int i=0; i<fundos.size();i++){
+                    if(fundos.get(i)== temp.getId()){//recorremos los fundos para verificar q si pertenece el fundo al filtro
+                        fundoVOS.add(temp);
+                        break;
+                    }
+                }
             }
             cursor.close();
         }catch (Exception e){

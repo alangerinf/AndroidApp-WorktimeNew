@@ -19,6 +19,7 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_COD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_DNI;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_NAME;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TRABAJADOR_SUSPENCION;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._FROM;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._ORDERBY;
 import static com.ibao.alanger.worktime.database.DataBaseDesign._SELECT;
@@ -132,6 +133,9 @@ public class TrabajadorDAO {
                     break;
                 case TAB_TRABAJADOR_NAME:
                     trabajadorVO.setName(cursor.getString(cursor.getColumnIndex(name)));
+                    break;
+                case TAB_TRABAJADOR_SUSPENCION:
+                    trabajadorVO.setSuspencion(cursor.getString(cursor.getColumnIndex(name)));
                     break;
                 default:
                     Toast.makeText(ctx,TAG+" getAtributes error no se encuentra campo "+name,Toast.LENGTH_LONG).show();

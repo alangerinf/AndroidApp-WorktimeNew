@@ -22,6 +22,10 @@ import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_LABOR_ISDIRE
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_PRODUCTIVIDAD;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_PRODUCTIVIDAD_ID;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREODETALLE;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREODETALLE_DATEEND;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREODETALLE_DNI;
+import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREODETALLE_IDTAREO;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_DATEEND;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_DATESTART;
 import static com.ibao.alanger.worktime.database.DataBaseDesign.TAB_TAREO_ID;
@@ -271,6 +275,52 @@ public class TareoDAO {
         return tareoVOS;
     }
 
+    public List<TareoVO> listTareo_same_dni(int idTareo,String DNI){
+        ConexionSQLiteHelper c;
+        Log.d(TAG,"idTareo: "+idTareo+" , DNI:"+DNI);
+
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                    _SELECT+
+                            "T.*"+
+                        _FROM+
+                            TAB_TAREO+" as T"+_n+
+                            TAB_TAREODETALLE+" AS TD"+
+                        _WHERE+
+                            "T."+TAB_TAREO_ISACTIVE+"=1"+
+                            _AND+
+                            "T."+TAB_TAREO_ID+" != "+idTareo+//DIFERENTE DEL TAREO ACTUAL
+                            _AND+
+                            "T."+TAB_TAREO_ISASISTENCIA+" = 0"+
+                            _AND+
+                            "TD."+TAB_TAREODETALLE_IDTAREO+" = "+"T."+TAB_TAREO_ID+
+                            _AND+
+                            "TD."+TAB_TAREODETALLE_DNI+" = '"+DNI+"'"+
+                            _AND+
+                            "(TD."+TAB_TAREODETALLE_DATEEND+" is null OR TD."+TAB_TAREODETALLE_DATEEND+" = '' )"
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                Log.d(TAG,"mismo dni"+temp.toString());
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listTareo_same_dni "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listTareo_same_dni "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
+
     public List<TareoVO> listAll(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
@@ -289,6 +339,7 @@ public class TareoDAO {
             Log.d(TAG,"cantidad de tareos "+cursor.getCount());
             while(cursor.moveToNext()){
                 TareoVO temp = getAtributtes(cursor);
+                Log.d(TAG,"idTareo"+temp.getId());
                 tareoVOS.add(temp);
             }
             cursor.close();

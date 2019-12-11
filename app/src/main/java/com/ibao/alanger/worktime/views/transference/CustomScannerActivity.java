@@ -230,7 +230,7 @@ public class CustomScannerActivity extends AppCompatActivity implements
 
                 try {
 
-                    if (!VerifyPersonal.verify(true, TAREOVO, PageViewModel.getMutable(), MY_EXTRA_MODE, DNI, formatter.format(date))) {//si s e rechazo
+                    if (!VerifyPersonal.verify(CustomScannerActivity.this,true, TAREOVO, PageViewModel.getMutable(), MY_EXTRA_MODE, DNI, formatter.format(date))) {//si s e rechazo
                         // Prevent duplicate scans
                         Log.d(TAG, DNI + "DUPLICADO");
 

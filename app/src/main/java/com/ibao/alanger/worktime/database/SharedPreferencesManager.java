@@ -21,6 +21,7 @@ public class SharedPreferencesManager {
     private static String user_password = "password";
     private static String user_idSupervisor = "idSupervisor";
     private static String user_fundos = "idFundos";
+    private static String user_permisoManuel = "permisoManual";
 
     public static boolean saveUser(Context ctx, User user){
         boolean flag = false;
@@ -33,6 +34,7 @@ public class SharedPreferencesManager {
             editor.putInt(user_idSupervisor,user.getIdSupervisor());
             editor.putString(user_name,user.getName());
             editor.putString(user_fundos,user.getFundos());
+            editor.putBoolean(user_permisoManuel,user.isPermisoManual());
             flag = editor.commit();
         }catch (Exception e){
             Log.d(TAG,"saveUser:"+e.toString());
@@ -57,6 +59,8 @@ public class SharedPreferencesManager {
                         preferences.contains(user_name)
                         &&
                         preferences.contains(user_fundos)
+                        &&
+                        preferences.contains(user_permisoManuel)
                 ){
 
                     user = new User();
@@ -66,7 +70,7 @@ public class SharedPreferencesManager {
                     user.setIdSupervisor(preferences.getInt(user_idSupervisor,0));
                     user.setName(preferences.getString(user_name,""));
                     user.setFundos(preferences.getString(user_fundos,""));
-
+                    user.setPermisoManual(preferences.getBoolean(user_permisoManuel,false));
                 }
             }catch (Exception e) {
                 Log.d(TAG,"getUser:" + e.toString()) ;

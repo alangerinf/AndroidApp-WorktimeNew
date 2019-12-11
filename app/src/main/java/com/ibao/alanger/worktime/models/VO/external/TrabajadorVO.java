@@ -7,11 +7,13 @@ public class TrabajadorVO implements Serializable {
     private String dni;
     private String cod;
     private String name;
+    private String suspencion;
 
     public TrabajadorVO(){
         this.cod="";
         this.dni="";
         this.name="";
+        this.suspencion="";
     }
 
 
@@ -39,4 +41,11 @@ public class TrabajadorVO implements Serializable {
         this.name = name;
     }
 
+    public String getSuspencion() {
+        return suspencion;
+    }
+
+    public void setSuspencion(String suspencion) {
+        this.suspencion = suspencion;
+    }
 }

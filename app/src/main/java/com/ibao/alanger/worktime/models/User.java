@@ -14,7 +14,7 @@ public class User {
     private int idSupervisor;
     private String fundos;
     private List<Integer> idFundoList;
-
+    private boolean permisoManual;
 
     public String toString(){
         Gson gson = new Gson();
@@ -89,4 +89,11 @@ public class User {
         return idFundoList;
     }
 
+    public boolean isPermisoManual() {
+        return permisoManual;
+    }
+
+    public void setPermisoManual(boolean permisoManual) {
+        this.permisoManual = permisoManual;
+    }
 }

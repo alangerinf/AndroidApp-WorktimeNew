@@ -32,7 +32,7 @@ public class ActivityPreloader extends Activity {
     static TextView tViewlogo_p2;
     static Context ctx;
 
-    String TAG = ActivityPreloader.class.getSimpleName();
+    String TAG = "TAG"+ActivityPreloader.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,10 @@ public class ActivityPreloader extends Activity {
         iViewLogoEmpresa = findViewById(R.id.iViewLogoEmpresa);
         tViewlogo_p1 = findViewById(R.id.tViewlogo_p1);
         tViewlogo_p2 = findViewById(R.id.tViewlogo_p2);
+
+
+
+
     }
 
     void startAnimations(){

@@ -27,6 +27,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.SharedPreferencesManager;
 import com.ibao.alanger.worktime.models.DAO.TrabajadorDAO;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
 import com.ibao.alanger.worktime.models.VO.internal.TareoDetalleVO;
@@ -36,6 +37,7 @@ import com.ibao.alanger.worktime.views.transference.PageViewModel;
 import com.ibao.alanger.worktime.views.transference.TabbetActivity;
 import com.ibao.alanger.worktime.views.transference.helpers.VerifyPersonal;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -165,6 +167,7 @@ public class AddPersonalFragment extends Fragment {
             }
         });
 
+
         ftp_fabSetCancel.setOnClickListener(v->{
             startHourCounter();
         });
@@ -200,8 +203,9 @@ public class AddPersonalFragment extends Fragment {
             /****
              * TODO: CAMBIANDO LA FORMA DE VALIDAR PARA TENER TODO MAPEADO EN UNA CLASE
              */
+
             try {
-                if(VerifyPersonal.verify(true,mParamTAREOVOB,PageViewModel.getMutable(),MY_EXTRA_MODE,dni,hora)){
+                if(VerifyPersonal.verify(getActivity(),true,mParamTAREOVOB,PageViewModel.getMutable(),MY_EXTRA_MODE,dni,hora)){
                     TareoDetalleVO tareoDetalleVO = new TareoDetalleVO();
 
                     Log.d(TAG, MY_EXTRA_MODE);
@@ -236,14 +240,24 @@ public class AddPersonalFragment extends Fragment {
                 }else{
                     Log.d(TAG,"error de verificacion");
                 }
-            } catch (NullPointerException e) {
+            } catch (NullPointerException | ParseException e) {
                 Log.d(TAG,e.toString());
                 Snackbar snackbar= Snackbar.make(root,e.getMessage(),Snackbar.LENGTH_SHORT);
                 snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red_pastel));
                 snackbar.show();
             }
 
+
+
+
         });
+
+        if(!SharedPreferencesManager.getUser(getContext()).isPermisoManual()){
+            ftp_fabSetTime.hide();
+            ftp_tieTextDNI.setEnabled(false);
+
+        }
+
     }
 
     void restart(){
