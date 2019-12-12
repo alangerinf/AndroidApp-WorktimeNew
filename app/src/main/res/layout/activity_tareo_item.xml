@@ -38,7 +38,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_floating_button"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -61,7 +60,6 @@
                 style="@style/tView_Tittle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_floating_button"
                 android:text="Alan Gerónimo Sanes"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -87,7 +85,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/space_floating_button"
                 android:orientation="horizontal"
                 tools:ignore="UseCompoundDrawables">
 

@@ -12,8 +12,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.ibao.alanger.worktime.BuildConfig;
 import com.ibao.alanger.worktime.R;
+import com.ibao.alanger.worktime.database.ConexionSQLiteHelper;
 import com.ibao.alanger.worktime.database.SharedPreferencesManager;
+import com.ibao.alanger.worktime.database.webserver.ConectionConfig;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.update.view.ActivityUpdate;
 import com.ibao.alanger.worktime.upload.ActivityUpload;
@@ -94,6 +97,15 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
+        if (id == R.id.action_version) {
+            try {
+                Toast.makeText(getBaseContext(),"Versión "+ BuildConfig.VERSION_NAME+" code."+BuildConfig.VERSION_CODE+" db."+ ConexionSQLiteHelper.VERSION_DB,Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(),e.toString(),Toast.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
         if (id == R.id.action_logout) {
             if(new TareoDAO(ctx).listAll_UPLOAD().size()>0) {
                 Toast.makeText(ctx,"Aun no sincroniza sus labores",Toast.LENGTH_SHORT).show();

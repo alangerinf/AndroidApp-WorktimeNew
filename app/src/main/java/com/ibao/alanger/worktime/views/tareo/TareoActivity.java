@@ -152,7 +152,7 @@ public class TareoActivity extends AppCompatActivity {
     private void marcarSalida(){
 
         if(model.getTareoVO().getValue().getTareoDetalleVOList().size()==0){
-            Toast.makeText(ctx,"Aun no se ingresan Trabajadores",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx,"Lista Trabajadores vacía",Toast.LENGTH_SHORT).show();
         }
         for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
             if(ta.getTimeEnd().isEmpty()){
@@ -427,7 +427,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se borró un Trabajador de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
@@ -460,7 +460,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se borró la labor de "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override

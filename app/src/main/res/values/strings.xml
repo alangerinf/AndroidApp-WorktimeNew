@@ -2,7 +2,7 @@
     <string name="app_name">WorkTime</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Worktime</string>
+    <string name="nav_header_title">WorkTime</string>
     <string name="nav_header_subtitle">soporte@ibao.pe</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -42,10 +42,10 @@
     <string name="lista_de_cambios">Lista de Cambios</string>
     <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
     <string name="lista_de_personal">Lista de Trabajadores</string>
-    <string name="createTareo">Creando Actividad</string>
-    <string name="createTareoDirecto">Creando Actividad Directa</string>
-    <string name="createTareoIndirecto">Creando Actividad Indirecta</string>
-    <string name="createTareoAsistencia">Creando Actividad Asistencia</string>
+    <string name="createTareo">Creando Labor</string>
+    <string name="createTareoDirecto">Creando Labor Directa</string>
+    <string name="createTareoIndirecto">Creando Labor Indirecta</string>
+    <string name="createTareoAsistencia">Creando Asistencia</string>
     <string name="seleccione_tipo_Actividad">Seleccione Tipo de Labor</string>
     <string name="directo">DIRECTA</string>
     <string name="indirecto">INDIRECTA</string>
@@ -69,9 +69,16 @@
     <string name="sin_empresas">Sin Empresas</string>
     <string name="sin_centro_contes">Sin Centro de Costes</string>
     <string name="error_complete_configuraciones">Complete todas las configuraciones</string>
-    <string name="asistencia">ASISTENCIA</string>
+    <string name="asistencia">Asistencia</string>
     <string name="control_de_asistencia">Control de Asistencia</string>
     <string name="error_conexion_servidor">Error conectando con el servidor</string>
     <string name="update_status">Actualizando</string>
     <string name="editar_basicos">Editar Datos</string>
+    <string name="indirectas">Indirectas</string>
+    <string name="directas">Directas</string>
+    <string name="todas">Todas</string>
+    <string name="sincronizaci_n">Sincronización</string>
+    <string name="descargar_data">Descargar data</string>
+    <string name="subir_data">Subir data</string>
+    <string name="se_elimino_labor">Se eliminó una Labor</string>
 </resources>

@@ -90,7 +90,7 @@ public class AsistenciaTareoFragment extends Fragment {
         tareoVOList = new TareoDAO(ctx).listAsistencia();
 
         tViewTittle = getView().findViewById(R.id.fmain_tViewTittle);
-        tViewTittle.setText("Listas de Asistencia");
+        tViewTittle.setText(ctx.getText(R.string.asistencia));
 
         fab = getView().findViewById(R.id.fmain_fab);
         fab.setOnClickListener(v->{
@@ -173,7 +173,7 @@ public class AsistenciaTareoFragment extends Fragment {
             final int index = viewHolder.getAdapterPosition();
             adapter.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se Borró una Labor",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

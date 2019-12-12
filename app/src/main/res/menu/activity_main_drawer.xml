@@ -7,32 +7,32 @@
         <item
             android:id="@+id/nav_all"
             android:icon="@drawable/ic_list_black_24dp"
-            android:title="Todos" />
+            android:title="@string/todas" />
         <item
             android:id="@+id/nav_direct"
             android:icon="@drawable/ic_call_received_black_24dp"
-            android:title="Directos" />
+            android:title="@string/directas" />
         <item
             android:id="@+id/nav_indirect"
             android:icon="@drawable/ic_call_missed_black_24dp"
-            android:title="Indirectos" />
+            android:title="@string/indirectas" />
         <item
             android:id="@+id/nav_asistencia"
             android:icon="@drawable/ic_nature_people_black_24dp"
-            android:title="Asisitencia" />
+            android:title="@string/asistencia" />
     </group>
 
-    <item android:title="Sicronización"
+    <item android:title="@string/sincronizaci_n"
         >
         <menu>
             <item
                 android:id="@+id/nav_download"
                 android:icon="@drawable/ic_system_update_black_24dp"
-                android:title= "Descargar datos" />
+                android:title= "@string/descargar_data" />
             <item
                 android:id="@+id/nav_update"
                 android:icon="@drawable/ic_backup_black_24dp"
-                android:title="Subir data" />
+                android:title="@string/subir_data" />
         </menu>
     </item>
 
