@@ -160,31 +160,15 @@ public class AddPersonalFragment extends Fragment {
         startHourCounter();
 
 
-        ftp_fabSetTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openTimePicker(ftp_tieTextHour);
-            }
-        });
+        ftp_fabSetTime.setOnClickListener(view -> openTimePicker(ftp_tieTextHour));
 
 
-        ftp_fabSetCancel.setOnClickListener(v->{
-            startHourCounter();
-        });
+        ftp_fabSetCancel.setOnClickListener(v-> startHourCounter());
 
 
-        ftp_fabRestart.setOnClickListener(v->{
-            restart();
-        });
+        ftp_fabRestart.setOnClickListener(v-> restart());
 
-        ftp_fabQR.setOnClickListener(v->{
-
-            Intent i = new Intent(getActivity(),CustomScannerActivity.class);
-            i.putExtra(CustomScannerActivity.EXTRA_TAREO,mParamTAREOVOB);
-            i.putExtra(EXTRA_HOUR,isCounterRun?"":""+ftp_tieTextHour.getText().toString());
-            i.putExtra(CustomScannerActivity.EXTRA_MODE,MY_EXTRA_MODE);
-            startActivityForResult(i,REQUEST_QR);
-        });
+        ftp_fabQR.setOnClickListener(v-> openQR());
 
         ftp_btnAdd.setOnClickListener(v->{
             String dni = ftp_tieTextDNI.getText().toString();
@@ -244,6 +228,7 @@ public class AddPersonalFragment extends Fragment {
                 Log.d(TAG,e.toString());
                 Snackbar snackbar= Snackbar.make(root,e.getMessage(),Snackbar.LENGTH_SHORT);
                 snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red_pastel));
+
                 snackbar.show();
             }
 
@@ -252,12 +237,29 @@ public class AddPersonalFragment extends Fragment {
 
         });
 
+        //si no tiene permiso manual se desactivan algunas cosas
         if(!SharedPreferencesManager.getUser(getContext()).isPermisoManual()){
             ftp_fabSetTime.hide();
             ftp_tieTextDNI.setEnabled(false);
+            ftp_btnAdd.setOnClickListener(v->{
+                Snackbar snackbar= Snackbar.make(root,getContext().getString(R.string.no_permiso_manual),Snackbar.LENGTH_SHORT);
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(getContext(), R.color.red_pastel));
+                snackbar.setActionTextColor(ContextCompat.getColor(getContext(),R.color.white));
+                snackbar.setAction("Leer QR", v1 -> openQR());
+                snackbar.show();
 
+            });
         }
 
+    }
+
+
+    void openQR(){
+        Intent i = new Intent(getActivity(),CustomScannerActivity.class);
+        i.putExtra(CustomScannerActivity.EXTRA_TAREO,mParamTAREOVOB);
+        i.putExtra(EXTRA_HOUR,isCounterRun?"":""+ftp_tieTextHour.getText().toString());
+        i.putExtra(CustomScannerActivity.EXTRA_MODE,MY_EXTRA_MODE);
+        startActivityForResult(i,REQUEST_QR);
     }
 
     void restart(){

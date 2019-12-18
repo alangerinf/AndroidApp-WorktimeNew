@@ -113,7 +113,6 @@ public class TareoActivity extends AppCompatActivity {
                     }
                 }
             }
-
         });
         new ItemTouchHelper(itemTouchHelperCallBackActive).attachToRecyclerView(tareo_rViewTActivos);
         tareo_rViewTActivos.setAdapter(adapterActivo);

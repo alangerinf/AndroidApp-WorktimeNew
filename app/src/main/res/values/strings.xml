@@ -81,4 +81,5 @@
     <string name="descargar_data">Descargar data</string>
     <string name="subir_data">Subir data</string>
     <string name="se_elimino_labor">Se eliminó una Labor</string>
+    <string name="no_permiso_manual">No tiene permiso manual</string>
 </resources>
