@@ -388,7 +388,7 @@ public class TareoActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     // TODO Extract the data returned from the child Activity.
                     model.setTareoVO((TareoVO) data.getSerializableExtra(CreateTareoActivity.EXTRA_TAREO));
-                    Toast.makeText(ctx,"Datos editados corrctamente",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ctx, R.string.datos_editados_correctamente,Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
@@ -428,14 +428,11 @@ public class TareoActivity extends AppCompatActivity {
 
             Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
 
-            snackbar.setAction("Deshacer", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new TareoDetalleDAO(ctx).insert(item);
-                    model.addTareoDetalle(index,item);
-                    adapterActivo.notifyDataSetChanged();
-                    adapterInactivo.notifyDataSetChanged();
-                }
+            snackbar.setAction(getString(R.string.desahacer), v -> {
+                new TareoDetalleDAO(ctx).insert(item);
+                model.addTareoDetalle(index,item);
+                adapterActivo.notifyDataSetChanged();
+                adapterInactivo.notifyDataSetChanged();
             });
 
             snackbar.show();

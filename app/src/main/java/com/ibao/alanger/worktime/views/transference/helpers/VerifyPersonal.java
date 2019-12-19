@@ -2,8 +2,8 @@ package com.ibao.alanger.worktime.views.transference.helpers;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.ibao.alanger.worktime.R;
 import com.ibao.alanger.worktime.models.DAO.TareoDAO;
 import com.ibao.alanger.worktime.models.DAO.TrabajadorDAO;
 import com.ibao.alanger.worktime.models.VO.external.TrabajadorVO;
@@ -28,19 +28,19 @@ public class VerifyPersonal {
         boolean flag = true;
 
         if(DNI.length() != 8){
-            throw new NullPointerException("DNI no tiene 8 digitos");
+            throw new NullPointerException(ctx.getString(R.string.error_dni_no_complete));
         }
         if(tareoDestino == null){
-            throw new NullPointerException("Tareo es nulo");
+            throw new NullPointerException(ctx.getString(R.string.error_tareo_nulo));
         }
         if(tareoDetalleVOList == null){
-            throw new NullPointerException("lista es nula");
+            throw new NullPointerException(ctx.getString(R.string.erro_lista_nula));
         }
         if(!mode.equals(TabbetActivity.EXTRA_MODE_ADD_TRABAJADOR) && !mode.equals(TabbetActivity.EXTRA_MODE_REMOVE_TRABAJADOR)){
             throw new NullPointerException("modo no válido <"+mode+">");
         }
         if (hour.isEmpty()){
-            throw new NullPointerException("Hour no válido");
+            throw new NullPointerException(ctx.getString(R.string.error_hora_no_valida));
         }
 
         switch (mode){//verificar todos los pusibles casos negativos
@@ -51,7 +51,7 @@ public class VerifyPersonal {
                     if(!trabajadorVO.getSuspencion().isEmpty()){
                         flag = false;
                         if(catchError){
-                            throw new NullPointerException("Suspención: "+trabajadorVO.getSuspencion());
+                            throw new NullPointerException("Suspensión: "+trabajadorVO.getSuspencion());
                         }
                         break;
                     }
@@ -63,7 +63,7 @@ public class VerifyPersonal {
                 if(trabajadorEnTareoActual!=null){ // verificar si ya existe en la lista del tareo
                     flag = false;
                     if(catchError){
-                        throw new NullPointerException("Trabajador ya agregado a la Labor");
+                        throw new NullPointerException(ctx.getString(R.string.error_trabajador_agregado_labor));
                     }
                     break;
                 }
@@ -74,7 +74,7 @@ public class VerifyPersonal {
                 if(trabajadorEnLista!=null){
                     flag = false;
                     if(catchError){
-                        throw new NullPointerException("Trabajador ya agregado a la lista actual");
+                        throw new NullPointerException(ctx.getString(R.string.error_trabajador_agregado_lista));
                     }
                     break;
                 }
@@ -88,7 +88,7 @@ public class VerifyPersonal {
                     Log.d(TAG,"encontro mismo dni");
                     flag = false;
                     if(catchError){
-                        throw new NullPointerException("Trabajador en otra Labor");
+                        throw new NullPointerException(ctx.getString(R.string.error_trabajador_otra_labor));
                     }
                     break;
                 }
@@ -111,14 +111,14 @@ public class VerifyPersonal {
                     if(! temp.getTimeEnd().isEmpty()){ // si ya tiene hora de salida
                         flag = false;
                         if(catchError){
-                            throw new NullPointerException("Trabajador ya marco su salida");
+                            throw new NullPointerException(ctx.getString(R.string.error_trabajador_hora_salida));
                         }
                         break;
                     }
                     //caso contrario es true
                         if(!isValidDateEnd(temp.getTimeStart(),hour)){
                             if(catchError){
-                                throw new NullPointerException("Hora de salida invalida");
+                                throw new NullPointerException(ctx.getString(R.string.error_hora_salida_invalida));
                             }
                             break;
                         }
@@ -128,7 +128,7 @@ public class VerifyPersonal {
                 if(getTareoDetalleFormTareo_DNI(tareoDetalleVOList,DNI)!=null){
                     flag = false;
                     if(catchError){
-                        throw new NullPointerException("Trabajador ya agregado a la lista actual");
+                        throw new NullPointerException(ctx.getString(R.string.error_trabajador_agregado_lista));
                     }
                     break;
                 }

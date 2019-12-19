@@ -46,14 +46,7 @@ import java.util.GregorianCalendar;
 import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.EXTRA_HOUR;
 import static com.ibao.alanger.worktime.views.transference.CustomScannerActivity.REQUEST_QR;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AddPersonalFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddPersonalFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -249,6 +242,7 @@ public class AddPersonalFragment extends Fragment {
                 snackbar.show();
 
             });
+            ftp_fabRestart.hide();
         }
 
     }

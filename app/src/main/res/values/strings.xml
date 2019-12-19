@@ -40,7 +40,7 @@
     <string name="ingrese_dni">Ingrese DNI</string>
     <string name="hora">Hora</string>
     <string name="lista_de_cambios">Lista de Cambios</string>
-    <string name="no_se_agreg_personal">Aun no se agregó Personal</string>
+    <string name="no_se_agreg_personal">Lista vacía</string>
     <string name="lista_de_personal">Lista de Trabajadores</string>
     <string name="createTareo">Creando Labor</string>
     <string name="createTareoDirecto">Creando Labor Directa</string>
@@ -82,4 +82,15 @@
     <string name="subir_data">Subir data</string>
     <string name="se_elimino_labor">Se eliminó una Labor</string>
     <string name="no_permiso_manual">No tiene permiso manual</string>
+    <string name="error_trabajador_agregado_labor">Trabajador ya agregado a la Labor</string>
+    <string name="error_dni_no_complete">DNI no tiene 8 digitos</string>
+    <string name="error_tareo_nulo">Tareo es nulo</string>
+    <string name="erro_lista_nula">lista es nula</string>
+    <string name="error_hora_no_valida">Hora no válido</string>
+    <string name="error_trabajador_agregado_lista">Trabajador ya agregado a la lista actual</string>
+    <string name="error_trabajador_otra_labor">Trabajador en otra Labor</string>
+    <string name="error_trabajador_hora_salida">Trabajador ya marco su salida</string>
+    <string name="error_hora_salida_invalida">Hora de salida invalida</string>
+    <string name="datos_editados_correctamente">Datos editados correctamente</string>
+    <string name="desahacer">Deshacer</string>
 </resources>
