@@ -69,8 +69,8 @@
     <string name="sin_empresas">Sin Empresas</string>
     <string name="sin_centro_contes">Sin Centro de Costes</string>
     <string name="error_complete_configuraciones">Complete todas las configuraciones</string>
-    <string name="asistencia">Asistencia</string>
-    <string name="control_de_asistencia">Control de Asistencia</string>
+    <string name="asistencia">ASISTENCIA</string>
+    <string name="control_de_asistencia">CONTROL DE ASISTENCIA</string>
     <string name="error_conexion_servidor">Error conectando con el servidor</string>
     <string name="update_status">Actualizando</string>
     <string name="editar_basicos">Editar Datos</string>
@@ -93,4 +93,5 @@
     <string name="error_hora_salida_invalida">Hora de salida invalida</string>
     <string name="datos_editados_correctamente">Datos editados correctamente</string>
     <string name="desahacer">Deshacer</string>
+    <string name="se_elimino_trabajador">Se eliminó un Trabajador</string>
 </resources>

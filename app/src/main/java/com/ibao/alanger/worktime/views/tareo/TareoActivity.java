@@ -426,7 +426,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,getString(R.string.se_elimino_trabajador),Snackbar.LENGTH_LONG);
 
             snackbar.setAction(getString(R.string.desahacer), v -> {
                 new TareoDetalleDAO(ctx).insert(item);
@@ -456,7 +456,7 @@ public class TareoActivity extends AppCompatActivity {
             adapterActivo.notifyDataSetChanged();
             adapterInactivo.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,"Se eliminó un Trabajador "+item.getTrabajadorVO().getName()+" \""+item.getProductividad()+"\""+" productividad.",Snackbar.LENGTH_LONG);
+            Snackbar snackbar = Snackbar.make(root,getString(R.string.se_elimino_trabajador),Snackbar.LENGTH_LONG);
 
             snackbar.setAction("Deshacer", new View.OnClickListener() {
                 @Override
