@@ -534,7 +534,7 @@ public class TareoActivity extends AppCompatActivity {
                     eTextCantidad.setError("valor invalido");
                 }else {
                     for(TareoDetalleVO td : model.getTareoVO().getValue().getTareoDetalleVOList()) {
-                        long id = new ProductividadDAO(ctx).insert(td.getId(), valor, getHour());
+                        long id = new ProductividadDAO(ctx).insert(td.getId(), valor,getDateTime());
                         if (id > 0) {
                             td.getProductividadVOList().add(new ProductividadDAO(ctx).selectById((int) id));
                         }

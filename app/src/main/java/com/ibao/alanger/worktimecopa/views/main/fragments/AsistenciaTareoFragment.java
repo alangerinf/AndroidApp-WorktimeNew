@@ -90,7 +90,7 @@ public class AsistenciaTareoFragment extends Fragment {
         tareoVOList = new TareoDAO(ctx).listAsistencia();
 
         tViewTittle = getView().findViewById(R.id.fmain_tViewTittle);
-        tViewTittle.setText(ctx.getText(R.string.asistencia));
+        tViewTittle.setText("Lista de Asistencia");
 
         fab = getView().findViewById(R.id.fmain_fab);
         fab.setOnClickListener(v->{

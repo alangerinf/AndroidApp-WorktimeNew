@@ -230,10 +230,10 @@ public class ProductividadActivity extends AppCompatActivity {
                 }else {
                     pro.setValue(Float.valueOf(numero));
                     if(isNew){
-                        long id = new ProductividadDAO(ctx).insert(TAREODETALLEVO.getId(),numero,getHour());
+                        long id = new ProductividadDAO(ctx).insert(TAREODETALLEVO.getId(),numero,getDateTime());
                         if(id>0){
                             pro.setId((int)id);
-                            pro.setDateTime(getHour());
+                            pro.setDateTime(getDateTime());
                             pro.setIdTareoDetalle( TAREODETALLEVO.getId());
                             model.addProductividad(pro);
                           //  Toast.makeText(ctx,"Se agregaron "+eTextCantidad.getText().toString()+"",Toast.LENGTH_SHORT).show();
