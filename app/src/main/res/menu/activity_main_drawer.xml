@@ -19,7 +19,7 @@
         <item
             android:id="@+id/nav_asistencia"
             android:icon="@drawable/ic_nature_people_black_24dp"
-            android:title="@string/asistencia" />
+            android:title="@string/asistencia_min" />
     </group>
 
     <item android:title="@string/sincronizaci_n"

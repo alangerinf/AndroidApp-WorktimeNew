@@ -177,7 +177,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <com.ibao.alanger.worktime.adapters.GradientButton
+            <com.ibao.alanger.worktimecopa.adapters.GradientButton
                 android:id="@+id/btnLogin"
                 android:layout_width="240dp"
                 android:layout_height="43dp"
@@ -218,7 +218,7 @@
                 app:layout_constraintStart_toEndOf="@+id/logo"
                 app:layout_constraintTop_toTopOf="@+id/logo">
 
-                <com.ibao.alanger.worktime.adapters.GradientTextView
+                <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                     android:id="@+id/textView19"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

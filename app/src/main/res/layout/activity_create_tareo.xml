@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +54,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -159,7 +159,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
             android:layout_marginTop="@dimen/margin_starndar"
             android:orientation="vertical">
 
-            <com.ibao.alanger.worktime.adapters.GradientTextView
+            <com.ibao.alanger.worktimecopa.adapters.GradientTextView
                 style="@style/tView_Tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

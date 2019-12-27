@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ibao.alanger.worktime">
+    package="com.ibao.alanger.worktimecopa">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".app.AppController"
+        android:name="com.ibao.alanger.worktimecopa.app.AppController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,42 +25,42 @@
 
 
         <activity
-            android:name=".views.transference.TabbetActivity"
+            android:name="com.ibao.alanger.worktimecopa.views.transference.TabbetActivity"
             android:theme="@style/AppThemeMaterial.NoActionBar"/>
 
         <activity
-            android:name=".update.view.ActivityUpdate"
+            android:name="com.ibao.alanger.worktimecopa.update.view.ActivityUpdate"
             android:theme="@style/AppThemeMaterial.NoActionBar">
 
         </activity>
 
         <activity
-            android:name=".upload.ActivityUpload"
+            android:name="com.ibao.alanger.worktimecopa.upload.ActivityUpload"
             android:theme="@style/AppThemeMaterial.NoActionBar" />
 
-        <activity android:name=".views.CreateTareoActivity"
+        <activity android:name="com.ibao.alanger.worktimecopa.views.CreateTareoActivity"
             android:theme="@style/AppThemeMaterial"
             />
         <activity
-            android:name=".views.SelectTareoActivity"
+            android:name="com.ibao.alanger.worktimecopa.views.SelectTareoActivity"
             android:label="@string/select_tareo_activity_name" />
-        <activity android:name=".views.productividad.ProductividadActivity"
+        <activity android:name="com.ibao.alanger.worktimecopa.views.productividad.ProductividadActivity"
             android:label="Productividad"
             />
         <activity
-            android:name=".views.tareo.TareoActivity"
+            android:name="com.ibao.alanger.worktimecopa.views.tareo.TareoActivity"
             android:label="@string/tareo_labor_name">
 
         </activity>
         <activity
-            android:name=".views.main.MainActivity"
+            android:name="com.ibao.alanger.worktimecopa.views.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
 
         </activity>
 
         <activity
-            android:name=".views.ActivityPreloader"
+            android:name="com.ibao.alanger.worktimecopa.views.ActivityPreloader"
             android:screenOrientation="portrait"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
@@ -70,19 +70,19 @@
         </activity>
 
         <activity
-            android:name=".login.view.LoginActivity"
+            android:name="com.ibao.alanger.worktimecopa.login.view.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Fullscreen" />
 
         <activity
-            android:name=".views.transference.CustomScannerActivity"
-            android:parentActivityName=".views.transference.TabbetActivity"
+            android:name="com.ibao.alanger.worktimecopa.views.transference.CustomScannerActivity"
+            android:parentActivityName="com.ibao.alanger.worktimecopa.views.transference.TabbetActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service
-            android:name=".update.UpdateService"
+            android:name="com.ibao.alanger.worktimecopa.update.UpdateService"
             android:enabled="true"
             android:exported="true" />
 

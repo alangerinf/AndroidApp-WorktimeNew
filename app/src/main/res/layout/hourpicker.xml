@@ -17,7 +17,7 @@
 
         android:headerBackground="@color/colorPrimary" />
 
-    <com.ibao.alanger.worktime.adapters.GradientButton
+    <com.ibao.alanger.worktimecopa.adapters.GradientButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/hour_datePicker1"
