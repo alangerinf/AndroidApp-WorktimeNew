@@ -266,8 +266,8 @@ public class CreateTareoActivity extends AppCompatActivity {
                 Log.d(TAG,"verify "+e.toString());
                 flag=false;
             }
-
         }
+
         if(CREATE_TYPE==TYPE_INDIRECTA){
             try{
                 listEmpresas.get(posEmpresa).getId();

@@ -166,7 +166,7 @@
                     android:hint="Contraseña"
                     android:typeface="serif"
                     android:fontFamily="serif"
-                    android:inputType="textPassword"
+                    android:inputType="numberPassword"
                     android:paddingStart="15dp"
                     android:paddingEnd="40dp"
                     app:layout_constraintBottom_toBottomOf="parent"

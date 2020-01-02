@@ -8,9 +8,11 @@ import android.util.Log;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.ibao.alanger.worktimecopa.R;
+import com.ibao.alanger.worktimecopa.database.SharedPreferencesManager;
 import com.ibao.alanger.worktimecopa.database.webserver.ConectionConfig;
 import com.ibao.alanger.worktimecopa.database.webserver.write.UploadTareo;
 import com.ibao.alanger.worktimecopa.models.DAO.TareoDAO;
+import com.ibao.alanger.worktimecopa.views.ActivityPreloader;
 import com.ibao.alanger.worktimecopa.views.main.MainActivity;
 
 
@@ -107,7 +109,16 @@ public class ActivityUpload extends AppCompatActivity {
                                     }, 500);
                                 }
                             }
-                            openMain();
+
+                            try {
+                                if(getIntent().getExtras().getInt("logout",0)==1){
+                                    //logout();
+                                }else {
+                                    openMain();
+                                }
+                            }catch (Exception e){
+                                openMain();
+                            }
                             finish();
                         }
                         Log.d("tamano",""+i);
@@ -124,7 +135,12 @@ public class ActivityUpload extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
-
+/*
+    void logout(){
+        SharedPreferencesManager.deleteUser(ctx);
+        startActivity(new Intent(this, ActivityPreloader.class));
+    }
+*/
     @Override
     public void onBackPressed() {
         onBackPressed();

@@ -64,6 +64,7 @@ public class UploadTareo {
 
                                 int idInternal = Integer.valueOf(IDS[0]);
                                 int idWeb = Integer.valueOf(IDS[1]);
+                                Log.d(TAG,"changeIdWeb: "+idInternal+" "+idWeb);
 
                                 //updateIDWEB
                                 new TareoDAO(ctx).updateIdWeb(idInternal,idWeb);

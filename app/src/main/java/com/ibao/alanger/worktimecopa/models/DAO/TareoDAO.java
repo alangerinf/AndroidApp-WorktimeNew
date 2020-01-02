@@ -38,6 +38,7 @@ import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_TAREO_IS
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_TAREO_PRODUCTIVIDAD;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._AND;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._FROM;
+import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._OR;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._SELECT;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._WHERE;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign._n;
@@ -242,7 +243,6 @@ public class TareoDAO {
         return i;
     }
 
-
     public List<TareoVO> listAll_UPLOAD(){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
@@ -272,6 +272,46 @@ public class TareoDAO {
         }
         return tareoVOS;
     }
+
+
+    public List<TareoVO> listNoFinishedAndDeleted(){
+        ConexionSQLiteHelper c;
+        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
+        SQLiteDatabase db = c.getReadableDatabase();
+        List<TareoVO> tareoVOS = new ArrayList<>();
+        try{
+            Cursor cursor= db.rawQuery(
+                        _SELECT+
+                                "*"+
+                            _FROM+
+                                TAB_TAREO+
+                            _WHERE+
+                                "("+
+                                    TAB_TAREO_ISACTIVE+" = 1"+
+                                    _AND+
+                                    TAB_TAREO_DATEEND+" IS NULL"+
+                                ")"+
+                                _OR+
+                                TAB_TAREO_ISACTIVE+" = 0"
+                    ,
+                    null
+            );
+            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
+            while(cursor.moveToNext()){
+                TareoVO temp = getAtributtes(cursor);
+                tareoVOS.add(temp);
+            }
+            cursor.close();
+        }catch (Exception e){
+            Toast.makeText(ctx,TAG+" listAll "+e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG," listAll "+e.toString());
+        }finally {
+            db.close();
+            c.close();
+        }
+        return tareoVOS;
+    }
+
 
     public List<TareoVO> listTareo_same_dni(int idTareo,String DNI){
         ConexionSQLiteHelper c;

@@ -18,6 +18,7 @@ public class DataBaseDesign {
 
     public static final String  _SELECT     = " SELECT ",
                                 _AND        = " AND ",
+                                _OR         = " OR ",
                                 _FROM       = " FROM ",
                                 _WHERE      = " WHERE ",
                                 _ORDERBY    = " ORDER BY ",

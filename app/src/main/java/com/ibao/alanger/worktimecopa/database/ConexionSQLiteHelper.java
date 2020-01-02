@@ -8,13 +8,14 @@ import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.*;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper{
 
-    public static int VERSION_DB = 7;
+    public static int VERSION_DB = 11;
 
     public ConexionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     static final private String TAG = ConexionSQLiteHelper.class.getSimpleName();
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATETABLE_EMPRESA);

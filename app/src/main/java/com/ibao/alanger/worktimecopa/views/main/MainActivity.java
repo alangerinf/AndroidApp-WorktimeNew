@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.ibao.alanger.worktimecopa.BuildConfig;
 import com.ibao.alanger.worktimecopa.R;
 import com.ibao.alanger.worktimecopa.database.ConexionSQLiteHelper;
@@ -106,7 +108,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.action_logout) {
             if(new TareoDAO(ctx).listAll_UPLOAD().size()>0) {
-                Toast.makeText(ctx,"Aun no sincroniza sus labores",Toast.LENGTH_SHORT).show();
+
+                Snackbar snackbar= Snackbar.make(myFragment.getView(),"Falta finalizar todas sus labores y sincronizar",Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.red_pastel));
+                snackbar.setActionTextColor(ContextCompat.getColor(this,R.color.white));
+                snackbar.setAction("Sincronizar", v1 -> startActivity(new Intent(this, ActivityUpload.class)));
+                snackbar.show();
+
             }else{
                 SharedPreferencesManager.deleteUser(ctx);
                 startActivity(new Intent(this, ActivityPreloader.class));

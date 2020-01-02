@@ -60,7 +60,6 @@ public class LoginActivity extends Activity implements LoginView{
         setContentView(R.layout.activity_login);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
         declaration();
         defineEvents();
         enterAnimation();
@@ -80,14 +79,11 @@ public class LoginActivity extends Activity implements LoginView{
         constCombo  = findViewById(R.id.constCombo);
         progressBar = findViewById(R.id.progressBar);
 
-
         defaultAttributes();
 
-/*
         eTextUser.setText("46671192");
-        eTextPassword.setText("123456");
+        eTextPassword.setText("654321");
 
- */
     }
 
     void defaultAttributes(){
