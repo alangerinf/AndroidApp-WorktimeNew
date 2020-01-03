@@ -170,22 +170,43 @@ public class DirectTareoFragment extends Fragment {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
             final TareoVO item = tareoVOList.remove(viewHolder.getAdapterPosition());
-            new TareoDAO(ctx).deleteLogicById(item.getId());
-            final int index = viewHolder.getAdapterPosition();
-            adapter.notifyDataSetChanged();
 
-            Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
-            snackbar.setAction("Deshacer", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new TareoDAO(ctx).unDeleteLogicById(item.getId());
-                    tareoVOList.add(index,item);
-                    adapter.notifyDataSetChanged();
-                }
-            });
-            snackbar.show();
+            if(item.getIdWeb()>0){
+                new TareoDAO(ctx).deleteLogicById(item.getId());
+                final int index = viewHolder.getAdapterPosition();
+                adapter.notifyDataSetChanged();
+
+                Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
+                snackbar.setAction("Deshacer", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TareoDAO(ctx).unDeleteLogicById(item.getId());
+                        tareoVOList.add(index,item);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                snackbar.show();
+            }else {
+
+                new TareoDAO(ctx).deleteById(item.getId());
+                final int index = viewHolder.getAdapterPosition();
+                adapter.notifyDataSetChanged();
+
+                Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
+                snackbar.setAction("Deshacer", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new TareoDAO(ctx).insert(item);
+                        tareoVOList.add(index,item);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                snackbar.show();
+
+            }
         }
     };
+
 
     @Override
     public void onDetach() {

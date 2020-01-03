@@ -274,43 +274,6 @@ public class TareoDAO {
     }
 
 
-    public List<TareoVO> listNoFinishedAndDeleted(){
-        ConexionSQLiteHelper c;
-        c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
-        SQLiteDatabase db = c.getReadableDatabase();
-        List<TareoVO> tareoVOS = new ArrayList<>();
-        try{
-            Cursor cursor= db.rawQuery(
-                        _SELECT+
-                                "*"+
-                            _FROM+
-                                TAB_TAREO+
-                            _WHERE+
-                                "("+
-                                    TAB_TAREO_ISACTIVE+" = 1"+
-                                    _AND+
-                                    TAB_TAREO_DATEEND+" IS NULL"+
-                                ")"+
-                                _OR+
-                                TAB_TAREO_ISACTIVE+" = 0"
-                    ,
-                    null
-            );
-            Log.d(TAG,"cantidad de tareos "+cursor.getCount());
-            while(cursor.moveToNext()){
-                TareoVO temp = getAtributtes(cursor);
-                tareoVOS.add(temp);
-            }
-            cursor.close();
-        }catch (Exception e){
-            Toast.makeText(ctx,TAG+" listAll "+e.toString(), Toast.LENGTH_SHORT).show();
-            Log.d(TAG," listAll "+e.toString());
-        }finally {
-            db.close();
-            c.close();
-        }
-        return tareoVOS;
-    }
 
 
     public List<TareoVO> listTareo_same_dni(int idTareo,String DNI){

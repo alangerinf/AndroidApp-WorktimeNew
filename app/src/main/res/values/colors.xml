@@ -11,5 +11,7 @@
     <color name="white">#fff</color>
     <color name="red_pastel">#FD6767</color>
 
+    <color name="colorCompleto">#55c29c</color>
+    <color name="colorIncompleto">#FD6767</color>
 
 </resources>

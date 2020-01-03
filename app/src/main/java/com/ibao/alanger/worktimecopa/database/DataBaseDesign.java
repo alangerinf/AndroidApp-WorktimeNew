@@ -179,12 +179,14 @@ public class DataBaseDesign {
                                 TAB_CULTIVO_NAME_TYPE       = TYPE_VARCHAR,
                                 TAB_CULTIVO_HASLABOR        = "hasLabor",
                                 TAB_CULTIVO_HASLABOR_TYPE   = TYPE_BOOLEAN,
+                                TAB_CULTIVO_IDFUNDO         = "idFundo",
+                                TAB_CULTIVO_IDFUNDO_TYPE    = TYPE_INTEGER,
                                 TAB_CULTIVO_STATUS          = "status",
                                 TAB_CULTIVO_STATUS_TYPE     = TYPE_BOOLEAN;
 
     public static final String CREATETABLE_CULTIVO =
             TABLE_CREATE+TAB_CULTIVO+"("+
-                    TAB_CULTIVO_ID   + TAB_CULTIVO_ID_TYPE   + PK+ N_NULL+
+                    TAB_CULTIVO_ID   + TAB_CULTIVO_ID_TYPE   + N_NULL+
                     AND +
                     TAB_CULTIVO_COD + TAB_CULTIVO_COD_TYPE + N_NULL+
                     AND +
@@ -192,8 +194,11 @@ public class DataBaseDesign {
                     AND +
                     TAB_CULTIVO_HASLABOR + TAB_CULTIVO_HASLABOR_TYPE+ N_NULL+
                     AND +
+                    TAB_CULTIVO_IDFUNDO + TAB_CULTIVO_IDFUNDO_TYPE+ N_NULL+
+                    AND +
                     TAB_CULTIVO_STATUS + TAB_CULTIVO_STATUS_TYPE+ N_NULL+
                     ")";
+
 
     public static final String  TAB_TRABAJADOR              = "Trabajador",
                                 TAB_TRABAJADOR_DNI              = "dni",

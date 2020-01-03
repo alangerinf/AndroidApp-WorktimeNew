@@ -19,6 +19,7 @@ import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_COD;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_HASLABOR;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_ID;
+import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_IDFUNDO;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_NAME;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_STATUS;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_LOTE;
@@ -131,7 +132,7 @@ public class CultivoDAO {
     }
 
 
-    public List<CultivoVO> listAll(){
+    public List<CultivoVO> selectByIdFundo(int idFundo){
         ConexionSQLiteHelper c;
         c = new ConexionSQLiteHelper(ctx, DATABASE_NAME,null,VERSION_DB);
         SQLiteDatabase db = c.getReadableDatabase();
@@ -139,10 +140,13 @@ public class CultivoDAO {
         try{
             //String[] campos = {TAB_CULTIVO_ID,TAB_CULTIVO_COD,TAB_CULTIVO_NAME};
             String[] args ={
-                    "1"
+                    "1",
+                    String.valueOf(idFundo)
             };
-            Cursor cursor= db.query(TAB_CULTIVO,null,TAB_CULTIVO_STATUS+"=?",args,null,null,null);
+            Cursor cursor= db.query(TAB_CULTIVO,null,TAB_CULTIVO_STATUS+"=? AND "+TAB_CULTIVO_IDFUNDO+"=?",args,null,null,null);
+            Log.d(TAG,"selectByIdFundo"+" cant="+cursor.getCount());
             while(cursor.moveToNext()){
+
                 CultivoVO temp = getAtributtes(cursor);
                 cultivos.add(temp);
             }
@@ -173,6 +177,9 @@ public class CultivoDAO {
                     break;
                 case TAB_CULTIVO_HASLABOR:
                     cultivoVO.setLabor(cursor.getInt(cursor.getColumnIndex(name))>0);
+                    break;
+                case TAB_CULTIVO_IDFUNDO:
+                    cultivoVO.setIdFundo(cursor.getInt(cursor.getColumnIndex(name)));
                     break;
                 case TAB_CULTIVO_STATUS:
                     cultivoVO.setStatus(cursor.getInt(cursor.getColumnIndex(name))>0);

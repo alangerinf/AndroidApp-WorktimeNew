@@ -32,7 +32,6 @@ public class TareoVO implements Serializable {
     private boolean isActive;
     private boolean isAsistencia;
 
-
     private List<TareoDetalleVO> tareoDetalleVOList;
 
     public TareoVO(){

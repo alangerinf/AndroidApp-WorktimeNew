@@ -424,23 +424,23 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorCentroCoste.setVisibility(View.GONE);
 
         loadSpnEmpresas();
-        loadSpnCultivos();
         loadSpnActividades();
 
-        spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                loadSpnLote("spnFundo.setOnItemSelectedListener");
+                loadSpnFundos();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
 
-        spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                loadSpnFundos();
+                //    loadSpnLote("spnFundo.setOnItemSelectedListener");
+                loadSpnCultivos();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -467,12 +467,15 @@ public class CreateTareoActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
 
+        if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+            handler.removeCallbacks(runLoadDirectoIsFirst);
             handler.postDelayed(runLoadDirectoIsFirst,100);
         }
+
     }
-    Handler handler = new Handler();
+
+    private static Handler handler = new Handler();
     Runnable runLoadDirectoIsFirst = new Runnable() {
         @Override
         public void run() {
@@ -486,13 +489,18 @@ public class CreateTareoActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e(TAG,e.toString());
             }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateFundo();
+                }
 
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
             try {
                 if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
                     tryPosicionateCultivo();
-
                 }
-
             }catch (Exception e){
                 Log.e(TAG,e.toString());
             }
@@ -505,14 +513,7 @@ public class CreateTareoActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e(TAG,e.toString());
             }
-            try {
-                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
-                    tryPosicionateFundo();
-                }
 
-            }catch (Exception e){
-                Log.e(TAG,e.toString());
-            }
             try {
                 if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
                     tryPosicionateLabor();
@@ -547,7 +548,14 @@ public class CreateTareoActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e(TAG,e.toString());
             }
+            try {
+                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
+                    tryPosicionateFundo();
+                }
 
+            }catch (Exception e){
+                Log.e(TAG,e.toString());
+            }
             try {
                 if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
                     tryPosicionateCultivo();
@@ -566,14 +574,7 @@ public class CreateTareoActivity extends AppCompatActivity {
             }catch (Exception e){
                 Log.e(TAG,e.toString());
             }
-            try {
-                if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
-                    tryPosicionateFundo();
-                }
 
-            }catch (Exception e){
-                Log.e(TAG,e.toString());
-            }
             try {
                 if (isFirst && MY_CREATE_MODE.equals(MODE_EDIT)) {
                     tryPosicionateLabor();
@@ -632,14 +633,25 @@ public class CreateTareoActivity extends AppCompatActivity {
         selectorLote.setVisibility(View.GONE);
 
         loadSpnEmpresas();
-        loadSpnCultivos();
+
         loadSpnActividades();
+
 
         spnEmpresa.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int index, long l) {
                 loadSpnCentroCoste();
                 loadSpnFundos();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        spnFundo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //    loadSpnLote("spnFundo.setOnItemSelectedListener");
+                loadSpnCultivos();
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -666,7 +678,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
 
         if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
-
+            handler.removeCallbacks(runLoadIndirectoIsFirst);
             handler.postDelayed(runLoadIndirectoIsFirst,100);
         }
     }
@@ -842,6 +854,7 @@ public class CreateTareoActivity extends AppCompatActivity {
         });
 
         if(isFirst && MY_CREATE_MODE.equals(MODE_EDIT)){
+            handler.removeCallbacks(runLoadAsistenciaIsFirst);
             handler.postDelayed(runLoadAsistenciaIsFirst,100);
         }
 
@@ -857,6 +870,26 @@ public class CreateTareoActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            handler.removeCallbacks(runLoadDirectoIsFirst);
+        }catch (Exception e){
+
+        }
+        try {
+            handler.removeCallbacks(runLoadIndirectoIsFirst);
+        }catch (Exception e){
+
+        }
+        try {
+            handler.removeCallbacks(runLoadAsistenciaIsFirst);
+        }catch (Exception e){
+
+        }
+        super.onDestroy();
     }
 
     void goToTareo(long id){
@@ -910,9 +943,10 @@ public class CreateTareoActivity extends AppCompatActivity {
     }
 
     private void loadListCultivos() {
-        Log.d(TAG,"loadListCultivos");
         CultivoDAO cultivoDAO = new CultivoDAO(ctx);
-        listCultivos = cultivoDAO.listAll();
+        int pos = spnFundo.getSelectedItemPosition();
+        Log.d(TAG,"loadListCultivos "+listFundos.get(pos/*-1*/).getId());
+        listCultivos = cultivoDAO.selectByIdFundo(listFundos.get(pos/*-1*/).getId());
         cargarNombreCultivos();
     }
     private void cargarNombreCultivos(){
@@ -1059,14 +1093,16 @@ public class CreateTareoActivity extends AppCompatActivity {
     // todo : Cargardores de Fundos
     void loadSpnLabor(){
         Log.i(TAG,"loadSpnLabor");
+        listNombreLabores = new ArrayList<>();
         loadListLabor();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreLabores);
-        spnLabor.setAdapter(adapter);
         if(listNombreLabores.size()==0){
             if(!isFirst || !MY_CREATE_MODE.equals(MODE_EDIT)) {
                 Toast.makeText(ctx, ctx.getString(R.string.sin_labores),Toast.LENGTH_SHORT).show();
             }
             spnLabor.setAdapter(null);
+        }else {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getBaseContext(),R.layout.spinner_item,listNombreLabores);
+            spnLabor.setAdapter(adapter);
         }
     }
 
@@ -1076,31 +1112,36 @@ public class CreateTareoActivity extends AppCompatActivity {
         int posActividad = spnActividad.getSelectedItemPosition();
         int posCultivo = spnCultivo.getSelectedItemPosition();
 
-        Log.d(TAG,"idCultivo: "+listCultivos.get(posCultivo).getId());
-        Log.d(TAG,"idActividad: "+listActividades.get(posActividad).getId());
+        try {
+            Log.d(TAG, "idCultivo: " + listCultivos.get(posCultivo).getId());
+            Log.d(TAG, "idActividad: " + listActividades.get(posActividad).getId());
 
-        Log.d(TAG, "CREATE TIPE:"+CREATE_TYPE);
+            Log.d(TAG, "CREATE TIPE:" + CREATE_TYPE);
 
-        if(MY_CREATE_MODE.equals(MODE_MAIN)){
-            listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
-                    listCultivos.get(posCultivo).getId(),
-                    listActividades.get(posActividad).getId(),
-                    (CREATE_TYPE==TYPE_DIRECTA)
-            );
-        }else {
-            if(MY_CREATE_MODE.equals(MODE_EDIT)){
+            if(MY_CREATE_MODE.equals(MODE_MAIN)){
                 listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
                         listCultivos.get(posCultivo).getId(),
                         listActividades.get(posActividad).getId(),
-                        MY_TAREO_EDIT.getLaborVO().isDirecto());
-
+                        (CREATE_TYPE==TYPE_DIRECTA)
+                );
             }else {
-                Toast.makeText(ctx,"modo o tareo no reconocido",Toast.LENGTH_LONG).show();
+                if(MY_CREATE_MODE.equals(MODE_EDIT)){
+                    listLabores = laborDAO.listByIdCultivoIdActividad_IsDirect(
+                            listCultivos.get(posCultivo).getId(),
+                            listActividades.get(posActividad).getId(),
+                            MY_TAREO_EDIT.getLaborVO().isDirecto()
+                    );
+                }else {
+                    Toast.makeText(ctx,"modo o tareo no reconocido",Toast.LENGTH_LONG).show();
+                }
             }
+            loadNombreLabores();
+
+        }catch (Exception e){
+            Log.d(TAG,e.toString());
         }
 
 
-        loadNombreLabores();
     }
 
     private void loadNombreLabores(){

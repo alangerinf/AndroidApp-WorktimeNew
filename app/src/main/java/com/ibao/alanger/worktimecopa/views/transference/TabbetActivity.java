@@ -1,14 +1,18 @@
 package com.ibao.alanger.worktimecopa.views.transference;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -176,6 +180,27 @@ public class  TabbetActivity extends AppCompatActivity
         onBackPressed();
         return true;
     }
+
+    @Override
+    public void onBackPressed(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_return);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Button dialog_positive = dialog.findViewById(R.id.dialog_positive);
+        Button dialog_negative = dialog.findViewById(R.id.dialog_negative);
+
+        dialog_positive.setOnClickListener(v->{
+            dialog.dismiss();
+            super.onBackPressed();
+        });
+        dialog_negative.setOnClickListener(v->{
+            dialog.dismiss();
+        });
+        dialog.show();
+    }
+
 
     @Override
     public void onFragmentInteraction_upd_eTextDNI(String mensaje) {

@@ -26,6 +26,7 @@ import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_COD;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_HASLABOR;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_ID;
+import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_IDFUNDO;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_NAME;
 import static com.ibao.alanger.worktimecopa.database.DataBaseDesign.TAB_CULTIVO_STATUS;
 import static com.ibao.alanger.worktimecopa.database.webserver.ConectionConfig.URL_DOWN_CULTUVOS;
@@ -70,6 +71,7 @@ public class DownloaderCultivos implements Downloader{
                                 TAB_CULTIVO_COD+","+
                                 TAB_CULTIVO_NAME+","+
                                 TAB_CULTIVO_HASLABOR+", "+
+                                TAB_CULTIVO_IDFUNDO+","+
                                 TAB_CULTIVO_STATUS+" "+
                                 ")"+
                                 "VALUES ";
@@ -81,6 +83,7 @@ public class DownloaderCultivos implements Downloader{
                             int id = data.getInt("id");
                             String cod = " ";
                             String name = data.getString("nombre");
+                            int idFundo = data.getInt("idFundo");
                             int hasLabor = data.getInt("hasLabor");
                             int status = 1;
 
@@ -92,6 +95,7 @@ public class DownloaderCultivos implements Downloader{
                                     "\""+cod+"\""+","+
                                     "\""+name+"\""+","+
                                     hasLabor+","+
+                                    idFundo+","+
                                     status+
                                     ")";
 

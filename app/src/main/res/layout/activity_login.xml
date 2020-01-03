@@ -119,7 +119,7 @@
                     android:layout_height="0dp"
                     android:background="@drawable/shape_shadow"
                     android:hint="Usuario"
-                    android:inputType="textEmailAddress"
+                    android:inputType="number"
                     android:fontFamily="serif"
                     android:typeface="serif"
                     android:paddingLeft="15dp"
