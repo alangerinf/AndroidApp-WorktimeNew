@@ -80,10 +80,10 @@ public class LoginActivity extends Activity implements LoginView{
         progressBar = findViewById(R.id.progressBar);
 
         defaultAttributes();
-
+/*
         eTextUser.setText("46671192");
         eTextPassword.setText("654321");
-
+*/
     }
 
     void defaultAttributes(){
