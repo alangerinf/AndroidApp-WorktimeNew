@@ -56,7 +56,6 @@
             android:name="com.ibao.alanger.worktimecopa.views.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
-
         </activity>
 
         <activity

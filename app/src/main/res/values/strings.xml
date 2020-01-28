@@ -95,4 +95,5 @@
     <string name="desahacer">Deshacer</string>
     <string name="se_elimino_trabajador">Se eliminó un Trabajador</string>
     <string name="asistencia_min">Asistencia</string>
+    <string name="existen_trabajadores_sin_salida">No se puede finalizar con trabajadores sin hora de salida</string>
 </resources>

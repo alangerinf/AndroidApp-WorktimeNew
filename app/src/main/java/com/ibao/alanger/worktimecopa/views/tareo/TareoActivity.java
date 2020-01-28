@@ -149,19 +149,39 @@ public class TareoActivity extends AppCompatActivity {
 
     }
 
+
+
+
     private void marcarSalida(){
 
         if(model.getTareoVO().getValue().getTareoDetalleVOList().size()==0){
             Toast.makeText(ctx,"Lista Trabajadores vacía",Toast.LENGTH_SHORT).show();
         }
+
+
+
+        // SI TIENES TRABAJADORES SIN HORA DE SALIDA NO PUEDE FINALIZAR
+            //MOSTRAR UNA ALERTA
+
+
+        boolean flagTodosTienenSalida = true;
         for(TareoDetalleVO ta :model.getTareoVO().getValue().getTareoDetalleVOList() ){
             if(ta.getTimeEnd().isEmpty()){
-                Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
-                new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
+                flagTodosTienenSalida = false;
+                break;
+                //Log.d(TAG,"salida:"+ta.getIdTareo()+" "+ta.getTrabajadorVO().getDni()+" "+Utilities.getDateTime());
+                //  new TareoDetalleDAO(ctx).updateSalidaby_dni_idTareo(ta.getIdTareo(),ta.getTrabajadorVO().getDni(),Utilities.getDateTime());
             }
+
+        }
+        if(flagTodosTienenSalida){ // si todos los trabajadores tienen hora de  salida
             new TareoDAO(ctx).updateFinishHourById(model.getTareoVO().getValue().getId(),Utilities.getDateTime());
             onBackPressed();
+        }else {
+            Snackbar snackbar = Snackbar.make(root,getString(R.string.existen_trabajadores_sin_salida),Snackbar.LENGTH_LONG);
+            snackbar.show();
         }
+
     }
 
     //codigo pasado para obtener el resultado de la edicion de datos basicos
