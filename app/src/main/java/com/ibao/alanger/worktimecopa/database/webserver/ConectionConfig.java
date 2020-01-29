@@ -2,7 +2,7 @@ package com.ibao.alanger.worktimecopa.database.webserver;
 
 public class ConectionConfig {
 
-    private static final String ROOT= "http://35.167.15.182/WorkTime/Demo/Requests/";
+    private static final String ROOT= "http://35.167.15.182/WorkTime/Copacabana/Requests/";
     public static final String POST_LOGIN=ROOT+"autenticar.php";
 
     public static final String URL_DOWN_ACTIVIDADES =ROOT+"getActividades.php";
