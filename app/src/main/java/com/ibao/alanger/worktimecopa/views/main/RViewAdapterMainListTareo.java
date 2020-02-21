@@ -19,36 +19,44 @@ import java.util.List;
 
 public class RViewAdapterMainListTareo
         extends RecyclerView.Adapter<RViewAdapterMainListTareo.ViewHolder>
-        implements View.OnClickListener{
+        implements View.OnClickListener, View.OnLongClickListener{
 
     List<TareoVO> tareoVOList;
     Context ctx;
 
     private View.OnClickListener onClickListener;
 
+    private View.OnLongClickListener onLongClickListener;
+
     public RViewAdapterMainListTareo(Context ctx,List<TareoVO> tareoVOList) {
         this.tareoVOList = tareoVOList;
         this.ctx = ctx;
     }
 
+    public TareoVO getItem(int pos){
+        return tareoVOList.get(pos);
+    }
+
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.fragment_main_item,null,false);
+                .inflate(R.layout.fragment_main_item,null,false);
 
         view.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         ));
         view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        TareoVO item = tareoVOList.get(position);
+        TareoVO item = getItem(position);
 
         holder.fmain_item_nTrabajadores.setText(""+item.getTareoDetalleVOList().size());
         holder.fmain_item_dateTime.setText(item.getDateTimeStart());
@@ -79,6 +87,21 @@ public class RViewAdapterMainListTareo
 
     public void setOnClicListener(View.OnClickListener listener){
         this.onClickListener=listener;
+    }
+    public void setOnLongClickListener(View.OnLongClickListener listener){
+        Log.d(TAG,"setOnLongClickListenere");
+        this.onLongClickListener=listener;
+    }
+
+    String TAG = RViewAdapterMainListTareo.class.getSimpleName();
+    @Override
+    public boolean onLongClick(View v) {
+        Log.d(TAG,"on long click");
+        if(onLongClickListener!=null){
+            Log.d(TAG,""+v);
+            onLongClickListener.onLongClick(v);
+        }
+        return true;
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,60 @@ public class AsistenciaTareoFragment extends Fragment {
             v.setClickable(false);
             v.setFocusable(false);
         });
-        new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
+        //new ItemTouchHelper(itemTouchHelperCallBack).attachToRecyclerView(rView);
+
+        adapter.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                int index = rView.getChildAdapterPosition(v);
+                TareoVO item = adapter.getItem(index);
+                if(item.getIdWeb()>0){
+                    //final int index = viewHolder.getAdapterPosition();
+                    Snackbar snackbar = Snackbar.make(root,"¿Desea Eliminar La Labor?",Snackbar.LENGTH_LONG);
+                    snackbar.setAction("Sí", new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            tareoVOList.remove(index);
+                            new TareoDAO(ctx).deleteLogicById(item.getId());
+                            adapter.notifyDataSetChanged();
+                            Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
+                            snackbar.setAction("Deshacer", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new TareoDAO(ctx).unDeleteLogicById(item.getId());
+                                    tareoVOList.add(index,item);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            snackbar.show();
+                        }
+                    }) ;
+                    snackbar.show();
+                }else {
+                    Snackbar snackbar = Snackbar.make(root,"¿Desea Eliminar La Labor?",Snackbar.LENGTH_LONG);
+                    snackbar.setAction("Sí", new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            tareoVOList.remove(index);
+                            new TareoDAO(ctx).deleteById(item.getId());
+                            adapter.notifyDataSetChanged();
+                            Snackbar snackbar = Snackbar.make(root,getActivity().getString(R.string.se_elimino_labor),Snackbar.LENGTH_LONG);
+                            snackbar.setAction("Deshacer", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    new TareoDAO(ctx).insert(item);
+                                    tareoVOList.add(index,item);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            snackbar.show();
+                        }
+                    }) ;
+                    snackbar.show();
+                }
+                return false;
+            }
+        });
         rView.setAdapter(adapter);
     }
 
@@ -157,7 +211,7 @@ public class AsistenciaTareoFragment extends Fragment {
     }
 
 
-
+/*
 
     private ItemTouchHelper.SimpleCallback itemTouchHelperCallBack = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT|ItemTouchHelper.LEFT) {
         @Override
@@ -204,7 +258,7 @@ public class AsistenciaTareoFragment extends Fragment {
             }
         }
     };
-
+*/
     @Override
     public void onDetach() {
         super.onDetach();

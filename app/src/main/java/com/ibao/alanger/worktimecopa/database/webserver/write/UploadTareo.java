@@ -3,7 +3,10 @@ package com.ibao.alanger.worktimecopa.database.webserver.write;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -48,7 +51,7 @@ public class UploadTareo {
         StringRequest sr = new StringRequest(Request.Method.POST,
                 URL_UP_TAREO,
                 response -> {
-                  //  progress.dismiss();
+                    //  progress.dismiss();
                     Log.d(TAG,"resp: "+response);
                     STATUS =ConectionConfig.STATUS_PROCESSING;
 
@@ -131,6 +134,10 @@ public class UploadTareo {
                 return headers;
             }
         };
+
+        sr.setRetryPolicy(new DefaultRetryPolicy(30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         AppController.getInstance().addToRequestQueue(sr);
     }

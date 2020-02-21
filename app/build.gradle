@@ -7,8 +7,8 @@ android {
         applicationId "com.ibao.alanger.worktimecopa"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 5
-        versionName "1.0d"
+        versionCode 6
+        versionName "1.0e"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -36,8 +36,6 @@ dependencies {
 
     //lottue  animaciones
     implementation 'com.airbnb.android:lottie:3.0.0'
-
-
 
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.google.code.gson:gson:2.8.2'
